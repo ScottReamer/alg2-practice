@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algebra 1 Check-up</title>
+<!-- alg2-tutor-06-prereq-diagnostic-app-v2 (2026-10-26, S02).
+     v2: readable math in the results file; dossier mastery rule (solid / fragile / gap / untested) with a
+     confident-wrong flag; decimal-for-exact radicals classified as notation; touch-sized keypad with
+     x, minus and inequality keys for iPad; color-mix fallback; storage key changed so v1 progress can't collide. -->
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d2430; --muted:#5b6472; --line:#e3dfd6;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --good:#2e7d4f; --warn:#b26a00; --bad:#b3372f;
+  --good-bg:#e3f1e8; --warn-bg:#f8ecd9; --bad-bg:#f6e1df;
+  --soft:#eef3f7; --mfont:"Cambria Math","STIX Two Math","Latin Modern Math",Cambria,Georgia,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14181e; --card:#1c222b; --ink:#e7eaef; --muted:#9aa4b2; --line:#2c3440;
+    --accent:#5aa7dc; --accent-ink:#0e141a; --good:#5cc08a; --warn:#e0a23a; --bad:#ec7a70; --soft:#202a35;
+    --good-bg:#1f3328; --warn-bg:#3a2e1a; --bad-bg:#3d2523; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:1.6rem;margin:.2em 0 .4em}
+h2{font-size:1.15rem;margin:1.6em 0 .5em}
+p,li{color:var(--ink)}
+.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+.m{font-family:var(--mfont);font-size:1.12em;white-space:nowrap}
+.m i{font-style:italic}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .12em;font-size:.92em;line-height:1.15}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.sys{margin:.6em 0 .2em 1em;line-height:2}
+.hint{color:var(--muted);font-size:.9rem;margin-top:.5em}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:.9rem}
+.bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:8px 0 4px}
+.bar>div{height:100%;background:var(--accent);transition:width .25s}
+.prompt{font-size:1.15rem;line-height:1.7;overflow-x:auto}
+input[type=text]{width:100%;font:1.25rem var(--mfont);padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:14px}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.keys{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.keys button{font:1.1rem var(--mfont);min-width:48px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.read{min-height:1.6em;margin-top:10px;font-size:.95rem}
+.read.ok{color:var(--muted)} .read.err{color:var(--bad)}
+.confq{margin:18px 0 8px;font-weight:600}
+.conf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button.btn{font:600 1rem system-ui,sans-serif;min-height:48px;padding:12px 10px;border-radius:10px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;touch-action:manipulation}
+button.btn.ghost{background:transparent;color:var(--accent)}
+button.btn:disabled{opacity:.45;cursor:default}
+button.link{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.95rem;padding:12px 0;margin-top:6px;min-height:44px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+ul.tight{padding-left:1.2em} ul.tight li{margin:.3em 0}
+code,.kbd{font-family:var(--mfont);background:var(--soft);padding:1px 6px;border-radius:5px}
+table{width:100%;border-collapse:collapse}
+td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+.dots span{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:var(--line)}
+.dots .g{background:var(--good)} .dots .w{background:var(--warn)} .dots .b{background:var(--bad)}
+.tag{font-size:.8rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+.tag.solid{background:var(--good-bg);color:var(--good)}
+.tag.fragile,.tag.untested{background:var(--warn-bg);color:var(--warn)}
+.tag.gap{background:var(--bad-bg);color:var(--bad)}
+.flag{display:block;font-size:.78rem;color:var(--bad);font-weight:600;margin-top:3px}
+.rev{border-left:4px solid var(--line);padding:2px 0 2px 14px;margin:18px 0}
+.rev.bad{border-color:var(--bad)} .rev.warn{border-color:var(--warn)}
+.rev .lbl{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:8px}
+ol.steps{padding-left:1.3em;margin:.4em 0} ol.steps li{margin:.45em 0}
+.why{display:block;color:var(--muted);font-size:.88rem}
+textarea{width:100%;height:140px;font:12px monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+.note{font-size:.9rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+/* alg2-tutor diagnostic engine v2: parser, checkers, item templates.
+   v2 (2026-10-26, S02): v1 plus a notation catch for decimal answers to exact-radical items.
+   Pure JS, no DOM. Works in browser (window.ALG2) and Node (module.exports). */
+(function (root) {
+  'use strict';
+
+  // ---------- RNG ----------
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function makeRng(seed) {
+    var r = mulberry32(seed);
+    var R = {
+      f: r,
+      int: function (lo, hi) { return lo + Math.floor(r() * (hi - lo + 1)); },
+      nz: function (lo, hi) { var v; do { v = lo + Math.floor(r() * (hi - lo + 1)); } while (v === 0); return v; },
+      pick: function (arr) { return arr[Math.floor(r() * arr.length)]; },
+      shuffle: function (arr) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    };
+    return R;
+  }
+
+  // ---------- number helpers ----------
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a; }
+  function lcm(a, b) { return Math.abs(a * b) / gcd(a, b); }
+  function reduce(p, q) { if (q < 0) { p = -p; q = -q; } var g = gcd(p, q) || 1; return [p / g, q / g]; }
+  function isSquarefree(n) { if (n < 2) return false; for (var k = 2; k * k <= n; k++) if (n % (k * k) === 0) return false; return true; }
+  function simplifySqrt(n) { // returns [outside, inside]
+    var out = 1, ins = n;
+    for (var k = Math.floor(Math.sqrt(n)); k >= 2; k--) { if (ins % (k * k) === 0) { out *= k; ins /= (k * k); k = Math.floor(Math.sqrt(ins)) + 1; } }
+    return [out, ins];
+  }
+  function approxEq(a, b) { return Math.abs(a - b) <= 1e-7 * Math.max(1, Math.abs(a), Math.abs(b)); }
+
+  // ---------- normalization ----------
+  var SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+  function normalize(s) {
+    s = String(s == null ? '' : s).toLowerCase();
+    s = s.replace(/[−–—]/g, '-').replace(/[×·⋅∙]/g, '*').replace(/÷/g, '/');
+    s = s.replace(/≤/g, '<=').replace(/≥/g, '>=').replace(/=</g, '<=').replace(/=>/g, '>=');
+    s = s.replace(/∞/g, 'inf').replace(/infinity/g, 'inf');
+    s = s.replace(/\+\/-|\+-/g, '±');
+    // superscripts -> ^(...)
+    s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, function (m) { var t = ''; for (var i = 0; i < m.length; i++) t += SUP[m[i]]; return '^(' + t + ')'; });
+    s = s.replace(/√\s*\(/g, 'sqrt(');
+    s = s.replace(/√\s*([0-9.]+|[a-z])/g, 'sqrt($1)');
+    s = s.replace(/sqrt\s*(?!\s*\()([0-9.]+|[a-z])/g, 'sqrt($1)');
+    s = s.replace(/\s+/g, ' ').trim();
+    return s;
+  }
+
+  // ---------- tokenizer / parser ----------
+  function tokenize(s) {
+    var toks = [], i = 0;
+    while (i < s.length) {
+      var ch = s[i];
+      if (ch === ' ') { i++; continue; }
+      if (/[0-9.]/.test(ch)) {
+        var j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++;
+        var str = s.slice(i, j);
+        if ((str.match(/\./g) || []).length > 1 || str === '.') throw new Error('“' + str + '” isn’t a number');
+        toks.push({ t: 'num', v: parseFloat(str), dec: str.indexOf('.') >= 0 ? str.length - str.indexOf('.') - 1 : 0 }); i = j; continue;
+      }
+      if (/[a-z]/.test(ch)) {
+        if (s.slice(i, i + 4) === 'sqrt') { toks.push({ t: 'fn', v: 'sqrt' }); i += 4; continue; }
+        toks.push({ t: 'var', v: ch }); i++; continue;
+      }
+      if ('+-*/^(),'.indexOf(ch) >= 0) { toks.push({ t: ch }); i++; continue; }
+      if (ch === '[' || ch === ']') { toks.push({ t: ch === '[' ? '(' : ')' }); i++; continue; }
+      throw new Error('I don’t recognize “' + ch + '”');
+    }
+    // implicit multiplication
+    var out = [];
+    for (var k = 0; k < toks.length; k++) {
+      var a = out[out.length - 1], b = toks[k];
+      if (a && (a.t === 'num' || a.t === 'var' || a.t === ')') && (b.t === 'num' || b.t === 'var' || b.t === 'fn' || b.t === '(')) out.push({ t: '*' });
+      out.push(b);
+    }
+    return out;
+  }
+  function parse(str) {
+    var toks = tokenize(normalize(str));
+    if (!toks.length) throw new Error('Nothing typed yet');
+    var p = 0;
+    function peek() { return toks[p]; }
+    function eat(t) { var k = toks[p]; if (!k || k.t !== t) throw new Error('Expected “' + t + '”'); p++; return k; }
+    function expr() {
+      var n = term();
+      while (peek() && (peek().t === '+' || peek().t === '-')) { var op = toks[p++].t; var r = term(); n = { t: op === '+' ? 'add' : 'sub', a: n, b: r }; }
+      return n;
+    }
+    function term() {
+      var n = unary();
+      while (peek() && (peek().t === '*' || peek().t === '/')) { var op = toks[p++].t; var r = unary(); n = { t: op === '*' ? 'mul' : 'div', a: n, b: r }; }
+      return n;
+    }
+    function unary() {
+      if (peek() && peek().t === '-') { p++; return { t: 'neg', a: unary() }; }
+      if (peek() && peek().t === '+') { p++; return unary(); }
+      return power();
+    }
+    function power() {
+      var base = primary();
+      if (peek() && peek().t === '^') { p++; var e = unary(); return { t: 'pow', a: base, b: e }; }
+      return base;
+    }
+    function primary() {
+      var k = peek();
+      if (!k) throw new Error('The expression ends too early');
+      if (k.t === 'num') { p++; var nn = { t: 'num', v: k.v }; if (k.dec) nn.dec = k.dec; return nn; }
+      if (k.t === 'var') { p++; return { t: 'var', v: k.v }; }
+      if (k.t === 'fn') { p++; eat('('); var a = expr(); eat(')'); return { t: 'sqrt', a: a }; }
+      if (k.t === '(') { p++; var e = expr(); eat(')'); return { t: 'paren', a: e }; }
+      throw new Error('Unexpected “' + k.t + '”');
+    }
+    var tree = expr();
+    if (p < toks.length) throw new Error('Unexpected “' + toks[p].t + '”');
+    return strip(tree);
+  }
+  function strip(n) { // remove paren nodes
+    if (!n) return n;
+    if (n.t === 'paren') return strip(n.a);
+    var m = { t: n.t }; if ('v' in n) m.v = n.v; if (n.dec) m.dec = n.dec;
+    if (n.a) m.a = strip(n.a); if (n.b) m.b = strip(n.b);
+    return m;
+  }
+  function evaluate(n, env) {
+    switch (n.t) {
+      case 'num': return n.v;
+      case 'var': if (!(n.v in env)) return NaN; return env[n.v];
+      case 'add': return evaluate(n.a, env) + evaluate(n.b, env);
+      case 'sub': return evaluate(n.a, env) - evaluate(n.b, env);
+      case 'mul': return evaluate(n.a, env) * evaluate(n.b, env);
+      case 'div': return evaluate(n.a, env) / evaluate(n.b, env);
+      case 'neg': return -evaluate(n.a, env);
+      case 'pow': return Math.pow(evaluate(n.a, env), evaluate(n.b, env));
+      case 'sqrt': var v = evaluate(n.a, env); return v < 0 ? NaN : Math.sqrt(v);
+    }
+    return NaN;
+  }
+  function varsIn(n, set) {
+    set = set || {};
+    if (!n) return set;
+    if (n.t === 'var') set[n.v] = true;
+    varsIn(n.a, set); varsIn(n.b, set);
+    return set;
+  }
+  function hasAddSub(n) { if (!n) return false; if (n.t === 'add' || n.t === 'sub') return true; if (n.t === 'sqrt') return false; return hasAddSub(n.a) || hasAddSub(n.b); }
+
+  // pretty printer (unicode) for the "we read this as" preview
+  var PREC = { add: 1, sub: 1, mul: 2, div: 2, neg: 3, pow: 4, num: 5, var: 5, sqrt: 5 };
+  var SUPS = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
+  function fmtN(v) { var s = (Math.round(v * 1e9) / 1e9).toString(); return s.replace('-', '−'); }
+  function pretty(n) {
+    function wrap(c, minP) { var s = pretty(c); return PREC[c.t] < minP ? '(' + s + ')' : s; }
+    switch (n.t) {
+      case 'num': return fmtN(n.v);
+      case 'var': return n.v;
+      case 'add': return pretty(n.a) + ' + ' + wrap(n.b, 2);
+      case 'sub': return pretty(n.a) + ' − ' + wrap(n.b, 2);
+      case 'mul':
+        var L = wrap(n.a, 2), R = wrap(n.b, 3);
+        var juxt = (n.b.t === 'var' || n.b.t === 'sqrt' || (n.b.t === 'pow' && n.b.a.t === 'var') || R[0] === '(') && n.a.t !== 'div';
+        return juxt ? L + R : L + '·' + R;
+      case 'div': return wrap(n.a, 2) + '/' + wrap(n.b, 3);
+      case 'neg': return '−' + wrap(n.a, 3);
+      case 'pow':
+        var base = n.a.t === 'num' && n.a.v < 0 ? '(' + pretty(n.a) + ')' : wrap(n.a, 5);
+        if (n.b.t === 'num' && Number.isInteger(n.b.v) && n.b.v >= 0) return base + String(n.b.v).split('').map(function (d) { return SUPS[d]; }).join('');
+        if (n.b.t === 'neg' && n.b.a.t === 'num' && Number.isInteger(n.b.a.v)) return base + '⁻' + String(n.b.a.v).split('').map(function (d) { return SUPS[d]; }).join('');
+        return base + '^(' + pretty(n.b) + ')';
+      case 'sqrt': var a = pretty(n.a); return (n.a.t === 'num' || n.a.t === 'var') ? '√' + a : '√(' + a + ')';
+    }
+    return '?';
+  }
+
+  // ---------- equivalence ----------
+  var SAMPLES = [-2.31, -1.17, 0.73, 1.91, 2.63, 3.37, -0.41, 4.19, 0.29, -3.07];
+  function equivExpr(A, B, vars) {
+    var good = 0;
+    for (var i = 0; i < SAMPLES.length; i++) {
+      var env = {};
+      for (var j = 0; j < vars.length; j++) env[vars[j]] = SAMPLES[(i + 3 * j) % SAMPLES.length] + 0.13 * j;
+      var a = evaluate(A, env), b = evaluate(B, env);
+      if (!isFinite(a) || !isFinite(b)) { if (isFinite(a) !== isFinite(b)) return false; continue; }
+      if (!approxEq(a, b)) return false;
+      good++;
+    }
+    return good >= 4;
+  }
+
+  // ---------- form checks ----------
+  function flattenMul(n, out) {
+    out = out || [];
+    if (n.t === 'mul') { flattenMul(n.a, out); flattenMul(n.b, out); }
+    else if (n.t === 'neg') { flattenMul(n.a, out); }
+    else out.push(n);
+    return out;
+  }
+  function flattenAdd(n, out) {
+    out = out || [];
+    if (n.t === 'add' || n.t === 'sub') { flattenAdd(n.a, out); flattenAdd(n.b, out); } else out.push(n);
+    return out;
+  }
+  function isExpanded(n) {
+    if (!n) return true;
+    if (n.t === 'mul' && (hasAddSub(n.a) || hasAddSub(n.b))) return false;
+    if (n.t === 'pow' && hasAddSub(n.a)) return false;
+    if (n.t === 'neg' && hasAddSub(n.a)) return false;
+    return isExpanded(n.a) && isExpanded(n.b);
+  }
+  function factoredCount(n) {
+    var fs = flattenMul(n), c = 0;
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i]; if (!Object.keys(varsIn(f)).length) continue;
+      if (f.t === 'pow' && f.b.t === 'num' && Number.isInteger(f.b.v) && f.b.v >= 2 && hasAddSub(f.a)) c += f.b.v;
+      else c += 1;
+    }
+    return c;
+  }
+  function isMonomialForm(n) {
+    if (n.t === 'div') return false;
+    var fs = flattenMul(n), seen = {}, nums = 0;
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i];
+      if (f.t === 'num') { nums++; continue; }
+      var v = null;
+      if (f.t === 'var') v = f.v;
+      else if (f.t === 'pow' && f.a.t === 'var' && f.b.t === 'num') v = f.a.v;
+      else return false;
+      if (seen[v]) return false; seen[v] = true;
+    }
+    return nums <= 1;
+  }
+  function radicalsSimplified(n) {
+    if (!n) return true;
+    if (n.t === 'sqrt') {
+      if (Object.keys(varsIn(n.a)).length) return false;
+      var v = evaluate(n.a, {});
+      if (!Number.isInteger(v) || !isSquarefree(v)) return false;
+    }
+    if (n.t === 'div' && containsSqrt(n.b)) return false;
+    if (n.t === 'pow' && n.b.t !== 'num') return false; // no fractional exponents left
+    return radicalsSimplified(n.a) && radicalsSimplified(n.b);
+  }
+  function containsSqrt(n) { if (!n) return false; if (n.t === 'sqrt') return true; return containsSqrt(n.a) || containsSqrt(n.b); }
+  function isLowestFraction(n) {
+    var m = n.t === 'neg' ? n.a : n;
+    if (m.t === 'num') return Number.isInteger(m.v);
+    if (m.t === 'div' && m.a.t === 'num' && m.b.t === 'num' && Number.isInteger(m.a.v) && Number.isInteger(m.b.v)) return gcd(m.a.v, m.b.v) === 1 && m.b.v !== 1;
+    return false;
+  }
+  // v2: a bare decimal (e.g. 8.485 for 6√2) on an exact-radical item. Notation, not a wrong idea.
+  function isDecimalApprox(item, r) {
+    if (item.form !== 'radical' || item.type !== 'number') return false;
+    var m = r.ast.t === 'neg' ? r.ast.a : r.ast;
+    if (m.t !== 'num' || !m.dec) return false;
+    // accept the exact value rounded or truncated to the number of decimal places typed
+    return Math.abs(r.value - item.key) <= Math.pow(10, -m.dec) + 1e-12;
+  }
+
+  // ---------- answer parsing by type ----------
+  function stripLead(s, names) {
+    s = normalize(s);
+    for (var i = 0; i < names.length; i++) {
+      var re = new RegExp('^\\s*' + names[i] + '\\s*=\\s*');
+      if (re.test(s)) return s.replace(re, '');
+    }
+    return s;
+  }
+  function expandPM(s) {
+    var i = s.indexOf('±');
+    if (i < 0) return [s];
+    return [s.slice(0, i) + '+' + s.slice(i + 1), s.slice(0, i) + '-' + s.slice(i + 1)];
+  }
+  function parseNumber(raw) {
+    var s = stripLead(raw, ['x', 'y', 'a', 't']);
+    var ast = parse(s);
+    var vs = Object.keys(varsIn(ast));
+    if (vs.length) throw new Error('This answer should be a number, without “' + vs[0] + '”');
+    var v = evaluate(ast, {});
+    if (!isFinite(v)) throw new Error('That doesn’t evaluate to a real number');
+    return { ast: ast, value: v, text: pretty(ast) };
+  }
+  function parseExprAns(raw, vars) {
+    var s = stripLead(raw, ['y']).replace(/^\s*[a-z]\s*\([^=]*\)\s*=\s*/, '');
+    var ast = parse(s);
+    var vs = Object.keys(varsIn(ast));
+    for (var i = 0; i < vs.length; i++) if (vars.indexOf(vs[i]) < 0) throw new Error('Unexpected letter “' + vs[i] + '”; use ' + vars.join(', '));
+    return { ast: ast, text: pretty(ast) };
+  }
+  function parseSet(raw) {
+    var s = normalize(raw).replace(/\bor\b|\band\b|;/g, ',');
+    var parts = s.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    if (!parts.length) throw new Error('Nothing typed yet');
+    var vals = [], texts = [];
+    parts.forEach(function (pt) {
+      expandPM(pt.replace(/^x\s*=\s*/, '')).forEach(function (q) {
+        var r = parseNumber(q); vals.push(r.value); texts.push(r.text);
+      });
+    });
+    return { values: vals, text: texts.join(', ') };
+  }
+  function parsePair(raw) {
+    var s = normalize(raw);
+    var mx = s.match(/x\s*=\s*([^,;]+)/), my = s.match(/y\s*=\s*([^,;]+)/);
+    var a, b;
+    if (mx && my) { a = mx[1]; b = my[1]; }
+    else {
+      var inner = s.replace(/^\(/, '').replace(/\)$/, '');
+      var parts = inner.split(',');
+      if (parts.length !== 2) throw new Error('Type two numbers, like (2, 5)');
+      a = parts[0]; b = parts[1];
+    }
+    var A = parseNumber(a), B = parseNumber(b);
+    return { values: [A.value, B.value], text: '(' + A.text + ', ' + B.text + ')' };
+  }
+  var FLIP = { '<': '>', '>': '<', '<=': '>=', '>=': '<=' };
+  function parseIneq(raw) {
+    var s = normalize(raw).replace(/\s/g, '');
+    var iv = s.match(/^([\[(])(-?inf|[^,]+),(-?inf|[^\])]+)([\])])$/);
+    if (iv) {
+      var lo = /-inf/.test(iv[2]) ? -Infinity : parseNumber(iv[2]).value;
+      var hi = /^inf$|^\+inf$/.test(iv[3]) ? Infinity : parseNumber(iv[3]).value;
+      return mkIv(lo, iv[1] === '[', hi, iv[4] === ']');
+    }
+    var parts = s.split(/(<=|>=|<|>)/);
+    if (parts.length === 3) {
+      var A = parts[0], op = parts[1], B = parts[2];
+      if (A === 'x') return single(op, parseNumber(B).value);
+      if (B === 'x') return single(FLIP[op], parseNumber(A).value);
+      throw new Error('Write it with x on one side, like x < 4');
+    }
+    if (parts.length === 5 && parts[2] === 'x') {
+      var a = parseNumber(parts[0]).value, b = parseNumber(parts[4]).value, o1 = parts[1], o2 = parts[3];
+      if (o1[0] === '<' && o2[0] === '<') return mkIv(a, o1 === '<=', b, o2 === '<=');
+      if (o1[0] === '>' && o2[0] === '>') return mkIv(b, o2 === '>=', a, o1 === '>=');
+      throw new Error('Both signs in a compound inequality should point the same way');
+    }
+    throw new Error('Write an inequality like x < 4 or −3 < x < 7');
+    function single(op, v) {
+      if (op === '<') return mkIv(-Infinity, false, v, false);
+      if (op === '<=') return mkIv(-Infinity, false, v, true);
+      if (op === '>') return mkIv(v, false, Infinity, false);
+      return mkIv(v, true, Infinity, false);
+    }
+  }
+  function mkIv(lo, loIn, hi, hiIn) {
+    if (lo > hi) throw new Error('That range has no numbers in it');
+    var iv = { lo: lo, loIn: isFinite(lo) ? loIn : false, hi: hi, hiIn: isFinite(hi) ? hiIn : false };
+    iv.text = ivText(iv);
+    return iv;
+  }
+  function ivText(iv) {
+    var f = function (v) { return fmtN(v); };
+    if (!isFinite(iv.lo)) return 'x ' + (iv.hiIn ? '≤' : '<') + ' ' + f(iv.hi);
+    if (!isFinite(iv.hi)) return 'x ' + (iv.loIn ? '≥' : '>') + ' ' + f(iv.lo);
+    return f(iv.lo) + ' ' + (iv.loIn ? '≤' : '<') + ' x ' + (iv.hiIn ? '≤' : '<') + ' ' + f(iv.hi);
+  }
+  function eqIv(a, b) {
+    function e(x, y) { return (!isFinite(x) && !isFinite(y) && x === y) || (isFinite(x) && isFinite(y) && approxEq(x, y)); }
+    return e(a.lo, b.lo) && e(a.hi, b.hi) && a.loIn === b.loIn && a.hiIn === b.hiIn;
+  }
+  function eqMultiset(a, b) {
+    if (a.length !== b.length) return false;
+    var used = b.map(function () { return false; });
+    for (var i = 0; i < a.length; i++) {
+      var hit = -1;
+      for (var j = 0; j < b.length; j++) if (!used[j] && approxEq(a[i], b[j])) { hit = j; break; }
+      if (hit < 0) return false; used[hit] = true;
+    }
+    return true;
+  }
+  function dedupe(arr) { var out = []; arr.forEach(function (v) { if (!out.some(function (w) { return approxEq(v, w); })) out.push(v); }); return out; }
+
+  // preview: parse for display without grading. Returns {ok, text} or {ok:false, error}
+  function preview(item, raw) {
+    if (!String(raw).trim()) return { ok: false, error: '' };
+    try {
+      var r = readAnswer(item, raw);
+      return { ok: true, text: r.text };
+    } catch (e) { return { ok: false, error: e.message }; }
+  }
+  function readAnswer(item, raw) {
+    switch (item.type) {
+      case 'number': return parseNumber(raw);
+      case 'expr': return parseExprAns(raw, item.vars);
+      case 'set': return parseSet(raw);
+      case 'pair': return parsePair(raw);
+      case 'ineq': return parseIneq(raw);
+    }
+    throw new Error('Unknown answer type');
+  }
+  var FORM_MSG = {
+    'lowest': 'Right value, but give it as a fraction in lowest terms.',
+    'expanded': 'Right value, but it isn’t fully multiplied out and simplified.',
+    'factored': 'Right value, but it isn’t factored completely.',
+    'radical': 'Right value, but the radical isn’t fully simplified.',
+    'monomial': 'Right value, but it isn’t simplified to a single term.',
+    'decimal': 'That’s the right size as a decimal, but the question wants the exact answer with a square root.'
+  };
+  function matches(item, r, key) {
+    switch (item.type) {
+      case 'number': return approxEq(r.value, key);
+      case 'expr': return equivExpr(r.ast, typeof key === 'string' ? parse(key) : key, item.vars);
+      case 'set': return eqMultiset(dedupe(r.values), dedupe(key));
+      case 'pair': return approxEq(r.values[0], key[0]) && approxEq(r.values[1], key[1]);
+      case 'ineq': return eqIv(r, key);
+    }
+    return false;
+  }
+  function formOk(item, r) {
+    var f = item.form; if (!f) return true;
+    var ast = r.ast;
+    if (f === 'lowest') return isLowestFraction(ast);
+    if (f === 'expanded') return isExpanded(ast) && flattenAdd(ast).length <= item.terms;
+    if (f === 'factored') return factoredCount(ast) >= 2;
+    if (f === 'radical') return radicalsSimplified(ast);
+    if (f === 'monomial') return isMonomialForm(ast);
+    return true;
+  }
+  // grade: returns {verdict:'correct'|'form'|'wrong', trap, text, formMsg, formCode}
+  function grade(item, raw) {
+    var r = readAnswer(item, raw);
+    if (matches(item, r, item.key)) {
+      if (!formOk(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM_MSG[item.form], formCode: 'FORM_' + item.form.toUpperCase() };
+      return { verdict: 'correct', text: r.text };
+    }
+    if (isDecimalApprox(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM_MSG.decimal, formCode: 'DECIMAL_FOR_EXACT' };
+    var trap = null;
+    for (var i = 0; i < (item.traps || []).length; i++) {
+      var t = item.traps[i];
+      try { if (matches(item, r, t.key)) { trap = t; break; } } catch (e) { }
+    }
+    return { verdict: 'wrong', text: r.text, trap: trap ? { code: trap.code, error_type: trap.error_type, label: trap.label } : null };
+  }
+
+  // ---------- HTML formatting helpers for prompts ----------
+  var M = function (s) { return '<span class="m">' + s + '</span>'; };
+  function n$(v) { return v < 0 ? '−' + Math.abs(v) : String(v); }
+  function frac(p, q) { // html stacked fraction, reduced, sign in front
+    var r = reduce(p, q); p = r[0]; q = r[1];
+    if (q === 1) return n$(p);
+    return (p < 0 ? '−' : '') + '<span class="fr"><span>' + Math.abs(p) + '</span><span>' + q + '</span></span>';
+  }
+  function fracTxt(p, q) { var r = reduce(p, q); return r[1] === 1 ? String(r[0]) : r[0] + '/' + r[1]; }
+  // polynomial from coefficients high->low degree
+  function poly(c, v) {
+    v = v || 'x';
+    var deg = c.length - 1, out = '';
+    for (var i = 0; i < c.length; i++) {
+      var a = c[i], d = deg - i; if (a === 0) continue;
+      var abs = Math.abs(a), sign = a < 0 ? '−' : '+';
+      var coef = (abs === 1 && d > 0) ? '' : String(abs);
+      var vv = d === 0 ? '' : (d === 1 ? '<i>' + v + '</i>' : '<i>' + v + '</i><sup>' + d + '</sup>');
+      if (out === '') out = (a < 0 ? '−' : '') + coef + vv;
+      else out += ' ' + sign + ' ' + coef + vv;
+    }
+    return out || '0';
+  }
+  function polyS(c, v) { // ascii for keys
+    v = v || 'x';
+    var deg = c.length - 1, out = '';
+    for (var i = 0; i < c.length; i++) {
+      var a = c[i], d = deg - i; if (a === 0) continue;
+      var t = (Math.abs(a) === 1 && d > 0 ? (a < 0 ? '-' : '') : String(a)) + (d === 0 ? '' : (d === 1 ? v : v + '^' + d));
+      out += (out && a > 0 ? '+' : '') + t;
+    }
+    return out || '0';
+  }
+  function nz(c) { return c.filter(function (x) { return x !== 0; }).length; }
+  // "x + a" style binomial in html, e.g. lin(1,-3) = x − 3
+  function bin(a, b, v) { return poly([a, b], v); }
+  function paren(s) { return '(' + s + ')'; }
+  function sq(n) { return '<sup>' + n + '</sup>'; }
+  function X(v) { return '<i>' + (v || 'x') + '</i>'; }
+  function radHTML(out, ins) { if (ins === 1) return String(out); return (out === 1 ? '' : out) + '√' + ins; }
+  function step(s, why) { return '<li>' + s + (why ? '<span class="why">' + why + '</span>' : '') + '</li>'; }
+  function steps(arr) { return '<ol class="steps">' + arr.join('') + '</ol>'; }
+  function ivHTML(iv) { return ivText(iv).replace(/x/g, '<i>x</i>'); }
+
+  // ---------- skills ----------
+  var SKILLS = [
+    { id: 'P-01', name: 'Signed numbers and fractions' },
+    { id: 'P-02', name: 'Order of operations and evaluating' },
+    { id: 'P-03', name: 'Distributing and combining like terms' },
+    { id: 'P-04', name: 'Solving linear equations' },
+    { id: 'P-05', name: 'Inequalities and absolute value' },
+    { id: 'P-06', name: 'Slope and equations of lines' },
+    { id: 'P-07', name: 'Function notation' },
+    { id: 'P-08', name: 'Exponent rules' },
+    { id: 'P-09', name: 'Multiplying polynomials' },
+    { id: 'P-10', name: 'Factoring' },
+    { id: 'P-11', name: 'Solving quadratic equations' },
+    { id: 'P-12', name: 'Systems of equations' },
+    { id: 'P-13', name: 'Radicals and rational exponents' }
+  ];
+
+  // ---------- templates ----------
+  // Each gen(R) returns {prompt, type, key, keyHTML, vars?, form?, terms?, traps[], solution, params}
+  var T = [];
+  function def(id, skill, diff, std, gen) { T.push({ id: id, skill: skill, difficulty: diff, standards: std, gen: gen }); }
+  function trap(code, error_type, label, key) { return { code: code, error_type: error_type, label: label, key: key }; }
+
+  // P-01
+  def('T-P01-a', 'P-01', 1, ['7.NS.A.1'], function (R) {
+    var a = R.int(3, 9), b = R.int(10, 16);
+    return {
+      prompt: 'Evaluate: ' + M('−' + a + ' − (−' + b + ')'), type: 'number', key: b - a, keyHTML: M(n$(b - a)),
+      traps: [trap('SUB_NEG_AS_SUB', 'procedural', 'Subtracted instead of adding the opposite', -a - b), trap('SIGN_RESULT', 'slip', 'Right size, wrong sign', a - b)],
+      solution: steps([step(M('−' + a + ' − (−' + b + ') = −' + a + ' + ' + b), 'subtracting a negative is the same as adding a positive'), step(M('= ' + n$(b - a)))]),
+      params: { a: a, b: b }
+    };
+  });
+  def('T-P01-b', 'P-01', 1, ['7.NS.A.1'], function (R) {
+    var q, s, p, r;
+    do { q = R.int(2, 6); s = R.int(3, 8); } while (q === s || lcm(q, s) === Math.max(q, s) && R.f() < 0.6);
+    do { p = R.int(1, q - 1); } while (gcd(p, q) !== 1);
+    do { r = R.int(1, s - 1); } while (gcd(r, s) !== 1);
+    var L = lcm(q, s), num = p * (L / q) + r * (L / s), red = reduce(num, L);
+    return {
+      prompt: 'Add, and give your answer as a fraction in lowest terms: ' + M(frac(p, q) + ' + ' + frac(r, s)), type: 'number', form: 'lowest',
+      key: red[0] / red[1], keyHTML: M(frac(num, L)),
+      traps: [trap('FRAC_ADD_ACROSS', 'conceptual', 'Added the tops and the bottoms separately', (p + r) / (q + s))],
+      solution: steps([
+        step('Common denominator: ' + M(L), 'the smallest number both ' + q + ' and ' + s + ' divide into'),
+        step(M(frac(p, q) + ' = ' + '<span class="fr"><span>' + p * (L / q) + '</span><span>' + L + '</span></span>' + ', &nbsp; ' + frac(r, s) + ' = ' + '<span class="fr"><span>' + r * (L / s) + '</span><span>' + L + '</span></span>'), 'multiply top and bottom by the same number'),
+        step(M('Sum = ' + '<span class="fr"><span>' + num + '</span><span>' + L + '</span></span>' + (red[1] !== L ? ' = ' + frac(num, L) : '')), 'add the tops; the denominator stays')
+      ]),
+      params: { p: p, q: q, r: r, s: s }
+    };
+  });
+  def('T-P01-c', 'P-01', 2, ['7.NS.A.2'], function (R) {
+    var a, b, c, d;
+    do {
+      b = R.int(2, 9); d = R.int(2, 9);
+      do { a = R.int(1, 8); } while (gcd(a, b) !== 1);
+      do { c = R.int(1, 8); } while (gcd(c, d) !== 1);
+    } while (c === d || a * d === b * c || approxEq(a * d / (b * c), a * c / (b * d)));
+    var red = reduce(a * d, b * c);
+    return {
+      prompt: 'Divide, and give your answer as a fraction in lowest terms: ' + M(frac(a, b) + ' ÷ ' + frac(c, d)), type: 'number', form: 'lowest',
+      key: red[0] / red[1], keyHTML: M(frac(a * d, b * c)),
+      traps: [trap('DIV_AS_MULT', 'procedural', 'Multiplied straight across instead of dividing', (a * c) / (b * d)), trap('FLIPPED_WRONG_FRACTION', 'procedural', 'Flipped the first fraction instead of the second', (b * c) / (a * d))],
+      solution: steps([
+        step(M(frac(a, b) + ' ÷ ' + frac(c, d) + ' = ' + frac(a, b) + ' · ' + '<span class="fr"><span>' + d + '</span><span>' + c + '</span></span>'), 'dividing by a fraction means multiplying by its flip (reciprocal)'),
+        step(M('= <span class="fr"><span>' + a * d + '</span><span>' + b * c + '</span></span>' + (gcd(a * d, b * c) > 1 ? ' = ' + frac(a * d, b * c) : '')), 'multiply across, then reduce')
+      ]),
+      params: { a: a, b: b, c: c, d: d }
+    };
+  });
+
+  // P-02
+  def('T-P02-a', 'P-02', 1, ['6.EE.A.2.C'], function (R) {
+    var k = R.int(2, 9);
+    return {
+      prompt: 'Evaluate: ' + M('−' + k + sq(2)), type: 'number', key: -k * k, keyHTML: M(n$(-k * k)),
+      traps: [trap('NEG_SQUARE', 'conceptual', 'Squared the negative sign too', k * k)],
+      solution: steps([step(M('−' + k + sq(2) + ' = −(' + k + sq(2) + ')'), 'the exponent applies only to the ' + k + '; the minus sign is applied after'), step(M('= ' + n$(-k * k)), 'compare (−' + k + ')' + sq(2) + ' = ' + k * k + ', where the parentheses put the sign inside')]),
+      params: { k: k }
+    };
+  });
+  def('T-P02-b', 'P-02', 2, ['HSA.SSE.A.1'], function (R) {
+    var a = R.int(2, 3), b = R.nz(-5, 5), c = R.int(-6, 6), n = R.int(2, 4);
+    var val = a * n * n - b * n + c;
+    var wrong = -a * n * n - b * n + c;
+    return {
+      prompt: 'Evaluate ' + M(poly([a, b, c])) + ' when ' + M(X() + ' = −' + n) + '.', type: 'number', key: val, keyHTML: M(n$(val)),
+      traps: [trap('NEG_SQUARE', 'conceptual', 'Treated (−' + n + ')² as negative', wrong)],
+      solution: steps([
+        step(M(a + '(−' + n + ')' + sq(2) + (b < 0 ? ' − ' + Math.abs(b) : ' + ' + b) + '(−' + n + ')' + (c === 0 ? '' : (c < 0 ? ' − ' + Math.abs(c) : ' + ' + c))), 'put −' + n + ' in parentheses every time you substitute'),
+        step(M(a + '(' + n * n + ') ' + (-b * n < 0 ? '− ' + Math.abs(b * n) : '+ ' + Math.abs(b * n)) + (c === 0 ? '' : (c < 0 ? ' − ' + Math.abs(c) : ' + ' + c))), '(−' + n + ')' + sq(2) + ' = ' + n * n + ', positive'),
+        step(M('= ' + n$(val)))
+      ]),
+      params: { a: a, b: b, c: c, n: n }
+    };
+  });
+  def('T-P02-c', 'P-02', 2, ['6.EE.A.2.C'], function (R) {
+    var a = R.int(2, 9), b = R.int(2, 5), c = R.int(1, 6), d = c + R.int(2, 5);
+    var dd = (c - d) * (c - d), val = a + b * dd;
+    return {
+      prompt: 'Evaluate: ' + M(a + ' + ' + b + '(' + c + ' − ' + d + ')' + sq(2)), type: 'number', key: val, keyHTML: M(val),
+      traps: [trap('ADD_BEFORE_MULT', 'procedural', 'Added before multiplying', (a + b) * dd), trap('COEF_INSIDE_SQUARE', 'procedural', 'Multiplied before squaring', a + b * b * dd)],
+      solution: steps([step(M(c + ' − ' + d + ' = ' + n$(c - d)), 'parentheses first'), step(M('(' + n$(c - d) + ')' + sq(2) + ' = ' + dd), 'then the exponent'), step(M(b + ' · ' + dd + ' = ' + b * dd), 'then multiply'), step(M(a + ' + ' + b * dd + ' = ' + val), 'add last')]),
+      params: { a: a, b: b, c: c, d: d }
+    };
+  });
+
+  // P-03
+  def('T-P03-a', 'P-03', 1, ['7.EE.A.1'], function (R) {
+    var a, b, c, d, e;
+    do { a = R.int(2, 5); b = R.int(2, 4); c = R.int(1, 7); d = R.int(2, 5); e = R.int(1, 6); } while (a * b - d === 0 || -a * c + d * e === 0);
+    var k = [a * b - d, -a * c + d * e];
+    return {
+      prompt: 'Simplify: ' + M(a + '(' + bin(b, -c) + ') − ' + d + '(' + bin(1, -e) + ')'), type: 'expr', vars: ['x'], form: 'expanded', terms: nz(k),
+      key: polyS(k), keyHTML: M(poly(k)),
+      traps: [trap('NEG_DISTRIB', 'procedural', 'The minus sign didn’t reach the second term in the parentheses', polyS([a * b - d, -a * c - d * e]))],
+      solution: steps([
+        step(M(poly([a * b, -a * c]) + ' − ' + d + X() + ' + ' + d * e), 'distribute; −' + d + ' times −' + e + ' is +' + d * e),
+        step(M(poly(k)), 'combine the x terms and the constants')
+      ]),
+      params: { a: a, b: b, c: c, d: d, e: e }
+    };
+  });
+  def('T-P03-b', 'P-03', 1, ['HSA.APR.A.1'], function (R) {
+    var a = R.int(2, 5), d = R.int(1, a - 1), b, e, c, f;
+    do { b = R.nz(-7, 7); e = R.nz(-7, 7); c = R.nz(-7, 7); f = R.nz(-7, 7); } while (b === e || c === f);
+    var k = [a - d, b - e, c - f];
+    return {
+      prompt: 'Simplify: ' + M('(' + poly([a, b, c]) + ') − (' + poly([d, e, f]) + ')'), type: 'expr', vars: ['x'], form: 'expanded', terms: nz(k),
+      key: polyS(k), keyHTML: M(poly(k)),
+      traps: [trap('NEG_DISTRIB_PARTIAL', 'procedural', 'Subtracted only the first term of the second polynomial', polyS([a - d, b + e, c + f]))],
+      solution: steps([
+        step(M(poly([a, b, c]) + ' ' + poly([-d, -e, -f]).replace(/^−/, '− ').replace(/^(?!−)/, '+ ')), 'the minus sign flips every sign inside the second parentheses'),
+        step(M(poly(k)), 'combine like terms')
+      ]),
+      params: { a: a, b: b, c: c, d: d, e: e, f: f }
+    };
+  });
+  def('T-P03-c', 'P-03', 2, ['7.EE.A.1'], function (R) {
+    var p = R.int(2, 4), q = R.int(2, 3), a, b, c, d;
+    do { a = R.nz(-5, 5); b = R.nz(-5, 5); c = R.nz(-5, 5); d = R.nz(-5, 5); } while (a === c || b === d);
+    var k = [a - c, b - d];
+    return {
+      prompt: 'Simplify: ' + M(frac(1, p) + '(' + poly([p * a, p * b]) + ') − ' + frac(1, q) + '(' + poly([q * c, q * d]) + ')'), type: 'expr', vars: ['x'], form: 'expanded', terms: nz(k),
+      key: polyS(k), keyHTML: M(poly(k)),
+      traps: [trap('NEG_DISTRIB', 'procedural', 'The minus sign didn’t reach the second term', polyS([a - c, b + d]))],
+      solution: steps([
+        step(M(frac(1, p) + '(' + poly([p * a, p * b]) + ') = ' + poly([a, b])), 'divide each term by ' + p),
+        step(M('−' + frac(1, q) + '(' + poly([q * c, q * d]) + ') = ' + poly([-c, -d])), 'divide each term by ' + q + ', and the minus flips both signs'),
+        step(M(poly(k)), 'combine like terms')
+      ]),
+      params: { p: p, q: q, a: a, b: b, c: c, d: d }
+    };
+  });
+
+  // P-04
+  def('T-P04-a', 'P-04', 1, ['HSA.REI.B.3'], function (R) {
+    var x0, a, b, c, d, e;
+    do { x0 = R.int(-6, 9); a = R.int(2, 6); b = R.nz(-5, 5); c = R.int(1, 9); d = R.int(1, 9); e = a * (x0 + b) - c - d * x0; } while (d === a || Math.abs(e) > 30 || e === 0);
+    var tr = [];
+    if (a - d !== 0) { var w = (e - b + c) / (a - d); if (!approxEq(w, x0)) tr.push(trap('DISTRIB_FIRST_ONLY', 'procedural', 'Multiplied only the x by ' + a, w)); }
+    return {
+      prompt: 'Solve for ' + M(X()) + ': ' + M(a + '(' + bin(1, b) + ') − ' + c + ' = ' + poly([d, e])), type: 'number', key: x0, keyHTML: M(X() + ' = ' + n$(x0)),
+      traps: tr,
+      solution: steps([
+        step(M(poly([a, a * b - c]) + ' = ' + poly([d, e])), 'distribute the ' + a + ', then combine constants on the left'),
+        step(M(poly([a - d, 0]) + ' = ' + n$(e - (a * b - c))), 'move x terms left, constants right'),
+        step(M(X() + ' = ' + n$(x0)), 'divide by ' + n$(a - d))
+      ]),
+      params: { a: a, b: b, c: c, d: d, e: e }
+    };
+  });
+  def('T-P04-b', 'P-04', 2, ['HSA.REI.B.3'], function (R) {
+    var m, n, x0, p, r, k, q, s;
+    do {
+      m = R.pick([2, 3, 4, 5]); n = R.pick([2, 3, 4, 5]); x0 = R.int(-6, 9); p = R.int(1, 4); r = R.int(1, 4); k = R.int(-3, 4);
+      q = m * k - p * x0; s = n * k - r * x0;
+    } while (m === n || n * p - m * r === 0 || Math.abs(q) > 20 || Math.abs(s) > 20 || q === 0 || s === 0);
+    var tr = [];
+    if (p !== r) { var w = (s - q) / (p - r); if (!approxEq(w, x0)) tr.push(trap('CROSS_MULT', 'procedural', 'Dropped the denominators instead of cross-multiplying', w)); }
+    return {
+      prompt: 'Solve for ' + M(X()) + ': ' + M('<span class="fr"><span>' + poly([p, q]) + '</span><span>' + m + '</span></span> = <span class="fr"><span>' + poly([r, s]) + '</span><span>' + n + '</span></span>'), type: 'number', key: x0, keyHTML: M(X() + ' = ' + n$(x0)),
+      traps: tr,
+      solution: steps([
+        step(M(n + '(' + poly([p, q]) + ') = ' + m + '(' + poly([r, s]) + ')'), 'cross-multiply: each numerator times the other side’s denominator'),
+        step(M(poly([n * p, n * q]) + ' = ' + poly([m * r, m * s])), 'distribute'),
+        step(M(poly([n * p - m * r, 0]) + ' = ' + n$(m * s - n * q)), 'collect x terms and constants'),
+        step(M(X() + ' = ' + n$(x0)), 'divide')
+      ]),
+      params: { m: m, n: n, p: p, q: q, r: r, s: s }
+    };
+  });
+  def('T-P04-c', 'P-04', 2, ['HSA.CED.A.4'], function (R) {
+    var a = R.nz(-6, 6), b = R.int(2, 5), c = R.nz(-12, 12);
+    while (gcd(a, b) === b) a = R.nz(-6, 6);
+    var key = '(' + c + '-(' + a + ')x)/' + b;
+    return {
+      prompt: 'Solve for ' + M(X('y')) + ': ' + M(poly([a, 0]).replace(/<i>x<\/i>$/, '<i>x</i>') + ' + ' + b + X('y') + ' = ' + n$(c)) + '<div class="hint">Your answer will have ' + M(X()) + ' in it.</div>',
+      type: 'expr', vars: ['x'], key: key,
+      keyHTML: M(X('y') + ' = ' + '<span class="fr"><span>' + poly([-a, c]) + '</span><span>' + b + '</span></span>'),
+      traps: [trap('PARTIAL_ISOLATE', 'procedural', 'Forgot to divide everything by ' + b, '(' + c + ')-(' + a + ')x'), trap('SIGN_MOVE', 'slip', 'Kept the sign when moving the x term across', '(' + c + '+(' + a + ')x)/' + b)],
+      solution: steps([
+        step(M(b + X('y') + ' = ' + poly([-a, c])), 'subtract ' + poly([a, 0]) + ' from both sides'),
+        step(M(X('y') + ' = <span class="fr"><span>' + poly([-a, c]) + '</span><span>' + b + '</span></span>'), 'divide every term by ' + b)
+      ]),
+      params: { a: a, b: b, c: c }
+    };
+  });
+
+  // P-05
+  def('T-P05-a', 'P-05', 1, ['HSA.REI.B.3'], function (R) {
+    var a = R.int(2, 6), x0 = R.int(-6, 6), b = R.nz(-8, 8), op = R.pick(['>', '<', '>=', '<=']);
+    var c = -a * x0 + b;
+    var flipped = FLIP[op];
+    var key = ivFromOp(flipped, x0), wrong = ivFromOp(op, x0);
+    var sym = { '>': '&gt;', '<': '&lt;', '>=': '≥', '<=': '≤' };
+    return {
+      prompt: 'Solve: ' + M(poly([-a, b]) + ' ' + sym[op] + ' ' + n$(c)) + '<div class="hint">Type it like x &lt; 4 or x &gt;= −2.</div>', type: 'ineq', key: key, keyHTML: M(ivHTML(key)),
+      traps: [trap('INEQ_NO_FLIP', 'procedural', 'Didn’t flip the sign when dividing by a negative', wrong)],
+      solution: steps([
+        step(M(poly([-a, 0]) + ' ' + sym[op] + ' ' + n$(c - b)), (b >= 0 ? 'subtract ' + b : 'add ' + (-b)) + ' on both sides'),
+        step(M(ivHTML(key)), 'divide by −' + a + ': dividing by a negative flips the inequality sign')
+      ]),
+      params: { a: a, b: b, c: c, op: op }
+    };
+  });
+  function ivFromOp(op, v) {
+    if (op === '<') return mkIv(-Infinity, false, v, false);
+    if (op === '<=') return mkIv(-Infinity, false, v, true);
+    if (op === '>') return mkIv(v, false, Infinity, false);
+    return mkIv(v, true, Infinity, false);
+  }
+  def('T-P05-b', 'P-05', 2, ['HSA.REI.B.3'], function (R) {
+    var a, k, d, b, x0, e;
+    do { a = R.int(2, 4); k = R.int(1, 3); d = a + k; b = R.nz(-4, 4); x0 = R.int(-6, 6); e = (a - d) * x0 - a * b; } while (Math.abs(e) > 25);
+    var key = ivFromOp('>=', x0), wrong = ivFromOp('<=', x0);
+    return {
+      prompt: 'Solve: ' + M(a + '(' + bin(1, -b) + ') ≤ ' + poly([d, e])), type: 'ineq', key: key, keyHTML: M(ivHTML(key)),
+      traps: [trap('INEQ_NO_FLIP', 'procedural', 'Didn’t flip the sign when dividing by a negative', wrong)],
+      solution: steps([
+        step(M(poly([a, -a * b]) + ' ≤ ' + poly([d, e])), 'distribute'),
+        step(M(poly([a - d, 0]) + ' ≤ ' + n$(e + a * b)), 'collect x on the left, constants on the right'),
+        step(M(ivHTML(key)), 'divide by ' + n$(a - d) + ', a negative, so the sign flips')
+      ]),
+      params: { a: a, b: b, d: d, e: e }
+    };
+  });
+  def('T-P05-c', 'P-05', 3, ['HSA.REI.B.3', 'HSA.CED.A.1'], function (R) {
+    var h = R.nz(-5, 5), r = R.int(2, 7), strict = R.f() < 0.5;
+    var key = mkIv(h - r, !strict, h + r, !strict);
+    var tr = [trap('ABS_ONE_SIDE', 'conceptual', 'Kept only the positive case', ivFromOp(strict ? '<' : '<=', h + r)),
+      trap('ABS_SHIFT_SIGN', 'slip', 'Shifted the wrong direction', mkIv(-h - r, !strict, -h + r, !strict))];
+    return {
+      prompt: 'Solve: ' + M('|' + bin(1, -h) + '| ' + (strict ? '&lt;' : '≤') + ' ' + r) + '<div class="hint">A compound answer is typed like −3 &lt; x &lt; 7.</div>', type: 'ineq', key: key, keyHTML: M(ivHTML(key)),
+      traps: tr,
+      solution: steps([
+        step(M('−' + r + ' ' + (strict ? '&lt;' : '≤') + ' ' + bin(1, -h) + ' ' + (strict ? '&lt;' : '≤') + ' ' + r), 'distance from ' + h + ' is less than ' + r + ', so x − ' + n$(h) + ' is trapped between −' + r + ' and ' + r),
+        step(M(ivHTML(key)), (h > 0 ? 'add ' + h : 'subtract ' + (-h)) + ' to all three parts')
+      ]),
+      params: { h: h, r: r, strict: strict }
+    };
+  });
+
+  // P-06
+  def('T-P06-a', 'P-06', 1, ['8.EE.B.6'], function (R) {
+    var x1, y1, x2, y2;
+    do { x1 = R.int(-6, 6); y1 = R.int(-6, 6); x2 = R.int(-6, 6); y2 = R.int(-6, 6); } while (x1 === x2 || y1 === y2 || Math.abs(y2 - y1) === Math.abs(x2 - x1));
+    var dy = y2 - y1, dx = x2 - x1;
+    return {
+      prompt: 'Find the slope of the line through ' + M('(' + n$(x1) + ', ' + n$(y1) + ')') + ' and ' + M('(' + n$(x2) + ', ' + n$(y2) + ')') + '.', type: 'number', key: dy / dx, keyHTML: M(frac(dy, dx)),
+      traps: [trap('SLOPE_RECIP', 'conceptual', 'Used run over rise', dx / dy), trap('SLOPE_SIGN', 'slip', 'Subtracted in mismatched order', -dy / dx)],
+      solution: steps([
+        step(M('m = <span class="fr"><span>' + n$(y2) + ' − ' + (y1 < 0 ? '(' + n$(y1) + ')' : y1) + '</span><span>' + n$(x2) + ' − ' + (x1 < 0 ? '(' + n$(x1) + ')' : x1) + '</span></span>'), 'slope is rise over run: change in y over change in x, subtracted in the same order'),
+        step(M('= <span class="fr"><span>' + n$(dy) + '</span><span>' + n$(dx) + '</span></span>' + (gcd(dy, dx) !== 1 || dx < 0 ? ' = ' + frac(dy, dx) : '')))
+      ]),
+      params: { x1: x1, y1: y1, x2: x2, y2: y2 }
+    };
+  });
+  def('T-P06-b', 'P-06', 1, ['HSF.LE.A.2'], function (R) {
+    var m = R.nz(-4, 4), x1 = R.nz(-5, 5), y1 = R.int(-6, 6);
+    var b = y1 - m * x1;
+    return {
+      prompt: 'Write the equation of the line with slope ' + M(n$(m)) + ' through ' + M('(' + n$(x1) + ', ' + n$(y1) + ')') + ', in the form ' + M(X('y') + ' = m' + X() + ' + b') + '.', type: 'expr', vars: ['x'],
+      key: polyS([m, b]), keyHTML: M(X('y') + ' = ' + poly([m, b])),
+      traps: [trap('POINT_SLOPE_SIGN', 'slip', 'Sign error solving for b', polyS([m, y1 + m * x1]))],
+      solution: steps([
+        step(M(n$(y1) + ' = ' + n$(m) + '(' + n$(x1) + ') + b'), 'plug the point into y = mx + b'),
+        step(M(n$(y1) + ' = ' + n$(m * x1) + ' + b, so b = ' + n$(b))),
+        step(M(X('y') + ' = ' + poly([m, b])))
+      ]),
+      params: { m: m, x1: x1, y1: y1 }
+    };
+  });
+  def('T-P06-c', 'P-06', 2, ['HSF.LE.A.2'], function (R) {
+    var m, x1, x2, b;
+    do { m = R.nz(-4, 4); x1 = R.int(-4, 4); x2 = R.int(-4, 4); b = R.int(-6, 6); } while (x1 === x2 || Math.abs(m) === 1);
+    var y1 = m * x1 + b, y2 = m * x2 + b;
+    return {
+      prompt: 'Write the equation of the line through ' + M('(' + n$(x1) + ', ' + n$(y1) + ')') + ' and ' + M('(' + n$(x2) + ', ' + n$(y2) + ')') + ', in the form ' + M(X('y') + ' = m' + X() + ' + b') + '.', type: 'expr', vars: ['x'],
+      key: polyS([m, b]), keyHTML: M(X('y') + ' = ' + poly([m, b])),
+      traps: [trap('SLOPE_RECIP', 'conceptual', 'Used run over rise for the slope', '(1/' + m + ')x+(' + y1 + '-' + x1 + '/' + m + ')')],
+      solution: steps([
+        step(M('m = <span class="fr"><span>' + n$(y2 - y1) + '</span><span>' + n$(x2 - x1) + '</span></span> = ' + n$(m)), 'rise over run'),
+        step(M(n$(y1) + ' = ' + n$(m) + '(' + n$(x1) + ') + b, so b = ' + n$(b)), 'plug in either point'),
+        step(M(X('y') + ' = ' + poly([m, b])))
+      ]),
+      params: { x1: x1, y1: y1, x2: x2, y2: y2 }
+    };
+  });
+
+  // P-07
+  def('T-P07-a', 'P-07', 1, ['HSF.IF.A.2'], function (R) {
+    var a, b, x0, k;
+    do { a = R.nz(-5, 5); b = R.int(-9, 9); x0 = R.int(-5, 6); k = a * x0 + b; } while (Math.abs(a) === 1 || approxEq(a * k + b, x0));
+    return {
+      prompt: M('f(' + X() + ') = ' + poly([a, b])) + '. Find ' + M(X()) + ' so that ' + M('f(' + X() + ') = ' + n$(k)) + '.', type: 'number', key: x0, keyHTML: M(X() + ' = ' + n$(x0)),
+      traps: [trap('INPUT_OUTPUT_SWAP', 'conceptual', 'Found f(' + k + ') instead of solving f(x) = ' + k, a * k + b)],
+      solution: steps([
+        step(M(poly([a, b]) + ' = ' + n$(k)), 'f(x) = ' + n$(k) + ' means the output is ' + n$(k) + '; find the input that produces it'),
+        step(M(poly([a, 0]) + ' = ' + n$(k - b))),
+        step(M(X() + ' = ' + n$(x0)))
+      ]),
+      params: { a: a, b: b, k: k }
+    };
+  });
+  def('T-P07-b', 'P-07', 3, ['HSF.IF.A.2'], function (R) {
+    var h = R.int(1, 4), b = R.nz(-5, 5), c = R.int(-5, 5);
+    var k = [1, 2 * h + b, h * h + b * h + c];
+    return {
+      prompt: M('f(' + X() + ') = ' + poly([1, b, c])) + '. Find ' + M('f(' + X('t') + ' + ' + h + ')') + ' and simplify.', type: 'expr', vars: ['t'], form: 'expanded', terms: nz(k),
+      key: polyS(k, 't'), keyHTML: M(poly(k, 't')),
+      traps: [trap('BINOMIAL_SQUARE', 'conceptual', 'Wrote (t + ' + h + ')² as t² + ' + h * h, polyS([1, b, h * h + b * h + c], 't')),
+        trap('SHIFT_OUTSIDE', 'conceptual', 'Added ' + h + ' to the output instead of the input', polyS([1, b, c + h], 't'))],
+      solution: steps([
+        step(M('(' + bin(1, h, 't') + ')' + sq(2) + (b < 0 ? ' − ' + (-b) : ' + ' + b) + '(' + bin(1, h, 't') + ')' + (c === 0 ? '' : (c < 0 ? ' − ' + (-c) : ' + ' + c))), 'replace every x with (t + ' + h + ')'),
+        step(M(poly([1, 2 * h, h * h], 't') + (b < 0 ? ' − ' : ' + ') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + X('t') + (b < 0 ? ' − ' : ' + ') + Math.abs(b * h) + (c === 0 ? '' : (c < 0 ? ' − ' + (-c) : ' + ' + c))), '(t + ' + h + ')² = t² + ' + 2 * h + 't + ' + h * h + '; the middle term is the one people drop'),
+        step(M(poly(k, 't')), 'combine like terms')
+      ]),
+      params: { h: h, b: b, c: c }
+    };
+  });
+  def('T-P07-c', 'P-07', 2, ['HSF.BF.A.1.C'], function (R) {
+    var a, b, c, k, val, w1, w2;
+    do { a = R.int(2, 4); b = R.int(1, 6); c = R.int(-4, 5); k = R.pick([-3, -2, 2, 3]); val = a * (k * k + c) - b; w1 = Math.pow(a * k - b, 2) + c; w2 = (a * k - b) * (k * k + c); } while (approxEq(val, w1) || approxEq(val, w2) || approxEq(w1, w2));
+    return {
+      prompt: M('f(' + X() + ') = ' + poly([a, -b]) + '&nbsp;&nbsp; g(' + X() + ') = ' + poly([1, 0, c])) + '. Find ' + M('f(g(' + n$(k) + '))') + '.', type: 'number', key: val, keyHTML: M(val),
+      traps: [trap('COMP_ORDER', 'conceptual', 'Computed g(f(' + k + ')): inside and outside swapped', w1), trap('COMP_AS_PRODUCT', 'conceptual', 'Multiplied f(' + k + ') by g(' + k + ')', w2)],
+      solution: steps([
+        step(M('g(' + n$(k) + ') = (' + n$(k) + ')' + sq(2) + (c < 0 ? ' − ' + (-c) : ' + ' + c) + ' = ' + (k * k + c)), 'work from the inside out: g first'),
+        step(M('f(' + n$(k * k + c) + ') = ' + a + '(' + n$(k * k + c) + ') − ' + b + ' = ' + val), 'then feed that result into f')
+      ]),
+      params: { a: a, b: b, c: c, k: k }
+    };
+  });
+
+  // P-08
+  def('T-P08-a', 'P-08', 1, ['8.EE.A.1'], function (R) {
+    var a, b; do { a = R.int(2, 7); b = R.int(2, 7); } while (a + b === a * b);
+    return {
+      prompt: 'Simplify: ' + M(X() + sq(a) + ' · ' + X() + sq(b)), type: 'expr', vars: ['x'], form: 'monomial',
+      key: 'x^' + (a + b), keyHTML: M(X() + sq(a + b)),
+      traps: [trap('EXP_MULT', 'conceptual', 'Multiplied the exponents instead of adding', 'x^' + (a * b))],
+      solution: steps([step(M(X() + sq(a) + ' · ' + X() + sq(b) + ' = ' + X() + sq(a + ' + ' + b)), 'same base multiplied: count the factors, so add the exponents'), step(M('= ' + X() + sq(a + b)))]),
+      params: { a: a, b: b }
+    };
+  });
+  def('T-P08-b', 'P-08', 2, ['8.EE.A.1'], function (R) {
+    var a, p, q; do { a = R.int(2, 4); p = R.int(2, 4); q = R.int(2, 3); } while (p + q === p * q);
+    var coef = Math.pow(a, q);
+    return {
+      prompt: 'Simplify: ' + M('(' + a + X() + sq(p) + ')' + sq(q)), type: 'expr', vars: ['x'], form: 'monomial',
+      key: coef + 'x^' + (p * q), keyHTML: M(coef + X() + sq(p * q)),
+      traps: [trap('COEF_NOT_POWERED', 'procedural', 'Didn’t raise the ' + a + ' to the power', a + 'x^' + (p * q)), trap('POWER_ADD', 'conceptual', 'Added exponents instead of multiplying', coef + 'x^' + (p + q))],
+      solution: steps([step(M(a + sq(q) + ' · (' + X() + sq(p) + ')' + sq(q)), 'the outside exponent applies to every factor inside'), step(M(coef + X() + sq(p * q)), 'power of a power: multiply exponents, ' + p + ' · ' + q + ' = ' + p * q)]),
+      params: { a: a, p: p, q: q }
+    };
+  });
+  def('T-P08-c', 'P-08', 2, ['8.EE.A.1'], function (R) {
+    var b = R.int(2, 5), n = R.int(2, 3), d = Math.pow(b, n);
+    return {
+      prompt: 'Evaluate, as a fraction: ' + M(b + '<sup>−' + n + '</sup>'), type: 'number', form: 'lowest',
+      key: 1 / d, keyHTML: M(frac(1, d)),
+      traps: [trap('NEG_EXP_AS_NEG', 'conceptual', 'Read the negative exponent as a negative number', -d), trap('NEG_EXP_MULT', 'conceptual', 'Multiplied base by exponent', -b * n)],
+      solution: steps([step(M(b + '<sup>−' + n + '</sup> = <span class="fr"><span>1</span><span>' + b + sq(n) + '</span></span>'), 'a negative exponent means one over the positive power; it never makes the number negative'), step(M('= ' + frac(1, d)))]),
+      params: { b: b, n: n }
+    };
+  });
+
+  // P-09
+  def('T-P09-a', 'P-09', 1, ['HSA.APR.A.1'], function (R) {
+    var a, b; do { a = R.int(1, 9); b = R.int(1, 9); } while (a === b);
+    var k = [1, a - b, -a * b];
+    return {
+      prompt: 'Multiply and simplify: ' + M('(' + bin(1, a) + ')(' + bin(1, -b) + ')'), type: 'expr', vars: ['x'], form: 'expanded', terms: nz(k),
+      key: polyS(k), keyHTML: M(poly(k)),
+      traps: [trap('FOIL_MISSING_MIDDLE', 'procedural', 'Multiplied only first terms and last terms', polyS([1, 0, -a * b]))],
+      solution: steps([step(M(X() + sq(2) + ' − ' + b + X() + ' + ' + a + X() + ' − ' + a * b), 'every term in the first parentheses times every term in the second: four products'), step(M(poly(k)), 'combine the middle terms')]),
+      params: { a: a, b: b }
+    };
+  });
+  def('T-P09-b', 'P-09', 1, ['HSA.APR.A.1'], function (R) {
+    var a = R.int(2, 9), k = [1, -2 * a, a * a];
+    return {
+      prompt: 'Multiply and simplify: ' + M('(' + bin(1, -a) + ')' + sq(2)), type: 'expr', vars: ['x'], form: 'expanded', terms: 3,
+      key: polyS(k), keyHTML: M(poly(k)),
+      traps: [trap('BINOMIAL_SQUARE', 'conceptual', 'Squared each term separately', polyS([1, 0, a * a])), trap('BINOMIAL_SQUARE_DOS', 'conceptual', 'Squared each term and kept the minus', polyS([1, 0, -a * a]))],
+      solution: steps([step(M('(' + bin(1, -a) + ')(' + bin(1, -a) + ')'), 'squaring means multiplying it by itself'), step(M(X() + sq(2) + ' − ' + a + X() + ' − ' + a + X() + ' + ' + a * a), 'four products; (−' + a + ')(−' + a + ') = +' + a * a), step(M(poly(k)), 'the middle term −' + 2 * a + 'x is what people forget')]),
+      params: { a: a }
+    };
+  });
+  def('T-P09-c', 'P-09', 2, ['HSA.APR.A.1'], function (R) {
+    var p = R.int(2, 3), a = R.int(1, 5), b = R.nz(-4, 4), c = R.int(1, 6);
+    var k = [p, p * b - a, -p * c - a * b, a * c];
+    return {
+      prompt: 'Multiply and simplify: ' + M('(' + bin(p, -a) + ')(' + poly([1, b, -c]) + ')'), type: 'expr', vars: ['x'], form: 'expanded', terms: nz(k),
+      key: polyS(k), keyHTML: M(poly(k)),
+      traps: [trap('DISTRIB_PARTIAL', 'procedural', 'The −' + a + ' only multiplied the first term', polyS([p, p * b - a, -p * c, 0]))],
+      solution: steps([
+        step(M(p + X() + '(' + poly([1, b, -c]) + ') = ' + poly([p, p * b, -p * c, 0])), 'distribute ' + p + 'x to all three terms'),
+        step(M('−' + a + '(' + poly([1, b, -c]) + ') = ' + poly([-a, -a * b, a * c])), 'distribute −' + a + ' to all three terms'),
+        step(M(poly(k)), 'line up like terms and combine')
+      ]),
+      params: { p: p, a: a, b: b, c: c }
+    };
+  });
+
+  // P-10
+  def('T-P10-a', 'P-10', 1, ['HSA.SSE.A.2'], function (R) {
+    var m, n; do { m = R.nz(-9, 9); n = R.nz(-9, 9); } while (m === n || m === -n);
+    var k = [1, m + n, m * n];
+    return {
+      prompt: 'Factor completely: ' + M(poly(k)), type: 'expr', vars: ['x'], form: 'factored',
+      key: '(x+(' + m + '))(x+(' + n + '))', keyHTML: M('(' + bin(1, m) + ')(' + bin(1, n) + ')'),
+      traps: [trap('SIGN_FLIP_FACTORS', 'procedural', 'Right numbers, wrong signs', '(x-(' + m + '))(x-(' + n + '))')],
+      solution: steps([step('Find two numbers that multiply to ' + M(n$(m * n)) + ' and add to ' + M(n$(m + n)) + ': ' + M(n$(m)) + ' and ' + M(n$(n)) + '.'), step(M('(' + bin(1, m) + ')(' + bin(1, n) + ')'), 'check by multiplying back out')]),
+      params: { m: m, n: n }
+    };
+  });
+  def('T-P10-b', 'P-10', 1, ['HSA.SSE.A.2'], function (R) {
+    var p, q; do { p = R.int(1, 5); q = R.int(1, 9); } while (gcd(p, q) !== 1);
+    return {
+      prompt: 'Factor completely: ' + M(poly([p * p, 0, -q * q])), type: 'expr', vars: ['x'], form: 'factored',
+      key: '(' + p + 'x-' + q + ')(' + p + 'x+' + q + ')', keyHTML: M('(' + bin(p, -q) + ')(' + bin(p, q) + ')'),
+      traps: [trap('DOS_AS_SQUARE', 'conceptual', 'Wrote it as a perfect square', '(' + p + 'x-' + q + ')^2')],
+      solution: steps([step(M(poly([p * p, 0, -q * q]) + ' = (' + (p === 1 ? '' : p) + X() + ')' + sq(2) + ' − ' + q + sq(2)), 'a perfect square minus a perfect square'), step(M('(' + bin(p, -q) + ')(' + bin(p, q) + ')'), 'difference of squares: a² − b² = (a − b)(a + b)')]),
+      params: { p: p, q: q }
+    };
+  });
+  def('T-P10-c', 'P-10', 3, ['HSA.SSE.A.2'], function (R) {
+    var p, q, r, k, wrongKey;
+    do {
+      p = R.pick([2, 3, 5]); q = R.nz(-7, 7); r = R.nz(-6, 6);
+      k = [p, p * r + q, q * r];
+    } while (gcd(p, Math.abs(q)) !== 1 || p * r + q === 0 || (p * q + r) === (p * r + q));
+    return {
+      prompt: 'Factor completely: ' + M(poly(k)), type: 'expr', vars: ['x'], form: 'factored',
+      key: '(' + p + 'x+(' + q + '))(x+(' + r + '))', keyHTML: M('(' + bin(p, q) + ')(' + bin(1, r) + ')'),
+      traps: [trap('AC_SWAP', 'procedural', 'Put the constants in the wrong parentheses', '(' + p + 'x+(' + r + '))(x+(' + q + '))')],
+      solution: steps([
+        step('Multiply first and last coefficients: ' + M(p + ' · ' + n$(q * r) + ' = ' + n$(p * q * r)) + '. Find two numbers that multiply to ' + M(n$(p * q * r)) + ' and add to ' + M(n$(p * r + q)) + ': ' + M(n$(p * r)) + ' and ' + M(n$(q)) + '.', 'the a·c method'),
+        step(M(poly([p, p * r, 0]) + (q < 0 ? ' − ' : ' + ') + (Math.abs(q) === 1 ? '' : Math.abs(q)) + X() + (q * r < 0 ? ' − ' : ' + ') + Math.abs(q * r)), 'split the middle term'),
+        step(M(p + X() + '(' + bin(1, r) + ')' + (q < 0 ? ' − ' : ' + ') + Math.abs(q) + '(' + bin(1, r) + ')'), 'factor each pair'),
+        step(M('(' + bin(p, q) + ')(' + bin(1, r) + ')'), 'pull out the shared (x ' + (r < 0 ? '− ' + (-r) : '+ ' + r) + ')')
+      ]),
+      params: { p: p, q: q, r: r }
+    };
+  });
+
+  // P-11
+  def('T-P11-a', 'P-11', 1, ['HSA.REI.B.4.B'], function (R) {
+    var r1, r2; do { r1 = R.nz(-8, 8); r2 = R.nz(-8, 8); } while (r1 === r2 || r1 === -r2);
+    var k = [1, -(r1 + r2), r1 * r2];
+    return {
+      prompt: 'Solve: ' + M(poly(k) + ' = 0') + '<div class="hint">List all solutions, separated by commas.</div>', type: 'set', key: [r1, r2], keyHTML: M(X() + ' = ' + n$(Math.min(r1, r2)) + ', ' + n$(Math.max(r1, r2))),
+      traps: [trap('SIGN_FLIP_ROOTS', 'procedural', 'Took the numbers from the factors without flipping signs', [-r1, -r2])],
+      solution: steps([step(M('(' + bin(1, -r1) + ')(' + bin(1, -r2) + ') = 0'), 'factor'), step(M(bin(1, -r1) + ' = 0 or ' + bin(1, -r2) + ' = 0'), 'if a product is zero, one factor must be zero'), step(M(X() + ' = ' + n$(r1) + ' or ' + X() + ' = ' + n$(r2)), 'notice each solution has the opposite sign of the number in its factor')]),
+      params: { r1: r1, r2: r2 }
+    };
+  });
+  def('T-P11-b', 'P-11', 2, ['HSA.REI.B.4.B'], function (R) {
+    var h = R.nz(-5, 5), k = R.int(2, 7);
+    return {
+      prompt: 'Solve: ' + M('(' + bin(1, -h) + ')' + sq(2) + ' = ' + k * k) + '<div class="hint">List all solutions, separated by commas.</div>', type: 'set', key: [h + k, h - k], keyHTML: M(X() + ' = ' + n$(h - k) + ', ' + n$(h + k)),
+      traps: [trap('ONE_ROOT', 'conceptual', 'Took only the positive square root', [h + k]), trap('SHIFT_SIGN', 'slip', 'Shifted the wrong way', [-h + k, -h - k])],
+      solution: steps([step(M(bin(1, -h) + ' = ±' + k), 'take the square root of both sides; both +' + k + ' and −' + k + ' square to ' + k * k), step(M(X() + ' = ' + n$(h) + ' ± ' + k), (h > 0 ? 'add ' + h : 'subtract ' + (-h))), step(M(X() + ' = ' + n$(h + k) + ' or ' + n$(h - k)))]),
+      params: { h: h, k: k }
+    };
+  });
+  def('T-P11-c', 'P-11', 3, ['HSA.REI.B.4.B'], function (R) {
+    var h = R.nz(-4, 4), d = R.pick([2, 3, 5, 6, 7, 10]);
+    var k = [1, -2 * h, h * h - d];
+    var B = -2 * h, C = h * h - d, disc = B * B - 4 * C; // = 4d
+    return {
+      prompt: 'Solve: ' + M(poly(k) + ' = 0') + '<div class="hint">Exact answers. Type √ as sqrt, e.g. 3 + sqrt(2), 3 − sqrt(2), or use ±.</div>', type: 'set', key: [h + Math.sqrt(d), h - Math.sqrt(d)], keyHTML: M(X() + ' = ' + n$(h) + ' ± √' + d),
+      traps: [trap('QF_SIGN_B', 'procedural', 'Used +b instead of −b in the quadratic formula', [-h + Math.sqrt(d), -h - Math.sqrt(d)]), trap('QF_HALF', 'procedural', 'Divided only part of the numerator by 2a', [2 * h + Math.sqrt(4 * d) / 2, 2 * h - Math.sqrt(4 * d) / 2])],
+      solution: steps([
+        step(M(X() + ' = <span class="fr"><span>' + n$(-B) + ' ± √' + disc + '</span><span>2</span></span>'), 'quadratic formula with a = 1, b = ' + n$(B) + ', c = ' + n$(C) + '; b² − 4ac = ' + disc),
+        step(M('√' + disc + ' = 2√' + d), disc + ' = 4 · ' + d),
+        step(M(X() + ' = <span class="fr"><span>' + n$(-B) + ' ± 2√' + d + '</span><span>2</span></span> = ' + n$(h) + ' ± √' + d), 'divide BOTH terms of the top by 2')
+      ]),
+      params: { h: h, d: d }
+    };
+  });
+
+  // P-12
+  def('T-P12-a', 'P-12', 1, ['HSA.REI.C.6'], function (R) {
+    var x0, y0, m, b, a, c;
+    do { x0 = R.int(-5, 6); y0 = R.int(-6, 8); m = R.nz(-4, 4); a = R.int(1, 5); b = y0 - m * x0; c = a * x0 + y0; } while (x0 === y0 || a === -m);
+    return {
+      prompt: 'Solve the system:<div class="sys">' + M(X('y') + ' = ' + poly([m, b])) + '<br>' + M(poly([a, 0]) + ' + ' + X('y') + ' = ' + n$(c)) + '</div><div class="hint">Type the answer as (x, y).</div>', type: 'pair', key: [x0, y0], keyHTML: M('(' + n$(x0) + ', ' + n$(y0) + ')'),
+      traps: [trap('PAIR_ORDER', 'notation', 'Wrote (y, x) instead of (x, y)', [y0, x0])],
+      solution: steps([
+        step(M(poly([a, 0]) + ' + (' + poly([m, b]) + ') = ' + n$(c)), 'substitute the first equation for y'),
+        step(M(poly([a + m, b]) + ' = ' + n$(c) + ', so ' + X() + ' = ' + n$(x0))),
+        step(M(X('y') + ' = ' + n$(m) + '(' + n$(x0) + ')' + (b < 0 ? ' − ' + (-b) : ' + ' + b) + ' = ' + n$(y0)), 'back-substitute'),
+        step(M('(' + n$(x0) + ', ' + n$(y0) + ')'))
+      ]),
+      params: { m: m, b: b, a: a, c: c }
+    };
+  });
+  def('T-P12-b', 'P-12', 2, ['HSA.REI.C.6'], function (R) {
+    var x0, y0, a1, b1, a2, b2, c1, c2;
+    do {
+      x0 = R.int(-5, 6); y0 = R.int(-5, 6); a1 = R.nz(-5, 5); b1 = R.nz(-5, 5); a2 = R.nz(-5, 5); b2 = R.nz(-5, 5);
+    } while (x0 === y0 || a1 * b2 - a2 * b1 === 0 || Math.abs(a1) === Math.abs(a2) || Math.abs(b1) === Math.abs(b2) || Math.abs(a1) === 1 && Math.abs(b1) === 1 || Math.abs(a2) === 1 && Math.abs(b2) === 1);
+    c1 = a1 * x0 + b1 * y0; c2 = a2 * x0 + b2 * y0;
+    var L = lcm(Math.abs(b1), Math.abs(b2)), m1 = L / b1, m2 = L / b2;
+    return {
+      prompt: 'Solve the system:<div class="sys">' + M(poly([a1, 0]) + (b1 < 0 ? ' − ' : ' + ') + (Math.abs(b1) === 1 ? '' : Math.abs(b1)) + X('y') + ' = ' + n$(c1)) + '<br>' + M(poly([a2, 0]) + (b2 < 0 ? ' − ' : ' + ') + (Math.abs(b2) === 1 ? '' : Math.abs(b2)) + X('y') + ' = ' + n$(c2)) + '</div><div class="hint">Type the answer as (x, y).</div>', type: 'pair', key: [x0, y0], keyHTML: M('(' + n$(x0) + ', ' + n$(y0) + ')'),
+      traps: [trap('PAIR_ORDER', 'notation', 'Wrote (y, x) instead of (x, y)', [y0, x0])],
+      solution: steps([
+        step('Multiply the first equation by ' + M(n$(m1)) + ' and the second by ' + M(n$(m2)) + ' so the y terms match: both become ' + M(L + X('y')) + '.', 'elimination: make one variable’s coefficients equal'),
+        step('Subtract to eliminate y: ' + M(poly([a1 * m1 - a2 * m2, 0]) + ' = ' + n$(c1 * m1 - c2 * m2)) + ', so ' + M(X() + ' = ' + n$(x0)) + '.'),
+        step('Substitute back to get ' + M(X('y') + ' = ' + n$(y0)) + '.'),
+        step(M('(' + n$(x0) + ', ' + n$(y0) + ')'))
+      ]),
+      params: { a1: a1, b1: b1, c1: c1, a2: a2, b2: b2, c2: c2 }
+    };
+  });
+  def('T-P12-c', 'P-12', 2, ['HSA.CED.A.3', 'HSA.REI.C.6'], function (R) {
+    var A, S, a0, s0;
+    do { A = R.pick([8, 10, 12, 15]); S = R.pick([4, 5, 6]); a0 = R.int(12, 60); s0 = R.int(12, 60); } while (a0 === s0);
+    var N = a0 + s0, Tt = A * a0 + S * s0;
+    return {
+      prompt: 'A team sold ' + N + ' tickets to a game. Adult tickets cost $' + A + ' and student tickets cost $' + S + '. Total sales were $' + Tt + '. How many of each kind were sold?<div class="hint">Type the answer as (adult, student).</div>', type: 'pair', key: [a0, s0], keyHTML: M('(' + a0 + ', ' + s0 + ')') + ': ' + a0 + ' adult, ' + s0 + ' student',
+      traps: [trap('PAIR_ORDER', 'notation', 'Swapped adult and student', [s0, a0])],
+      solution: steps([
+        step(M(X('a') + ' + ' + X('s') + ' = ' + N) + ' and ' + M(A + X('a') + ' + ' + S + X('s') + ' = ' + Tt), 'one equation counts tickets, one counts dollars'),
+        step(M(A + X('a') + ' + ' + S + '(' + N + ' − ' + X('a') + ') = ' + Tt), 'substitute s = ' + N + ' − a'),
+        step(M((A - S) + X('a') + ' = ' + (Tt - S * N) + ', so ' + X('a') + ' = ' + a0 + ', ' + X('s') + ' = ' + s0))
+      ]),
+      params: { A: A, S: S, N: N, T: Tt }
+    };
+  });
+
+  // P-13
+  def('T-P13-a', 'P-13', 1, ['8.EE.A.2', 'HSN.RN.A.2'], function (R) {
+    var k = R.int(2, 6), m = R.pick([2, 3, 5, 6, 7]), n = k * k * m;
+    return {
+      prompt: 'Simplify: ' + M('√' + n) + '<div class="hint">Type √ as sqrt, e.g. 5sqrt(2).</div>', type: 'number', form: 'radical', key: k * Math.sqrt(m), keyHTML: M(k + '√' + m),
+      traps: [],
+      solution: steps([step(M('√' + n + ' = √(' + k * k + ' · ' + m + ')'), 'find the largest perfect square that divides ' + n + ': ' + k * k), step(M('= √' + (k * k) + ' · √' + m + ' = ' + k + '√' + m))]),
+      params: { n: n }
+    };
+  });
+  def('T-P13-b', 'P-13', 2, ['HSN.RN.A.2'], function (R) {
+    var pairs = [[6, 15], [10, 15], [6, 10], [3, 15], [8, 6], [14, 7], [10, 35], [6, 21], [15, 35], [2, 14], [12, 15], [6, 14]];
+    var pr = R.pick(pairs), a = pr[0], b = pr[1], s = simplifySqrt(a * b);
+    return {
+      prompt: 'Multiply and simplify: ' + M('√' + a + ' · √' + b) + '<div class="hint">Type √ as sqrt.</div>', type: 'number', form: 'radical', key: s[0] * Math.sqrt(s[1]), keyHTML: M(radHTML(s[0], s[1])),
+      traps: [],
+      solution: steps([step(M('√' + a + ' · √' + b + ' = √' + a * b), 'for nonnegative numbers, multiply under one root'), step(M('√' + a * b + ' = √(' + s[0] * s[0] + ' · ' + s[1] + ') = ' + radHTML(s[0], s[1])), 'pull out the largest perfect square, ' + s[0] * s[0])]),
+      params: { a: a, b: b }
+    };
+  });
+  def('T-P13-c', 'P-13', 2, ['HSN.RN.A.1', 'HSN.RN.A.2'], function (R) {
+    var opts = [[8, 2, 3, 2], [27, 2, 3, 3], [16, 3, 2, 4], [4, 3, 2, 2], [9, 3, 2, 3], [25, 3, 2, 5], [64, 2, 3, 4], [125, 2, 3, 5]];
+    var o = R.pick(opts), base = o[0], p = o[1], q = o[2], r = o[3], val = Math.pow(r, p);
+    return {
+      prompt: 'Evaluate: ' + M(base + '<sup>' + p + '/' + q + '</sup>'), type: 'number', key: val, keyHTML: M(val),
+      traps: [trap('RATEXP_MULT', 'conceptual', 'Multiplied the base by the fraction', base * p / q), trap('RATEXP_INVERTED', 'procedural', 'Used the ' + p + (p === 2 ? 'nd' : 'rd') + ' root and the ' + q + (q === 2 ? 'nd' : 'rd') + ' power', Math.pow(Math.pow(base, 1 / p), q))],
+      solution: steps([step(M(base + '<sup>' + p + '/' + q + '</sup> = (' + (q === 2 ? '√' : '∛') + base + ')' + sq(p)), 'the bottom of the exponent is the root, the top is the power'), step(M('= ' + r + sq(p) + ' = ' + val))]),
+      params: { base: base, p: p, q: q }
+    };
+  });
+
+  // ---------- build an instrument ----------
+  function buildDiagnostic(seed) {
+    var R = makeRng(seed);
+    var items = T.map(function (tpl) {
+      var it = tpl.gen(makeRng((seed ^ hash(tpl.id)) >>> 0));
+      it.template_id = tpl.id; it.skill = tpl.skill; it.difficulty = tpl.difficulty; it.standards = tpl.standards;
+      it.vars = it.vars || [];
+      return it;
+    });
+    var ordered = [];
+    [1, 2, 3].forEach(function (d) { ordered = ordered.concat(R.shuffle(items.filter(function (i) { return i.difficulty === d; }))); });
+    return ordered;
+  }
+  function hash(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function generate(templateId, seed) { var t = T.filter(function (x) { return x.id === templateId; })[0]; var it = t.gen(makeRng(seed)); it.template_id = t.id; it.skill = t.skill; it.difficulty = t.difficulty; it.vars = it.vars || []; return it; }
+
+  var API = {
+    version: '2.0', SKILLS: SKILLS, TEMPLATES: T, buildDiagnostic: buildDiagnostic, generate: generate,
+    grade: grade, preview: preview, parse: parse, pretty: pretty, normalize: normalize, evaluate: evaluate
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API; else root.ALG2 = API;
+})(this);
+
+</script>
+<script>
+(function(){
+'use strict';
+var E = window.ALG2;
+var KEY = 'alg2-tutor-06-diagnostic-v2';
+var INSTRUMENT = 'alg2-tutor-06-prereq-diagnostic';
+var APP_FILE = 'alg2-tutor-06-prereq-diagnostic-app-v2.html';
+var VERSION = '2.0';
+var STATUS_RULE = 'untested = no items; gap = 2+ wrong or skipped; solid = all correct, no guessing, at least 2 answered "sure"; fragile = everything else. flagged = any answer wrong while "sure" (confident-wrong: repair first).';
+var app = document.getElementById('app');
+var state = null, items = null, shownAt = 0;
+
+function load(){ try{ var s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function clearSaved(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+// v2: plain-text math for the results file. Stacked fractions become (a)/(b), superscripts become ^n.
+function txt(html){
+  var d=document.createElement('div'); d.innerHTML=html;
+  [].slice.call(d.querySelectorAll('.hint')).forEach(function(h){ h.remove(); });
+  [].slice.call(d.querySelectorAll('br')).forEach(function(b){ b.replaceWith('; '); });
+  [].slice.call(d.querySelectorAll('.sys')).forEach(function(s){ s.prepend(' '); });
+  function wrap(t){ t=t.trim(); return /^[−-]?[0-9a-z.√]+$/i.test(t) ? t : '('+t+')'; }
+  [].slice.call(d.querySelectorAll('sup')).reverse().forEach(function(s){ s.replaceWith('^'+wrap(s.textContent)); });
+  [].slice.call(d.querySelectorAll('.fr')).reverse().forEach(function(f){
+    var parts=f.children; if(parts.length===2) f.replaceWith(wrap(parts[0].textContent)+'/'+wrap(parts[1].textContent));
+  });
+  return (d.textContent||'').replace(/\u00a0\u00a0\s*/g,'; ').replace(/\u00a0/g,' ').replace(/\s+/g,' ').trim();
+}
+
+function newState(){
+  var seed = (Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0;
+  return { instrument: INSTRUMENT, version: VERSION, seed: seed, started: new Date().toISOString(), idx: 0, responses: [], finished: null };
+}
+
+function intro(){
+  var saved = load();
+  var resumable = saved && saved.version === VERSION && !saved.finished && saved.idx > 0;
+  var done = saved && saved.version === VERSION && saved.finished;
+  app.innerHTML =
+    '<h1>Algebra 1 check-up</h1>'+
+    '<p>About 30 to 40 minutes, 39 problems. This checks the Algebra 1 skills that Algebra 2 is built on, so the tutor knows where to start. It isn’t graded and nobody is judging the score.</p>'+
+    '<div class="card"><ul class="tight">'+
+      '<li><b>No calculator.</b> Use scratch paper, and keep it. Snap a photo when you’re done: your written work shows things the answers can’t.</li>'+
+      '<li>After each answer, tap how sure you are. That tells the tutor as much as the answer does.</li>'+
+      '<li>Never learned it, or no idea where to start? Tap <b>Skip</b>. A skip is useful information. A lucky guess hides a gap.</li>'+
+      '<li>You won’t see right or wrong until the end. Then every miss comes with the full method.</li>'+
+      '<li>You can close this and come back later on this same device and browser.</li>'+
+    '</ul></div>'+
+    '<div class="card"><b>Typing math</b><ul class="tight">'+
+      '<li>Exponent: <span class="kbd">x^2</span> &nbsp; Square root: <span class="kbd">sqrt(5)</span> or the √ button</li>'+
+      '<li>Fraction: <span class="kbd">3/4</span> &nbsp; Two answers: <span class="kbd">2, -5</span> or <span class="kbd">3 ± sqrt(2)</span></li>'+
+      '<li>Inequality: <span class="kbd">x &lt;= 4</span> &nbsp; Point: <span class="kbd">(2, 5)</span></li>'+
+      '<li>The buttons under the answer box type the awkward symbols for you.</li>'+
+      '<li>Under the answer box you’ll see how your answer was read. Check it before you submit.</li>'+
+    '</ul></div>'+
+    '<div class="row">'+
+      (resumable ? '<button class="btn" id="resume">Resume at question '+(saved.idx+1)+'</button><button class="btn ghost" id="fresh">Start over</button>' :
+       done ? '<button class="btn" id="results">See my results</button><button class="btn ghost" id="fresh">Take it again</button>' :
+       '<button class="btn" id="fresh">Start</button>')+
+    '</div>';
+  var f=document.getElementById('fresh'); f.onclick=function(){ if((resumable||done) && !confirm('Start a new check-up? Your saved progress on this device will be replaced.')) return; clearSaved(); state=newState(); items=E.buildDiagnostic(state.seed); save(); question(); };
+  var r=document.getElementById('resume'); if(r) r.onclick=function(){ state=saved; items=E.buildDiagnostic(state.seed); question(); };
+  var s=document.getElementById('results'); if(s) s.onclick=function(){ state=saved; items=E.buildDiagnostic(state.seed); results(); };
+}
+
+function keypadFor(it){
+  var v = (it.vars && it.vars[0]) || 'x';
+  var k;
+  if(it.type==='ineq') k=['x','<','>','≤','≥','−','(',')','/'];
+  else if(it.type==='pair') k=['(',')',',','−','/'];
+  else if(it.type==='expr') k=[v,'^2','^','−','(',')','/','√'];
+  else if(it.type==='set') k=['−','±',',','√','/','(',')'];
+  else k=['−','/','√','^','(',')'];
+  return k.map(function(s){ return '<button type="button" data-k="'+esc(s)+'">'+(s==='^2'?esc(v)+'²':esc(s))+'</button>'; }).join('');
+}
+
+function question(){
+  if(state.idx >= items.length){ finish(); return; }
+  var it = items[state.idx], n = state.idx+1, N = items.length;
+  app.innerHTML =
+    '<div class="top"><span>Question '+n+' of '+N+'</span><span>Progress saves automatically</span></div>'+
+    '<div class="bar"><div style="width:'+(100*state.idx/N)+'%"></div></div>'+
+    '<div class="card"><div class="prompt">'+it.prompt+'</div>'+
+      '<input type="text" id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Your answer">'+
+      '<div class="keys" id="keys">'+keypadFor(it)+'</div>'+
+      '<div class="read" id="read"></div>'+
+      '<div class="confq">Submit, and how sure are you?</div>'+
+      '<div class="conf">'+
+        '<button class="btn" data-c="sure" disabled>Sure</button>'+
+        '<button class="btn" data-c="think" disabled>Think so</button>'+
+        '<button class="btn" data-c="guess" disabled>Guessing</button>'+
+      '</div>'+
+      '<button class="link" id="skip">Skip: I haven’t learned this or don’t know how to start</button>'+
+    '</div>';
+  var inp=document.getElementById('ans'), read=document.getElementById('read');
+  var btns=[].slice.call(app.querySelectorAll('button[data-c]'));
+  function refresh(){
+    var p=E.preview(it, inp.value);
+    if(p.ok){ read.className='read ok'; read.innerHTML='Reads as: <span class="m">'+esc(p.text)+'</span>'; }
+    else { read.className='read err'; read.textContent=p.error||''; }
+    btns.forEach(function(b){ b.disabled=!p.ok; });
+  }
+  inp.addEventListener('input', refresh);
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(!btns[0].disabled){ read.className='read ok'; read.innerHTML += ' &nbsp;<b>Now tap how sure you are.</b>'; } } });
+  document.getElementById('keys').addEventListener('click', function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var k=b.getAttribute('data-k'), s=inp.selectionStart==null?inp.value.length:inp.selectionStart, t=inp.selectionEnd==null?s:inp.selectionEnd;
+    if(k==='√') k='sqrt(';
+    inp.value=inp.value.slice(0,s)+k+inp.value.slice(t);
+    var pos=s+k.length; inp.focus(); try{ inp.setSelectionRange(pos,pos); }catch(_){}
+    refresh();
+  });
+  btns.forEach(function(b){ b.onclick=function(){ submit(it, inp.value, b.getAttribute('data-c')); }; });
+  document.getElementById('skip').onclick=function(){ submit(it, '', 'skip'); };
+  shownAt=Date.now();
+  inp.focus();
+}
+
+function submit(it, raw, conf){
+  var rec = { n: state.idx+1, template_id: it.template_id, skill: it.skill, difficulty: it.difficulty, standards: it.standards,
+    params: it.params, prompt_text: txt(it.prompt), key_text: txt(it.keyHTML), response_raw: raw, confidence: conf,
+    time_ms: Date.now()-shownAt, skipped: conf==='skip' };
+  if(conf==='skip'){ rec.verdict='skipped'; rec.error_type='no-attempt'; }
+  else {
+    try{
+      var g=E.grade(it, raw);
+      rec.verdict=g.verdict; rec.response_read=g.text;
+      if(g.verdict==='form'){ rec.error_type='notation'; rec.form_issue=g.formMsg; rec.form_code=g.formCode; }
+      if(g.verdict==='wrong'){ rec.error_type = g.trap ? g.trap.error_type : 'unknown'; rec.trap_code = g.trap ? g.trap.code : null; rec.trap_label = g.trap ? g.trap.label : null; }
+    }catch(e){ var r=document.getElementById('read'); r.className='read err'; r.textContent=e.message; return; }
+  }
+  state.responses[state.idx]=rec; state.idx++; save(); question();
+}
+
+function finish(){ state.finished=new Date().toISOString(); save(); results(); }
+
+function skillSummary(){
+  return E.SKILLS.map(function(s){
+    var rs=state.responses.filter(function(r){ return r && r.skill===s.id; });
+    var count=function(f){ return rs.filter(f).length; };
+    var correct=count(function(r){ return r.verdict==='correct'; });
+    var form=count(function(r){ return r.verdict==='form'; });
+    var wrong=count(function(r){ return r.verdict==='wrong'; });
+    var skipped=count(function(r){ return r.verdict==='skipped'; });
+    var sureRight=count(function(r){ return r.verdict==='correct' && r.confidence==='sure'; });
+    var guessedRight=count(function(r){ return r.verdict==='correct' && r.confidence==='guess'; });
+    var confWrong=count(function(r){ return r.verdict==='wrong' && r.confidence==='sure'; });
+    var status;
+    if(rs.length===0) status='untested';
+    else if(wrong+skipped>=2) status='gap';
+    else if(correct===rs.length && guessedRight===0 && sureRight>=2) status='solid';
+    else status='fragile';
+    return { skill:s.id, name:s.name, items:rs.length, correct:correct, form_issues:form, wrong:wrong, skipped:skipped,
+      sure_correct:sureRight, guessed_correct:guessedRight, confident_wrong:confWrong, status:status, flagged: confWrong>0,
+      dots: rs.map(function(r){ return r.verdict==='correct' ? (r.confidence==='guess'?'w':'g') : (r.verdict==='form'?'w':'b'); }) };
+  });
+}
+
+function payload(){
+  var S=skillSummary();
+  var cnt=function(v){ return state.responses.filter(function(r){ return r && r.verdict===v; }).length; };
+  return { instrument: INSTRUMENT, version: VERSION, app_file: APP_FILE, engine_version: E.version, learner: 'Charlie',
+    seed: state.seed, started: state.started, finished: state.finished, device: navigator.userAgent, status_rule: STATUS_RULE,
+    totals: { items: state.responses.length, correct: cnt('correct'), form: cnt('form'), wrong: cnt('wrong'), skipped: cnt('skipped'),
+      minutes: Math.round(state.responses.reduce(function(a,r){return a+((r&&r.time_ms)||0);},0)/60000) },
+    flagged_skills: S.filter(function(s){ return s.flagged; }).map(function(s){ return s.skill; }),
+    skills: S.map(function(s){ var o={}; for(var k in s) if(k!=='dots') o[k]=s[k]; return o; }),
+    items: state.responses };
+}
+function fname(){ var d=new Date(state.finished||Date.now()); function p(n){return (n<10?'0':'')+n;} return 'alg2-tutor-diagnostic-results-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+'.json'; }
+
+function results(){
+  var S=skillSummary(), P=payload(), t=P.totals;
+  var LBL={solid:'Solid',fragile:'Fragile',gap:'Needs work',untested:'Untested'};
+  var rows=S.map(function(s){ return '<tr><td>'+esc(s.name)+(s.flagged?'<span class="flag">You were sure on one you missed: look at it first</span>':'')+'</td><td class="dots">'+s.dots.map(function(d){return '<span class="'+d+'"></span>';}).join('')+'</td><td><span class="tag '+s.status+'">'+LBL[s.status]+'</span></td></tr>'; }).join('');
+  var review='';
+  items.forEach(function(it,i){
+    var r=state.responses[i]; if(!r) return;
+    var guessedRight = r.verdict==='correct' && r.confidence==='guess';
+    if(r.verdict==='correct' && !guessedRight) return;
+    var cls = (r.verdict==='form'||guessedRight) ? 'warn' : 'bad';
+    var head = r.verdict==='skipped' ? 'Skipped' : r.verdict==='form' ? 'Right value, wrong form' : guessedRight ? 'Right, but you were guessing' : (r.confidence==='sure' ? 'Not quite, and you were sure' : 'Not quite');
+    review += '<div class="rev '+cls+'"><div><b>'+(i+1)+'. '+head+'</b></div>'+
+      '<div class="prompt" style="font-size:1rem">'+it.prompt.replace(/<div class="hint">[\s\S]*?<\/div>/g,'')+'</div>'+
+      (r.verdict!=='skipped' ? '<div class="lbl">You wrote</div><div class="m">'+esc(r.response_read||r.response_raw)+'</div>' : '')+
+      (r.form_issue ? '<div class="note">'+esc(r.form_issue)+'</div>' : '')+
+      (r.trap_label ? '<div class="note">Looks like: '+esc(r.trap_label)+'.</div>' : '')+
+      '<div class="lbl">Answer</div><div>'+it.keyHTML+'</div>'+
+      '<div class="lbl">How it works</div>'+it.solution+'</div>';
+  });
+  app.innerHTML =
+    '<h1>Done.</h1>'+
+    '<p>'+t.correct+' of '+t.items+' right'+(t.skipped? ', '+t.skipped+' skipped':'')+'. About '+t.minutes+' minutes.</p>'+
+    '<div class="card"><b>Send your results</b><p class="note">This file is what the tutor gets built from. Download it and send it to your dad, along with a photo of your scratch paper.</p>'+
+      '<div class="row"><button class="btn" id="dl">Download results</button><button class="btn ghost" id="cp">Copy results</button></div>'+
+      '<div id="cpbox"></div></div>'+
+    '<h2>By skill</h2><div class="card"><table>'+rows+'</table>'+
+      '<p class="note">Green: right. Amber: right but guessing, or right value in the wrong form. Red: wrong or skipped. Solid means all three right and you were sure on at least two.</p></div>'+
+    (review ? '<h2>Go through these</h2><p class="muted">Each one shows the method step by step. Work each one again on paper before reading the steps.</p>'+review : '<h2>Clean sweep</h2><p>Nothing to review. Algebra 1 is solid.</p>')+
+    '<div class="row"><button class="link" id="home">Back to start</button></div>';
+  document.getElementById('dl').onclick=function(){
+    try{
+      var blob=new Blob([JSON.stringify(P,null,2)],{type:'application/json'});
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname(); document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    }catch(e){ showCopy(); }
+  };
+  document.getElementById('cp').onclick=function(){
+    var s=JSON.stringify(P);
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(s).then(function(){ document.getElementById('cpbox').innerHTML='<p class="note">Copied. Paste it into a message to your dad.</p>'; }, showCopy); }
+    else showCopy();
+  };
+  function showCopy(){ var b=document.getElementById('cpbox'); b.innerHTML='<p class="note">Select all of this, copy it, and paste it into a message:</p><textarea readonly>'+esc(JSON.stringify(P))+'</textarea>'; b.querySelector('textarea').select(); }
+  document.getElementById('home').onclick=intro;
+  window.scrollTo(0,0);
+}
+
+intro();
+})();
+</script>
+</body>
+</html>
