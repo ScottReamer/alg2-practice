@@ -1,0 +1,1518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Chapter 2: Quadratics</title>
+<!-- alg2-tutor-14-ch2-app-v3 (2026-11-15, S10). Changelog v3: session order for the 11-18 group test is quadratic formula,
+     key features, then completing the square; carries any v2 progress on the device. Changelog v2 (2026-11-12, S08): shorter sessions (2 warm-up, 1 faded, 3 on your own, 2 close;
+     about 12-15 min) for the group-test week; learner name removed from the results file. Engine unchanged (v1).
+     v1 header: (2026-10-30, S04). Chapter 2 slice 1: completing the square, quadratic formula and
+     discriminant, and what-is-it-asking key features. Design: alg2-tutor-14-ch2-app-design-v1.md (approved by Scott 2026-10-30). -->
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d2430; --muted:#5b6472; --line:#e3dfd6;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --good:#2e7d4f; --warn:#b26a00; --bad:#b3372f;
+  --good-bg:#e3f1e8; --warn-bg:#f8ecd9; --bad-bg:#f6e1df;
+  --soft:#eef3f7; --mfont:"Cambria Math","STIX Two Math","Latin Modern Math",Cambria,Georgia,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14181e; --card:#1c222b; --ink:#e7eaef; --muted:#9aa4b2; --line:#2c3440;
+    --accent:#5aa7dc; --accent-ink:#0e141a; --good:#5cc08a; --warn:#e0a23a; --bad:#ec7a70; --soft:#202a35;
+    --good-bg:#1f3328; --warn-bg:#3a2e1a; --bad-bg:#3d2523; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:1.6rem;margin:.2em 0 .4em}
+h2{font-size:1.15rem;margin:1.6em 0 .5em}
+p,li{color:var(--ink)}
+.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+.m{font-family:var(--mfont);font-size:1.12em;white-space:nowrap}
+.m i{font-style:italic}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .12em;font-size:.92em;line-height:1.15}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.sys{margin:.6em 0 .2em 1em;line-height:2}
+.hint{color:var(--muted);font-size:.9rem;margin-top:.5em}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:.9rem}
+.bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:8px 0 4px}
+.bar>div{height:100%;background:var(--accent);transition:width .25s}
+.prompt{font-size:1.15rem;line-height:1.7;overflow-x:auto}
+input[type=text]{width:100%;font:1.25rem var(--mfont);padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:14px}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.keys{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.keys button{font:1.1rem var(--mfont);min-width:48px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.read{min-height:1.6em;margin-top:10px;font-size:.95rem}
+.read.ok{color:var(--muted)} .read.err{color:var(--bad)}
+.confq{margin:18px 0 8px;font-weight:600}
+.conf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button.btn{font:600 1rem system-ui,sans-serif;min-height:48px;padding:12px 10px;border-radius:10px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;touch-action:manipulation}
+button.btn.ghost{background:transparent;color:var(--accent)}
+button.btn:disabled{opacity:.45;cursor:default}
+button.link{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.95rem;padding:12px 0;margin-top:6px;min-height:44px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+ul.tight{padding-left:1.2em} ul.tight li{margin:.3em 0}
+code,.kbd{font-family:var(--mfont);background:var(--soft);padding:1px 6px;border-radius:5px}
+table{width:100%;border-collapse:collapse}
+td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+.dots span{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:var(--line)}
+.dots .g{background:var(--good)} .dots .w{background:var(--warn)} .dots .b{background:var(--bad)}
+.tag{font-size:.8rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+.tag.solid{background:var(--good-bg);color:var(--good)}
+.tag.fragile,.tag.untested{background:var(--warn-bg);color:var(--warn)}
+.tag.gap{background:var(--bad-bg);color:var(--bad)}
+.flag{display:block;font-size:.78rem;color:var(--bad);font-weight:600;margin-top:3px}
+.rev{border-left:4px solid var(--line);padding:2px 0 2px 14px;margin:18px 0}
+.rev.bad{border-color:var(--bad)} .rev.warn{border-color:var(--warn)}
+.rev .lbl{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:8px}
+ol.steps{padding-left:1.3em;margin:.4em 0} ol.steps li{margin:.45em 0}
+.why{display:block;color:var(--muted);font-size:.88rem}
+textarea{width:100%;height:140px;font:12px monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+.note{font-size:.9rem;color:var(--muted)}
+</style>
+<style>
+.phase{font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.opts{display:grid;gap:8px;margin-top:12px}
+.opts button{font:1rem system-ui,sans-serif;text-align:left;min-height:48px;padding:10px 14px;border:2px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.opts button.sel{border-color:var(--accent);background:var(--card)}
+.opts button.right{border-color:var(--good);background:var(--good-bg)}
+.opts button.wrongc{border-color:var(--bad);background:var(--bad-bg)}
+.verdict{font-size:1.2rem;font-weight:700;margin:.2em 0 .4em}
+.verdict.good{color:var(--good)} .verdict.warn{color:var(--warn)} .verdict.bad{color:var(--bad)}
+input[type=range]{width:100%;height:44px;accent-color:var(--accent)}
+.calc{font-size:.85rem;color:var(--muted)}
+.fade li.hidden{color:var(--muted);list-style:'… '}
+.big{font-size:1.05rem}
+.prog td,.prog th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+.pbar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;min-width:60px}
+.pbar>div{height:100%;background:var(--accent)}
+details summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+/* alg2-tutor-14 Chapter 2 app engine v1 (2026-10-30, S04).
+   Core parser and checkers copied verbatim from alg2-tutor-06-engine-v2 (lines 4-486), plus:
+   complex solution sets, unions of intervals, multiple choice, vertex-form and exact-form checks,
+   and the 12 Chapter 2 templates (completing the square, quadratic formula/discriminant, key features).
+   Pure JS, no DOM. Browser: window.ALG2C2. Node: module.exports. */
+(function (root) {
+  'use strict';
+
+  // ---------- RNG ----------
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function makeRng(seed) {
+    var r = mulberry32(seed);
+    var R = {
+      f: r,
+      int: function (lo, hi) { return lo + Math.floor(r() * (hi - lo + 1)); },
+      nz: function (lo, hi) { var v; do { v = lo + Math.floor(r() * (hi - lo + 1)); } while (v === 0); return v; },
+      pick: function (arr) { return arr[Math.floor(r() * arr.length)]; },
+      shuffle: function (arr) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    };
+    return R;
+  }
+
+  // ---------- number helpers ----------
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a; }
+  function lcm(a, b) { return Math.abs(a * b) / gcd(a, b); }
+  function reduce(p, q) { if (q < 0) { p = -p; q = -q; } var g = gcd(p, q) || 1; return [p / g, q / g]; }
+  function isSquarefree(n) { if (n < 2) return false; for (var k = 2; k * k <= n; k++) if (n % (k * k) === 0) return false; return true; }
+  function simplifySqrt(n) { // returns [outside, inside]
+    var out = 1, ins = n;
+    for (var k = Math.floor(Math.sqrt(n)); k >= 2; k--) { if (ins % (k * k) === 0) { out *= k; ins /= (k * k); k = Math.floor(Math.sqrt(ins)) + 1; } }
+    return [out, ins];
+  }
+  function approxEq(a, b) { return Math.abs(a - b) <= 1e-7 * Math.max(1, Math.abs(a), Math.abs(b)); }
+
+  // ---------- normalization ----------
+  var SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+  function normalize(s) {
+    s = String(s == null ? '' : s).toLowerCase();
+    s = s.replace(/[−–—]/g, '-').replace(/[×·⋅∙]/g, '*').replace(/÷/g, '/');
+    s = s.replace(/≤/g, '<=').replace(/≥/g, '>=').replace(/=</g, '<=').replace(/=>/g, '>=');
+    s = s.replace(/∞/g, 'inf').replace(/infinity/g, 'inf');
+    s = s.replace(/\+\/-|\+-/g, '±');
+    // superscripts -> ^(...)
+    s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, function (m) { var t = ''; for (var i = 0; i < m.length; i++) t += SUP[m[i]]; return '^(' + t + ')'; });
+    s = s.replace(/√\s*\(/g, 'sqrt(');
+    s = s.replace(/√\s*([0-9.]+|[a-z])/g, 'sqrt($1)');
+    s = s.replace(/sqrt\s*(?!\s*\()([0-9.]+|[a-z])/g, 'sqrt($1)');
+    s = s.replace(/\s+/g, ' ').trim();
+    return s;
+  }
+
+  // ---------- tokenizer / parser ----------
+  function tokenize(s) {
+    var toks = [], i = 0;
+    while (i < s.length) {
+      var ch = s[i];
+      if (ch === ' ') { i++; continue; }
+      if (/[0-9.]/.test(ch)) {
+        var j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++;
+        var str = s.slice(i, j);
+        if ((str.match(/\./g) || []).length > 1 || str === '.') throw new Error('“' + str + '” isn’t a number');
+        toks.push({ t: 'num', v: parseFloat(str), dec: str.indexOf('.') >= 0 ? str.length - str.indexOf('.') - 1 : 0 }); i = j; continue;
+      }
+      if (/[a-z]/.test(ch)) {
+        if (s.slice(i, i + 4) === 'sqrt') { toks.push({ t: 'fn', v: 'sqrt' }); i += 4; continue; }
+        toks.push({ t: 'var', v: ch }); i++; continue;
+      }
+      if ('+-*/^(),'.indexOf(ch) >= 0) { toks.push({ t: ch }); i++; continue; }
+      if (ch === '[' || ch === ']') { toks.push({ t: ch === '[' ? '(' : ')' }); i++; continue; }
+      throw new Error('I don’t recognize “' + ch + '”');
+    }
+    // implicit multiplication
+    var out = [];
+    for (var k = 0; k < toks.length; k++) {
+      var a = out[out.length - 1], b = toks[k];
+      if (a && (a.t === 'num' || a.t === 'var' || a.t === ')') && (b.t === 'num' || b.t === 'var' || b.t === 'fn' || b.t === '(')) out.push({ t: '*' });
+      out.push(b);
+    }
+    return out;
+  }
+  function parse(str) {
+    var toks = tokenize(normalize(str));
+    if (!toks.length) throw new Error('Nothing typed yet');
+    var p = 0;
+    function peek() { return toks[p]; }
+    function eat(t) { var k = toks[p]; if (!k || k.t !== t) throw new Error('Expected “' + t + '”'); p++; return k; }
+    function expr() {
+      var n = term();
+      while (peek() && (peek().t === '+' || peek().t === '-')) { var op = toks[p++].t; var r = term(); n = { t: op === '+' ? 'add' : 'sub', a: n, b: r }; }
+      return n;
+    }
+    function term() {
+      var n = unary();
+      while (peek() && (peek().t === '*' || peek().t === '/')) { var op = toks[p++].t; var r = unary(); n = { t: op === '*' ? 'mul' : 'div', a: n, b: r }; }
+      return n;
+    }
+    function unary() {
+      if (peek() && peek().t === '-') { p++; return { t: 'neg', a: unary() }; }
+      if (peek() && peek().t === '+') { p++; return unary(); }
+      return power();
+    }
+    function power() {
+      var base = primary();
+      if (peek() && peek().t === '^') { p++; var e = unary(); return { t: 'pow', a: base, b: e }; }
+      return base;
+    }
+    function primary() {
+      var k = peek();
+      if (!k) throw new Error('The expression ends too early');
+      if (k.t === 'num') { p++; var nn = { t: 'num', v: k.v }; if (k.dec) nn.dec = k.dec; return nn; }
+      if (k.t === 'var') { p++; return { t: 'var', v: k.v }; }
+      if (k.t === 'fn') { p++; eat('('); var a = expr(); eat(')'); return { t: 'sqrt', a: a }; }
+      if (k.t === '(') { p++; var e = expr(); eat(')'); return { t: 'paren', a: e }; }
+      throw new Error('Unexpected “' + k.t + '”');
+    }
+    var tree = expr();
+    if (p < toks.length) throw new Error('Unexpected “' + toks[p].t + '”');
+    return strip(tree);
+  }
+  function strip(n) { // remove paren nodes
+    if (!n) return n;
+    if (n.t === 'paren') return strip(n.a);
+    var m = { t: n.t }; if ('v' in n) m.v = n.v; if (n.dec) m.dec = n.dec;
+    if (n.a) m.a = strip(n.a); if (n.b) m.b = strip(n.b);
+    return m;
+  }
+  function evaluate(n, env) {
+    switch (n.t) {
+      case 'num': return n.v;
+      case 'var': if (!(n.v in env)) return NaN; return env[n.v];
+      case 'add': return evaluate(n.a, env) + evaluate(n.b, env);
+      case 'sub': return evaluate(n.a, env) - evaluate(n.b, env);
+      case 'mul': return evaluate(n.a, env) * evaluate(n.b, env);
+      case 'div': return evaluate(n.a, env) / evaluate(n.b, env);
+      case 'neg': return -evaluate(n.a, env);
+      case 'pow': return Math.pow(evaluate(n.a, env), evaluate(n.b, env));
+      case 'sqrt': var v = evaluate(n.a, env); return v < 0 ? NaN : Math.sqrt(v);
+    }
+    return NaN;
+  }
+  function varsIn(n, set) {
+    set = set || {};
+    if (!n) return set;
+    if (n.t === 'var') set[n.v] = true;
+    varsIn(n.a, set); varsIn(n.b, set);
+    return set;
+  }
+  function hasAddSub(n) { if (!n) return false; if (n.t === 'add' || n.t === 'sub') return true; if (n.t === 'sqrt') return false; return hasAddSub(n.a) || hasAddSub(n.b); }
+
+  // pretty printer (unicode) for the "we read this as" preview
+  var PREC = { add: 1, sub: 1, mul: 2, div: 2, neg: 3, pow: 4, num: 5, var: 5, sqrt: 5 };
+  var SUPS = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
+  function fmtN(v) { var s = (Math.round(v * 1e9) / 1e9).toString(); return s.replace('-', '−'); }
+  function pretty(n) {
+    function wrap(c, minP) { var s = pretty(c); return PREC[c.t] < minP ? '(' + s + ')' : s; }
+    switch (n.t) {
+      case 'num': return fmtN(n.v);
+      case 'var': return n.v;
+      case 'add': return pretty(n.a) + ' + ' + wrap(n.b, 2);
+      case 'sub': return pretty(n.a) + ' − ' + wrap(n.b, 2);
+      case 'mul':
+        var L = wrap(n.a, 2), R = wrap(n.b, 3);
+        var juxt = (n.b.t === 'var' || n.b.t === 'sqrt' || (n.b.t === 'pow' && n.b.a.t === 'var') || R[0] === '(') && n.a.t !== 'div';
+        return juxt ? L + R : L + '·' + R;
+      case 'div': return wrap(n.a, 2) + '/' + wrap(n.b, 3);
+      case 'neg': return '−' + wrap(n.a, 3);
+      case 'pow':
+        var base = n.a.t === 'num' && n.a.v < 0 ? '(' + pretty(n.a) + ')' : wrap(n.a, 5);
+        if (n.b.t === 'num' && Number.isInteger(n.b.v) && n.b.v >= 0) return base + String(n.b.v).split('').map(function (d) { return SUPS[d]; }).join('');
+        if (n.b.t === 'neg' && n.b.a.t === 'num' && Number.isInteger(n.b.a.v)) return base + '⁻' + String(n.b.a.v).split('').map(function (d) { return SUPS[d]; }).join('');
+        return base + '^(' + pretty(n.b) + ')';
+      case 'sqrt': var a = pretty(n.a); return (n.a.t === 'num' || n.a.t === 'var') ? '√' + a : '√(' + a + ')';
+    }
+    return '?';
+  }
+
+  // ---------- equivalence ----------
+  var SAMPLES = [-2.31, -1.17, 0.73, 1.91, 2.63, 3.37, -0.41, 4.19, 0.29, -3.07];
+  function equivExpr(A, B, vars) {
+    var good = 0;
+    for (var i = 0; i < SAMPLES.length; i++) {
+      var env = {};
+      for (var j = 0; j < vars.length; j++) env[vars[j]] = SAMPLES[(i + 3 * j) % SAMPLES.length] + 0.13 * j;
+      var a = evaluate(A, env), b = evaluate(B, env);
+      if (!isFinite(a) || !isFinite(b)) { if (isFinite(a) !== isFinite(b)) return false; continue; }
+      if (!approxEq(a, b)) return false;
+      good++;
+    }
+    return good >= 4;
+  }
+
+  // ---------- form checks ----------
+  function flattenMul(n, out) {
+    out = out || [];
+    if (n.t === 'mul') { flattenMul(n.a, out); flattenMul(n.b, out); }
+    else if (n.t === 'neg') { flattenMul(n.a, out); }
+    else out.push(n);
+    return out;
+  }
+  function flattenAdd(n, out) {
+    out = out || [];
+    if (n.t === 'add' || n.t === 'sub') { flattenAdd(n.a, out); flattenAdd(n.b, out); } else out.push(n);
+    return out;
+  }
+  function isExpanded(n) {
+    if (!n) return true;
+    if (n.t === 'mul' && (hasAddSub(n.a) || hasAddSub(n.b))) return false;
+    if (n.t === 'pow' && hasAddSub(n.a)) return false;
+    if (n.t === 'neg' && hasAddSub(n.a)) return false;
+    return isExpanded(n.a) && isExpanded(n.b);
+  }
+  function factoredCount(n) {
+    var fs = flattenMul(n), c = 0;
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i]; if (!Object.keys(varsIn(f)).length) continue;
+      if (f.t === 'pow' && f.b.t === 'num' && Number.isInteger(f.b.v) && f.b.v >= 2 && hasAddSub(f.a)) c += f.b.v;
+      else c += 1;
+    }
+    return c;
+  }
+  function isMonomialForm(n) {
+    if (n.t === 'div') return false;
+    var fs = flattenMul(n), seen = {}, nums = 0;
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i];
+      if (f.t === 'num') { nums++; continue; }
+      var v = null;
+      if (f.t === 'var') v = f.v;
+      else if (f.t === 'pow' && f.a.t === 'var' && f.b.t === 'num') v = f.a.v;
+      else return false;
+      if (seen[v]) return false; seen[v] = true;
+    }
+    return nums <= 1;
+  }
+  function radicalsSimplified(n) {
+    if (!n) return true;
+    if (n.t === 'sqrt') {
+      if (Object.keys(varsIn(n.a)).length) return false;
+      var v = evaluate(n.a, {});
+      if (!Number.isInteger(v) || !isSquarefree(v)) return false;
+    }
+    if (n.t === 'div' && containsSqrt(n.b)) return false;
+    if (n.t === 'pow' && n.b.t !== 'num') return false; // no fractional exponents left
+    return radicalsSimplified(n.a) && radicalsSimplified(n.b);
+  }
+  function containsSqrt(n) { if (!n) return false; if (n.t === 'sqrt') return true; return containsSqrt(n.a) || containsSqrt(n.b); }
+  function isLowestFraction(n) {
+    var m = n.t === 'neg' ? n.a : n;
+    if (m.t === 'num') return Number.isInteger(m.v);
+    if (m.t === 'div' && m.a.t === 'num' && m.b.t === 'num' && Number.isInteger(m.a.v) && Number.isInteger(m.b.v)) return gcd(m.a.v, m.b.v) === 1 && m.b.v !== 1;
+    return false;
+  }
+  // v2: a bare decimal (e.g. 8.485 for 6√2) on an exact-radical item. Notation, not a wrong idea.
+  function isDecimalApprox(item, r) {
+    if (item.form !== 'radical' || item.type !== 'number') return false;
+    var m = r.ast.t === 'neg' ? r.ast.a : r.ast;
+    if (m.t !== 'num' || !m.dec) return false;
+    // accept the exact value rounded or truncated to the number of decimal places typed
+    return Math.abs(r.value - item.key) <= Math.pow(10, -m.dec) + 1e-12;
+  }
+
+  // ---------- answer parsing by type ----------
+  function stripLead(s, names) {
+    s = normalize(s);
+    for (var i = 0; i < names.length; i++) {
+      var re = new RegExp('^\\s*' + names[i] + '\\s*=\\s*');
+      if (re.test(s)) return s.replace(re, '');
+    }
+    return s;
+  }
+  function expandPM(s) {
+    var i = s.indexOf('±');
+    if (i < 0) return [s];
+    return [s.slice(0, i) + '+' + s.slice(i + 1), s.slice(0, i) + '-' + s.slice(i + 1)];
+  }
+  function parseNumber(raw) {
+    var s = stripLead(raw, ['x', 'y', 'a', 't']);
+    var ast = parse(s);
+    var vs = Object.keys(varsIn(ast));
+    if (vs.length) throw new Error('This answer should be a number, without “' + vs[0] + '”');
+    var v = evaluate(ast, {});
+    if (!isFinite(v)) throw new Error('That doesn’t evaluate to a real number');
+    return { ast: ast, value: v, text: pretty(ast) };
+  }
+  function parseExprAns(raw, vars) {
+    var s = stripLead(raw, ['y']).replace(/^\s*[a-z]\s*\([^=]*\)\s*=\s*/, '');
+    var ast = parse(s);
+    var vs = Object.keys(varsIn(ast));
+    for (var i = 0; i < vs.length; i++) if (vars.indexOf(vs[i]) < 0) throw new Error('Unexpected letter “' + vs[i] + '”; use ' + vars.join(', '));
+    return { ast: ast, text: pretty(ast) };
+  }
+  function parseSet(raw) {
+    var s = normalize(raw).replace(/\bor\b|\band\b|;/g, ',');
+    var parts = s.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    if (!parts.length) throw new Error('Nothing typed yet');
+    var vals = [], texts = [];
+    parts.forEach(function (pt) {
+      expandPM(pt.replace(/^x\s*=\s*/, '')).forEach(function (q) {
+        var r = parseNumber(q); vals.push(r.value); texts.push(r.text);
+      });
+    });
+    return { values: vals, text: texts.join(', ') };
+  }
+  function parsePair(raw) {
+    var s = normalize(raw);
+    var mx = s.match(/x\s*=\s*([^,;]+)/), my = s.match(/y\s*=\s*([^,;]+)/);
+    var a, b;
+    if (mx && my) { a = mx[1]; b = my[1]; }
+    else {
+      var inner = s.replace(/^\(/, '').replace(/\)$/, '');
+      var parts = inner.split(',');
+      if (parts.length !== 2) throw new Error('Type two numbers, like (2, 5)');
+      a = parts[0]; b = parts[1];
+    }
+    var A = parseNumber(a), B = parseNumber(b);
+    return { values: [A.value, B.value], text: '(' + A.text + ', ' + B.text + ')' };
+  }
+  var FLIP = { '<': '>', '>': '<', '<=': '>=', '>=': '<=' };
+  function parseIneq(raw) {
+    var s = normalize(raw).replace(/\s/g, '');
+    var iv = s.match(/^([\[(])(-?inf|[^,]+),(-?inf|[^\])]+)([\])])$/);
+    if (iv) {
+      var lo = /-inf/.test(iv[2]) ? -Infinity : parseNumber(iv[2]).value;
+      var hi = /^inf$|^\+inf$/.test(iv[3]) ? Infinity : parseNumber(iv[3]).value;
+      return mkIv(lo, iv[1] === '[', hi, iv[4] === ']');
+    }
+    var parts = s.split(/(<=|>=|<|>)/);
+    if (parts.length === 3) {
+      var A = parts[0], op = parts[1], B = parts[2];
+      if (A === 'x') return single(op, parseNumber(B).value);
+      if (B === 'x') return single(FLIP[op], parseNumber(A).value);
+      throw new Error('Write it with x on one side, like x < 4');
+    }
+    if (parts.length === 5 && parts[2] === 'x') {
+      var a = parseNumber(parts[0]).value, b = parseNumber(parts[4]).value, o1 = parts[1], o2 = parts[3];
+      if (o1[0] === '<' && o2[0] === '<') return mkIv(a, o1 === '<=', b, o2 === '<=');
+      if (o1[0] === '>' && o2[0] === '>') return mkIv(b, o2 === '>=', a, o1 === '>=');
+      throw new Error('Both signs in a compound inequality should point the same way');
+    }
+    throw new Error('Write an inequality like x < 4 or −3 < x < 7');
+    function single(op, v) {
+      if (op === '<') return mkIv(-Infinity, false, v, false);
+      if (op === '<=') return mkIv(-Infinity, false, v, true);
+      if (op === '>') return mkIv(v, false, Infinity, false);
+      return mkIv(v, true, Infinity, false);
+    }
+  }
+  function mkIv(lo, loIn, hi, hiIn) {
+    if (lo > hi) throw new Error('That range has no numbers in it');
+    var iv = { lo: lo, loIn: isFinite(lo) ? loIn : false, hi: hi, hiIn: isFinite(hi) ? hiIn : false };
+    iv.text = ivText(iv);
+    return iv;
+  }
+  function ivText(iv) {
+    var f = function (v) { return fmtN(v); };
+    if (!isFinite(iv.lo)) return 'x ' + (iv.hiIn ? '≤' : '<') + ' ' + f(iv.hi);
+    if (!isFinite(iv.hi)) return 'x ' + (iv.loIn ? '≥' : '>') + ' ' + f(iv.lo);
+    return f(iv.lo) + ' ' + (iv.loIn ? '≤' : '<') + ' x ' + (iv.hiIn ? '≤' : '<') + ' ' + f(iv.hi);
+  }
+  function eqIv(a, b) {
+    function e(x, y) { return (!isFinite(x) && !isFinite(y) && x === y) || (isFinite(x) && isFinite(y) && approxEq(x, y)); }
+    return e(a.lo, b.lo) && e(a.hi, b.hi) && a.loIn === b.loIn && a.hiIn === b.hiIn;
+  }
+  function eqMultiset(a, b) {
+    if (a.length !== b.length) return false;
+    var used = b.map(function () { return false; });
+    for (var i = 0; i < a.length; i++) {
+      var hit = -1;
+      for (var j = 0; j < b.length; j++) if (!used[j] && approxEq(a[i], b[j])) { hit = j; break; }
+      if (hit < 0) return false; used[hit] = true;
+    }
+    return true;
+  }
+  function dedupe(arr) { var out = []; arr.forEach(function (v) { if (!out.some(function (w) { return approxEq(v, w); })) out.push(v); }); return out; }
+
+  // preview: parse for display without grading. Returns {ok, text} or {ok:false, error}
+  function preview(item, raw) {
+    if (!String(raw).trim()) return { ok: false, error: '' };
+    try {
+      var r = readAnswer(item, raw);
+      return { ok: true, text: r.text };
+    } catch (e) { return { ok: false, error: e.message }; }
+  }
+  function readAnswer(item, raw) {
+    switch (item.type) {
+      case 'number': return parseNumber(raw);
+      case 'expr': return parseExprAns(raw, item.vars);
+      case 'set': return parseSet(raw);
+      case 'pair': return parsePair(raw);
+      case 'ineq': return parseIneq(raw);
+    }
+    throw new Error('Unknown answer type');
+  }
+  var FORM_MSG = {
+    'lowest': 'Right value, but give it as a fraction in lowest terms.',
+    'expanded': 'Right value, but it isn’t fully multiplied out and simplified.',
+    'factored': 'Right value, but it isn’t factored completely.',
+    'radical': 'Right value, but the radical isn’t fully simplified.',
+    'monomial': 'Right value, but it isn’t simplified to a single term.',
+    'decimal': 'That’s the right size as a decimal, but the question wants the exact answer with a square root.'
+  };
+  function matches(item, r, key) {
+    switch (item.type) {
+      case 'number': return approxEq(r.value, key);
+      case 'expr': return equivExpr(r.ast, typeof key === 'string' ? parse(key) : key, item.vars);
+      case 'set': return eqMultiset(dedupe(r.values), dedupe(key));
+      case 'pair': return approxEq(r.values[0], key[0]) && approxEq(r.values[1], key[1]);
+      case 'ineq': return eqIv(r, key);
+    }
+    return false;
+  }
+  function formOk(item, r) {
+    var f = item.form; if (!f) return true;
+    var ast = r.ast;
+    if (f === 'lowest') return isLowestFraction(ast);
+    if (f === 'expanded') return isExpanded(ast) && flattenAdd(ast).length <= item.terms;
+    if (f === 'factored') return factoredCount(ast) >= 2;
+    if (f === 'radical') return radicalsSimplified(ast);
+    if (f === 'monomial') return isMonomialForm(ast);
+    return true;
+  }
+  // grade: returns {verdict:'correct'|'form'|'wrong', trap, text, formMsg, formCode}
+  function grade(item, raw) {
+    var r = readAnswer(item, raw);
+    if (matches(item, r, item.key)) {
+      if (!formOk(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM_MSG[item.form], formCode: 'FORM_' + item.form.toUpperCase() };
+      return { verdict: 'correct', text: r.text };
+    }
+    if (isDecimalApprox(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM_MSG.decimal, formCode: 'DECIMAL_FOR_EXACT' };
+    var trap = null;
+    for (var i = 0; i < (item.traps || []).length; i++) {
+      var t = item.traps[i];
+      try { if (matches(item, r, t.key)) { trap = t; break; } } catch (e) { }
+    }
+    return { verdict: 'wrong', text: r.text, trap: trap ? { code: trap.code, error_type: trap.error_type, label: trap.label } : null };
+  }
+
+  // ---------- HTML formatting helpers for prompts ----------
+  var M = function (s) { return '<span class="m">' + s + '</span>'; };
+  function n$(v) { return v < 0 ? '−' + Math.abs(v) : String(v); }
+  function frac(p, q) { // html stacked fraction, reduced, sign in front
+    var r = reduce(p, q); p = r[0]; q = r[1];
+    if (q === 1) return n$(p);
+    return (p < 0 ? '−' : '') + '<span class="fr"><span>' + Math.abs(p) + '</span><span>' + q + '</span></span>';
+  }
+  function fracTxt(p, q) { var r = reduce(p, q); return r[1] === 1 ? String(r[0]) : r[0] + '/' + r[1]; }
+  // polynomial from coefficients high->low degree
+  function poly(c, v) {
+    v = v || 'x';
+    var deg = c.length - 1, out = '';
+    for (var i = 0; i < c.length; i++) {
+      var a = c[i], d = deg - i; if (a === 0) continue;
+      var abs = Math.abs(a), sign = a < 0 ? '−' : '+';
+      var coef = (abs === 1 && d > 0) ? '' : String(abs);
+      var vv = d === 0 ? '' : (d === 1 ? '<i>' + v + '</i>' : '<i>' + v + '</i><sup>' + d + '</sup>');
+      if (out === '') out = (a < 0 ? '−' : '') + coef + vv;
+      else out += ' ' + sign + ' ' + coef + vv;
+    }
+    return out || '0';
+  }
+  function polyS(c, v) { // ascii for keys
+    v = v || 'x';
+    var deg = c.length - 1, out = '';
+    for (var i = 0; i < c.length; i++) {
+      var a = c[i], d = deg - i; if (a === 0) continue;
+      var t = (Math.abs(a) === 1 && d > 0 ? (a < 0 ? '-' : '') : String(a)) + (d === 0 ? '' : (d === 1 ? v : v + '^' + d));
+      out += (out && a > 0 ? '+' : '') + t;
+    }
+    return out || '0';
+  }
+  function nz(c) { return c.filter(function (x) { return x !== 0; }).length; }
+  // "x + a" style binomial in html, e.g. lin(1,-3) = x − 3
+  function bin(a, b, v) { return poly([a, b], v); }
+  function paren(s) { return '(' + s + ')'; }
+  function sq(n) { return '<sup>' + n + '</sup>'; }
+  function X(v) { return '<i>' + (v || 'x') + '</i>'; }
+  function radHTML(out, ins) { if (ins === 1) return String(out); return (out === 1 ? '' : out) + '√' + ins; }
+  function step(s, why) { return '<li>' + s + (why ? '<span class="why">' + why + '</span>' : '') + '</li>'; }
+  function steps(arr) { return '<ol class="steps">' + arr.join('') + '</ol>'; }
+  function ivHTML(iv) { return ivText(iv).replace(/x/g, '<i>x</i>'); }
+
+
+  // =====================================================================
+  // App 14 additions
+  // =====================================================================
+  function fmtV(v) { return fmtN(v); }
+  function isInt(v) { return Math.abs(v - Math.round(v)) < 1e-9; }
+  function fracStr(v) { // exact-ish fraction text for keys/typing, e.g. -5/3
+    for (var q = 1; q <= 400; q++) { var p = Math.round(v * q); if (Math.abs(p / q - v) < 1e-10) { var r = reduce(p, q); return r[1] === 1 ? String(r[0]) : r[0] + '/' + r[1]; } }
+    return String(v);
+  }
+  function fracH(v) { for (var q = 1; q <= 400; q++) { var p = Math.round(v * q); if (Math.abs(p / q - v) < 1e-10) return frac(p, q); } return fmtV(v); }
+  // h ± o√m pieces from h and n (n > 0, not a perfect square)
+  function pmRad(h, n) {
+    var s = simplifySqrt(n), o = s[0], m = s[1];
+    var rad = (o === 1 ? '' : o) + '√' + m, radT = (o === 1 ? '' : o + '*') + 'sqrt(' + m + ')';
+    return {
+      html: h === 0 ? '±' + rad : n$(h) + ' ± ' + rad,
+      typed: h === 0 ? '±' + radT : String(h) + ' ± ' + radT,
+      values: [h + Math.sqrt(n), h - Math.sqrt(n)], o: o, m: m
+    };
+  }
+  function cplxH(re, im) { // a ± bi html
+    var b = Math.abs(im), bi = (b === 1 ? '' : b) + '<i>i</i>';
+    return re === 0 ? '±' + bi : n$(re) + ' ± ' + bi;
+  }
+  function stepsArr(arr) { return steps(arr.map(function (s) { return step(s.m, s.why); })); }
+  function S(m, why) { return { m: m, why: why }; }
+  function sgn(v) { return v === 0 ? '' : (v < 0 ? ' − ' : ' + ') + Math.abs(v); }
+  function vtx(h, k, a, v) { // html for a(x - h)^2 + k
+    v = v || 'x';
+    var A = a === 1 ? '' : a === -1 ? '−' : (Number.isInteger(a) ? n$(a) : fracH(a));
+    var inner = h === 0 ? '<i>' + v + '</i>' : '(<i>' + v + '</i> ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ')';
+    var base = h === 0 ? inner + sq(2) : inner + sq(2);
+    var kk = k === 0 ? '' : ' ' + (k > 0 ? '+' : '−') + ' ' + Math.abs(k);
+    return A + base + kk;
+  }
+  function vtxS(h, k, a) { // ascii
+    var A = a === 1 ? '' : a === -1 ? '-' : '(' + fracStr(a) + ')*';
+    var inner = h === 0 ? 'x' : '(x' + (h > 0 ? '-' : '+') + Math.abs(h) + ')';
+    return A + inner + '^2' + (k === 0 ? '' : (k > 0 ? '+' : '-') + Math.abs(k));
+  }
+  function ivUText(ivs) { // union text in interval notation
+    return ivs.map(function (iv) {
+      var lo = isFinite(iv.lo) ? fmtV(iv.lo) : '−∞', hi = isFinite(iv.hi) ? fmtV(iv.hi) : '∞';
+      return (iv.loIn ? '[' : '(') + lo + ', ' + hi + (iv.hiIn ? ']' : ')');
+    }).join(' ∪ ');
+  }
+  function ivUTyped(ivs) {
+    return ivs.map(function (iv) {
+      var lo = isFinite(iv.lo) ? fracStr(iv.lo) : '-inf', hi = isFinite(iv.hi) ? fracStr(iv.hi) : 'inf';
+      return (iv.loIn ? '[' : '(') + lo + ', ' + hi + (iv.hiIn ? ']' : ')');
+    }).join(' U ');
+  }
+
+  // ---------- new readers ----------
+  var ALLREALS = /^(all real( numbers)?|all reals|r|\(-inf,inf\))$/;
+  function readIneqVar(raw, v) {
+    var s = normalize(raw).replace(/\s/g, '');
+    if (ALLREALS.test(s.replace(/,/g, ',')) || ALLREALS.test(normalize(raw))) return mkIv(-Infinity, false, Infinity, false);
+    var wrongVar = false;
+    if (v && v !== 'x') { if (/x/.test(s.replace(/max|inf/g, ''))) wrongVar = true; s = s.replace(new RegExp(v, 'g'), 'x'); }
+    if (/[a-wyz]/.test(s.replace(/inf/g, '').replace(/sqrt/g, ''))) throw new Error('Use ' + (v || 'x') + ' in the inequality');
+    var r = parseIneq(s);
+    if (v && v !== 'x' && !wrongVar) r.text = r.text.replace(/x/g, v);
+    if (wrongVar) r.wrongVar = true;
+    return r;
+  }
+  function intersect(a, b) {
+    var lo, loIn, hi, hiIn;
+    if (a.lo > b.lo || (a.lo === b.lo && !a.loIn)) { lo = a.lo; loIn = a.loIn; } else { lo = b.lo; loIn = b.loIn; }
+    if (a.hi < b.hi || (a.hi === b.hi && !a.hiIn)) { hi = a.hi; hiIn = a.hiIn; } else { hi = b.hi; hiIn = b.hiIn; }
+    if (lo > hi || (lo === hi && !(loIn && hiIn))) return null;
+    return { lo: lo, loIn: loIn, hi: hi, hiIn: hiIn };
+  }
+  function readUnion(raw) {
+    var s = normalize(raw).replace(/∪/g, ' u ');
+    if (!s) throw new Error('Nothing typed yet');
+    if (ALLREALS.test(s.replace(/\s/g, '')) || /^all real/.test(s)) { var all = mkIv(-Infinity, false, Infinity, false); return { ivs: [all], text: '(−∞, ∞)' }; }
+    if (/\band\b|&/.test(s)) {
+      var parts = s.split(/\s*(?:\band\b|&)\s*/).filter(Boolean);
+      var acc = null;
+      parts.forEach(function (p) { var iv = readIneqVar(p, 'x'); acc = acc === null ? iv : (acc ? intersect(acc, iv) : null); });
+      if (!acc) return { ivs: [], empty: true, viaAnd: true, text: 'no numbers (an “and” of two conditions that can’t both be true)' };
+      var one = mkIv(acc.lo, acc.loIn, acc.hi, acc.hiIn);
+      return { ivs: [one], text: ivUText([one]) };
+    }
+    var pieces = s.split(/\s*\bu\b\s*|\s+\bor\b\s+/).filter(Boolean);
+    var ivs = pieces.map(function (p) { return readIneqVar(p, 'x'); });
+    ivs.sort(function (a, b) { return a.lo - b.lo; });
+    return { ivs: ivs, text: ivUText(ivs) };
+  }
+  function eqUnion(A, B) {
+    if (A.length !== B.length) return false;
+    var used = B.map(function () { return false; });
+    for (var i = 0; i < A.length; i++) {
+      var hit = -1;
+      for (var j = 0; j < B.length; j++) if (!used[j] && eqIv(A[i], B[j])) { hit = j; break; }
+      if (hit < 0) return false; used[hit] = true;
+    }
+    return true;
+  }
+  var NONE = /^(no( real)? solutions?|none|no solution|∅|\{\}|dne)$/;
+  function readCset(raw) {
+    var s = normalize(raw);
+    if (NONE.test(s.replace(/\s+/g, ' ').trim())) return { none: true, values: [], text: 'no solution' };
+    var parts = s.replace(/\bor\b|;/g, ',').split(',').map(function (x) { return x.trim().replace(/^x\s*=\s*/, ''); }).filter(Boolean);
+    if (!parts.length) throw new Error('Nothing typed yet');
+    var vals = [], texts = [];
+    parts.forEach(function (pt) {
+      expandPM(pt).forEach(function (q) {
+        var ast = parse(q), vs = Object.keys(varsIn(ast));
+        vs.forEach(function (v) { if (v !== 'i') throw new Error('Unexpected letter “' + v + '”; use i for the imaginary unit'); });
+        if (/sqrt\(\s*-/.test(q)) throw new Error('Write the square root of a negative using i, like 3i');
+        var f0 = evaluate(ast, { i: 0 }), f1 = evaluate(ast, { i: 1 }), f2 = evaluate(ast, { i: 2 });
+        if (![f0, f1, f2].every(isFinite)) throw new Error('That doesn’t evaluate to a number');
+        if (!approxEq(f2 - f0, 2 * (f1 - f0))) throw new Error('Simplify so i appears once, like 3 + 2i (no i²)');
+        vals.push([f0, f1 - f0]); texts.push(pretty(ast));
+      });
+    });
+    return { values: vals, text: texts.join(', ') };
+  }
+  function eqCset(A, B) {
+    var d = function (arr) { var out = []; arr.forEach(function (v) { if (!out.some(function (w) { return approxEq(v[0], w[0]) && approxEq(v[1], w[1]); })) out.push(v); }); return out; };
+    A = d(A); B = d(B);
+    if (A.length !== B.length) return false;
+    return A.every(function (a) { return B.some(function (b) { return approxEq(a[0], b[0]) && approxEq(a[1], b[1]); }); });
+  }
+
+  // ---------- form checks ----------
+  function isVertexForm(n) {
+    var terms = flattenAdd(n), withX = 0, ok = true;
+    terms.forEach(function (t) {
+      var vs = Object.keys(varsIn(t));
+      if (!vs.length) return;
+      withX++;
+      var u = t; while (u.t === 'neg') u = u.a;
+      if (u.t === 'mul') { var f = flattenMul(u).filter(function (q) { return Object.keys(varsIn(q)).length; }); if (f.length !== 1) { ok = false; return; } u = f[0]; }
+      if (u.t !== 'pow' || u.b.t !== 'num' || u.b.v !== 2) { ok = false; return; }
+      var base = u.a;
+      if (base.t === 'var') return;
+      if ((base.t === 'add' || base.t === 'sub') && base.a.t === 'var' && !Object.keys(varsIn(base.b)).length) return;
+      if (base.t === 'add' && base.b.t === 'var' && !Object.keys(varsIn(base.a)).length) return;
+      ok = false;
+    });
+    return ok && withX === 1;
+  }
+  function hasDecimal(n) { if (!n) return false; if (n.t === 'num' && n.dec) return true; return hasDecimal(n.a) || hasDecimal(n.b); }
+  function intCoefs(n, out) { // coefficients of a sum of integers and integer*sqrt terms; null if other shapes
+    out = out || [];
+    var terms = flattenAdd(n);
+    for (var i = 0; i < terms.length; i++) {
+      var t = terms[i]; while (t.t === 'neg') t = t.a;
+      if (t.t === 'num' && Number.isInteger(t.v)) { out.push(t.v); continue; }
+      if (t.t === 'sqrt') { out.push(1); continue; }
+      if (t.t === 'mul' && t.a.t === 'num' && Number.isInteger(t.a.v) && t.b.t === 'sqrt') { out.push(t.a.v); continue; }
+      return null;
+    }
+    return out;
+  }
+  function fractionReduced(n) {
+    var m = n; while (m.t === 'neg') m = m.a;
+    if (m.t !== 'div' || m.b.t !== 'num' || !Number.isInteger(m.b.v)) return true;
+    var c = intCoefs(m.a); if (!c) return true;
+    var g = Math.abs(m.b.v); c.forEach(function (x) { g = gcd(g, x); });
+    return g === 1;
+  }
+  var FORM14 = {
+    radical: 'Right value, but simplify it: pull perfect squares out of the root and reduce the fraction.',
+    exact: 'Right size as a decimal, but give the exact answer (a fraction or a square root).',
+    vertex: 'Same function, but it isn’t in vertex form. Write it as (x − h)² + k.'
+  };
+
+  // ---------- one reader / grader for all types ----------
+  function read14(item, raw) {
+    if (!String(raw).trim()) throw new Error('');
+    switch (item.type) {
+      case 'number': return parseNumber(raw);
+      case 'expr': return parseExprAns(raw, item.vars || ['x']);
+      case 'set':
+        var r = parseSet(raw); r.asts = [];
+        normalize(raw).replace(/\bor\b|\band\b|;/g, ',').split(',').map(function (x) { return x.trim(); }).filter(Boolean).forEach(function (pt) {
+          expandPM(pt.replace(/^x\s*=\s*/, '')).forEach(function (q) { r.asts.push(parse(q)); });
+        });
+        return r;
+      case 'cset': return readCset(raw);
+      case 'union': return readUnion(raw);
+      case 'ineq': return readIneqVar(raw, item.ivar || 'x');
+      case 'choice': var k = parseInt(raw, 10); if (!(k >= 0 && k < item.options.length)) throw new Error('Pick one'); return { choice: k, text: item.options[k] };
+    }
+    throw new Error('Unknown answer type');
+  }
+  function preview14(item, raw) {
+    if (!String(raw).trim()) return { ok: false, error: '' };
+    try { var r = read14(item, raw); return { ok: true, text: r.text }; } catch (e) { return { ok: false, error: e.message }; }
+  }
+  function match14(item, r, key) {
+    switch (item.type) {
+      case 'number': return approxEq(r.value, key);
+      case 'expr': return equivExpr(r.ast, parse(key), item.vars || ['x']);
+      case 'set': return eqMultiset(dedupe(r.values), dedupe(key));
+      case 'cset': if (key === 'NONE') return !!r.none; return !r.none && eqCset(r.values, key);
+      case 'union': if (key === 'EMPTY') return !!r.empty; return !r.empty && eqUnion(r.ivs, key);
+      case 'ineq': return eqIv(r, key);
+      case 'choice': return r.choice === key;
+    }
+    return false;
+  }
+  function decimalClose(item, r) { // right value typed as a rounded decimal
+    if (item.form !== 'exact' && item.form !== 'radical') return false;
+    var near = function (v, k, ast) { var m = ast; while (m && m.t === 'neg') m = m.a; if (!m || m.t !== 'num' || !m.dec) return false; return Math.abs(v - k) <= Math.pow(10, -m.dec) + 1e-12 && !approxEq(v, k); };
+    if (item.type === 'number') return near(r.value, item.key, r.ast);
+    if (item.type === 'set') {
+      var ks = dedupe(item.key), vs = r.values;
+      if (dedupe(vs).length !== ks.length) return false;
+      var anyDec = false;
+      var ok = vs.every(function (v, i) {
+        return ks.some(function (k) { if (approxEq(v, k)) return true; if (near(v, k, r.asts[i])) { anyDec = true; return true; } return false; });
+      });
+      return ok && anyDec;
+    }
+    return false;
+  }
+  function form14(item, r) {
+    if (item.form === 'vertex') return isVertexForm(r.ast) ? null : 'vertex';
+    if (item.form === 'radical' && item.type === 'set') {
+      var bad = r.asts.some(function (a) { return !radicalsSimplified(a) || !fractionReduced(a); });
+      return bad ? 'radical' : null;
+    }
+    return null;
+  }
+  function grade14(item, raw) {
+    var r = read14(item, raw);
+    if (r.wrongVar) return { verdict: 'wrong', text: r.text, trap: { code: 'X_FOR_Y', error_type: 'conceptual', label: 'Wrote the range with x; the range is the y-values, so write it with y (or in interval notation)' } };
+    if (match14(item, r, item.key)) {
+      var f = form14(item, r);
+      if (f) return { verdict: 'form', text: r.text, formMsg: FORM14[f], formCode: 'FORM_' + f.toUpperCase() };
+      return { verdict: 'correct', text: r.text };
+    }
+    if (decimalClose(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM14.exact, formCode: 'DECIMAL_FOR_EXACT' };
+    var hit = null;
+    (item.traps || []).some(function (t) { try { if (match14(item, r, t.key)) { hit = t; return true; } } catch (e) { } return false; });
+    return { verdict: 'wrong', text: r.text, trap: hit ? { code: hit.code, error_type: hit.error_type, label: hit.label } : null };
+  }
+
+  // ---------- concepts ----------
+  var CONCEPTS = [
+    { id: 'A', concept: 'C-QUAD-006', name: 'Completing the square', lessons: '2-5' },
+    { id: 'B', concept: 'C-QUAD-007', name: 'Quadratic formula and discriminant', lessons: '2-6' },
+    { id: 'C', concept: 'C-QUAD-001..003', name: 'What is it asking: key features', lessons: '2-1, 2-2, 2-3' }
+  ];
+  var ASKS = [
+    { id: 'x', label: 'x-value(s): the input (x, or t for time, or the price)' },
+    { id: 'y', label: 'a y-value: the output (y, f(x), height, profit)' },
+    { id: 'xint', label: 'an interval of x-values (inputs)' },
+    { id: 'yint', label: 'an interval of y-values (outputs)' },
+    { id: 'rule', label: 'an equation (a rule)' }
+  ];
+  var T14 = [];
+  function def14(id, concept, role, std, gen) { T14.push({ id: id, concept: concept, role: role, standards: std, gen: gen }); }
+  function tr(code, et, label, key, typed) { return { code: code, error_type: et, label: label, key: key, typed: typed }; }
+  function distinctSet(a, b) { return !eqMultiset(dedupe(a), dedupe(b)); }
+  var NONSQ = [2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17, 18, 19, 20, 24, 27, 28];
+
+  // ---------- A. Completing the square ----------
+  def14('T-Q06-a', 'A', 'drill', ['HSA.REI.B.4.A', 'HSA.SSE.B.3.B'], function (R) {
+    var b = R.f() < 0.7 ? R.pick([4, 6, 8, 10, 12, 14]) * R.pick([1, -1]) : R.pick([3, 5, 7, 9]) * R.pick([1, -1]);
+    var c = R.int(1, 20), key = b * b / 4;
+    return {
+      prompt: 'You’re completing the square on ' + M(poly([1, b, 0]) + ' = ' + c) + '. What number do you add to <b>both sides</b>?',
+      type: 'number', key: key, keyHTML: M(fracH(key)), keyTyped: fracStr(key),
+      traps: [tr('B_NOT_HALVED', 'procedural', 'Squared b without halving it first', b * b, String(b * b)),
+              tr('HALF_NOT_SQUARED', 'procedural', 'Halved b but didn’t square it', b / 2, fracStr(b / 2))],
+      steps: [S(M('half of ' + n$(b) + ' is ' + fracH(b / 2)), 'take half the x-coefficient'),
+              S(M('(' + fracH(b / 2) + ')' + sq(2) + ' = ' + fracH(key)), 'square it: that’s the missing corner of the square'),
+              S(M(poly([1, b, 0]) + ' + ' + fracH(key) + ' = ' + c + ' + ' + fracH(key)), 'add it to both sides, or the equation stops being true')],
+      desmos: null, asks: null, params: { b: b, c: c }
+    };
+  });
+  def14('T-Q06-b', 'A', 'drill', ['HSA.REI.B.4.A', 'HSA.REI.B.4.B'], function (R) {
+    var h, q, c;
+    do { h = R.nz(-6, 6); q = R.int(1, 7); c = h * h - q * q; } while (c === 0);
+    var b = -2 * h, roots = [h - q, h + q], moved = R.f() < 0.4;
+    var eq = moved ? poly([1, b, 0]) + ' = ' + n$(-c) : poly([1, b, c]) + ' = 0';
+    var traps = [tr('MISSING_PM', 'procedural', 'Took only the positive square root (both ± roots count)', [h + q], String(h + q)),
+                 tr('MISSING_PM', 'procedural', 'Took only one square root (both ± roots count)', [h - q], String(h - q))];
+    if (distinctSet([-h - q, -h + q], roots)) traps.push(tr('SIGN_H', 'slip', 'Sign flipped on the shift: (x − h)² = … gives x = h ± …', [-h - q, -h + q], (-h - q) + ', ' + (-h + q)));
+    if (-c > 0) { var r1 = h + Math.sqrt(-c), r2 = h - Math.sqrt(-c); if (distinctSet([r1, r2], roots)) traps.push(tr('ONE_SIDE_ONLY', 'procedural', 'Added (b/2)² to the left side only', [r1, r2], h + ' ± sqrt(' + (-c) + ')')); }
+    return {
+      prompt: 'Solve by completing the square: ' + M(eq), type: 'set', key: roots,
+      keyHTML: M('<i>x</i> = ' + n$(h - q) + ' or <i>x</i> = ' + n$(h + q)), keyTyped: (h - q) + ', ' + (h + q),
+      traps: traps,
+      steps: [S(M(poly([1, b, 0]) + ' = ' + n$(-c)), moved ? 'the constant is already on the right' : 'move the constant to the right side'),
+              S(M(poly([1, b, 0]) + ' + ' + (h * h) + ' = ' + n$(-c) + ' + ' + (h * h)), 'half of ' + n$(b) + ' is ' + n$(-h) + '; square it to get ' + (h * h) + '; add to both sides'),
+              S(M(vtx(h, 0, 1) + ' = ' + (q * q)), 'the left side is now a perfect square'),
+              S(M('<i>x</i> ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ' = ±' + q), 'square root of both sides: keep both signs'),
+              S(M('<i>x</i> = ' + n$(h) + ' ± ' + q + ', so <i>x</i> = ' + n$(h - q) + ' or ' + n$(h + q)), 'check one: plug it back in and you get 0')],
+      desmos: 'y=' + polyS([1, b, c]), asks: 'x', params: { h: h, q: q, b: b, c: c, moved: moved }
+    };
+  });
+  def14('T-Q06-c', 'A', 'drill', ['HSA.REI.B.4.A', 'HSN.RN.A.2'], function (R) {
+    var h = R.nz(-6, 6), n = R.pick(NONSQ), b = -2 * h, c = h * h - n, P = pmRad(h, n);
+    var traps = [tr('MISSING_PM', 'procedural', 'Took only the positive square root', [h + Math.sqrt(n)], h + '+sqrt(' + n + ')')];
+    traps.push(tr('SIGN_H', 'slip', 'Sign flipped on the shift', [-h + Math.sqrt(n), -h - Math.sqrt(n)], (-h) + ' ± sqrt(' + n + ')'));
+    if (-c > 0 && -c !== n) traps.push(tr('ONE_SIDE_ONLY', 'procedural', 'Added (b/2)² to the left side only', [h + Math.sqrt(-c), h - Math.sqrt(-c)], h + ' ± sqrt(' + (-c) + ')'));
+    var st = [S(M(poly([1, b, 0]) + ' = ' + n$(-c)), 'move the constant to the right side'),
+              S(M(poly([1, b, 0]) + ' + ' + (h * h) + ' = ' + n$(-c) + ' + ' + (h * h)), 'half of ' + n$(b) + ' is ' + n$(-h) + '; squared, ' + (h * h) + '; add to both sides'),
+              S(M(vtx(h, 0, 1) + ' = ' + n), 'perfect square on the left'),
+              S(M('<i>x</i> ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ' = ±√' + n), 'square root of both sides; ' + n + ' isn’t a perfect square, so the root stays')];
+    if (P.o > 1) st.push(S(M('√' + n + ' = √(' + (P.o * P.o) + '·' + P.m + ') = ' + P.o + '√' + P.m), 'pull out the perfect square'));
+    st.push(S(M('<i>x</i> = ' + P.html), 'add ' + n$(h) + ' to both sides'));
+    return {
+      prompt: 'Solve by completing the square. Give exact answers. ' + M(poly([1, b, c]) + ' = 0'), type: 'set', form: 'radical', key: P.values,
+      keyHTML: M('<i>x</i> = ' + P.html), keyTyped: P.typed, traps: traps, steps: st,
+      desmos: 'y=' + polyS([1, b, c]), asks: 'x', params: { h: h, n: n, b: b, c: c }
+    };
+  });
+  def14('T-Q06-d', 'A', 'drill', ['HSA.SSE.B.3.B', 'HSF.IF.C.8.A'], function (R) {
+    var h = R.nz(-7, 7), k = R.int(-12, 12), b = -2 * h, c = h * h + k;
+    var key = vtxS(h, k, 1);
+    return {
+      prompt: 'Write in vertex form by completing the square: ' + M('<i>y</i> = ' + poly([1, b, c])), type: 'expr', vars: ['x'], form: 'vertex', key: key,
+      keyHTML: M('<i>y</i> = ' + vtx(h, k, 1)) + ' &nbsp;(vertex ' + M('(' + n$(h) + ', ' + n$(k) + ')') + ')', keyTyped: key,
+      traps: [tr('SIGN_H', 'slip', 'Sign flipped inside the parentheses', vtxS(-h, k, 1), vtxS(-h, k, 1)),
+              tr('K_NOT_ADJUSTED', 'procedural', 'Added ' + (h * h) + ' to make the square but didn’t subtract it back out', vtxS(h, c, 1), vtxS(h, c, 1)),
+              tr('K_WRONG_WAY', 'procedural', 'Added ' + (h * h) + ' a second time instead of subtracting it', vtxS(h, c + h * h, 1), vtxS(h, c + h * h, 1))],
+      steps: [S(M('<i>y</i> = (' + poly([1, b, 0]) + ')' + sgn(c)), 'group the x-terms'),
+              S(M('<i>y</i> = (' + poly([1, b, 0]) + ' + ' + (h * h) + ')' + sgn(c) + ' − ' + (h * h)), 'add ' + (h * h) + ' to complete the square, and subtract it so nothing changes'),
+              S(M('<i>y</i> = ' + vtx(h, k, 1)), 'the vertex is (' + n$(h) + ', ' + n$(k) + '): the sign inside flips, the outside number doesn’t')],
+      desmos: 'y=' + polyS([1, b, c]), asks: 'rule', params: { h: h, k: k, b: b, c: c }
+    };
+  });
+
+  // ---------- B. Quadratic formula and discriminant ----------
+  def14('T-Q07-a', 'B', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var m, p, n, q;
+    do { m = R.pick([1, 2, 3]); p = R.pick([1, 2, 3]); n = R.nz(-6, 6); q = R.nz(-6, 6); }
+    while (m * p === 1 || gcd(m, n) !== 1 || gcd(p, q) !== 1 || n * p === q * m);
+    var a = m * p, b = -(m * q + n * p), c = n * q, D = b * b - 4 * a * c, sD = Math.sqrt(D);
+    var roots = [n / m, q / p], moved = R.f() < 0.4;
+    var eq = moved ? poly([a, b, 0]) + ' = ' + n$(-c) : poly([a, b, c]) + ' = 0';
+    var traps = [];
+    if (distinctSet([-roots[0], -roots[1]], roots)) traps.push(tr('NEG_B_SIGN', 'slip', 'Used b instead of −b at the front of the formula', [-roots[0], -roots[1]], fracStr(-roots[0]) + ', ' + fracStr(-roots[1])));
+    var dv = [-b + sD / (2 * a), -b - sD / (2 * a)];
+    if (distinctSet(dv, roots)) traps.push(tr('DIVIDE_ONLY_ROOT', 'procedural', 'Divided only the square root by 2a, not the whole top', dv, fracStr(dv[0]) + ', ' + fracStr(dv[1])));
+    var ov = [2 * roots[0], 2 * roots[1]];
+    if (distinctSet(ov, roots)) traps.push(tr('OVER_A', 'procedural', 'Divided by a instead of 2a', ov, fracStr(ov[0]) + ', ' + fracStr(ov[1])));
+    if (moved) { var D2 = b * b + 4 * a * c; if (D2 >= 0) { var w = [(-b + Math.sqrt(D2)) / (2 * a), (-b - Math.sqrt(D2)) / (2 * a)]; if (distinctSet(w, roots)) traps.push(tr('NOT_STANDARD_FORM', 'procedural', 'Used the formula before moving everything to one side (c has the wrong sign)', w, fracStr(w[0]) + ', ' + fracStr(w[1]))); } }
+    return {
+      prompt: 'Solve with the quadratic formula. Give exact answers. ' + M(eq), type: 'set', form: 'exact', key: roots,
+      keyHTML: M('<i>x</i> = ' + fracH(roots[0]) + ' or <i>x</i> = ' + fracH(roots[1])), keyTyped: fracStr(roots[0]) + ', ' + fracStr(roots[1]),
+      traps: traps,
+      steps: (moved ? [S(M(poly([a, b, c]) + ' = 0'), 'first get 0 on one side')] : []).concat([
+              S(M('<i>a</i> = ' + n$(a) + ', <i>b</i> = ' + n$(b) + ', <i>c</i> = ' + n$(c)), 'read the coefficients, signs included'),
+              S(M('<i>b</i>' + sq(2) + ' − 4<i>ac</i> = ' + (b * b) + ' − (' + (4 * a * c) + ') = ' + D), 'the discriminant: the number under the root'),
+              S(M('<i>x</i> = (' + n$(-b) + ' ± √' + D + ') / ' + (2 * a) + ' = (' + n$(-b) + ' ± ' + sD + ') / ' + (2 * a)), 'the whole top is divided by 2a'),
+              S(M('<i>x</i> = ' + fracH((-b + sD) / (2 * a)) + ' or <i>x</i> = ' + fracH((-b - sD) / (2 * a))), 'do + and − separately, then reduce')]),
+      desmos: 'y=' + polyS([a, b, c]), asks: 'x', params: { a: a, b: b, c: c, moved: moved }
+    };
+  });
+  def14('T-Q07-b', 'B', 'drill', ['HSN.CN.C.7', 'HSA.REI.B.4.B'], function (R) {
+    var h = R.int(-5, 5), k = R.int(1, 6), A = R.pick([1, 1, 2]);
+    var a = A, b = -2 * h * A, c = (h * h + k * k) * A, D = b * b - 4 * a * c;
+    var key = [[h, k], [h, -k]];
+    var traps = [tr('REAL_ONLY', 'conceptual', 'Stopped at “no real solutions”; the question wants the complex solutions', 'NONE', 'no solution'),
+                 tr('SQRT_NEG_SIGN', 'conceptual', 'Treated √(negative) as an ordinary square root and got real numbers', [[h + k, 0], [h - k, 0]], (h + k) + ', ' + (h - k)),
+                 tr('IMAG_NOT_HALVED', 'procedural', 'Divided the real part by 2a but not the imaginary part', [[h, 2 * k], [h, -2 * k]], h + ' ± ' + (2 * k) + 'i'),
+                 tr('MISSING_PM', 'procedural', 'Gave only one of the two solutions', [[h, k]], h + ' + ' + k + 'i')];
+    if (h !== 0) traps.push(tr('SIGN_H', 'slip', 'Used b instead of −b', [[-h, k], [-h, -k]], (-h) + ' ± ' + k + 'i'));
+    return {
+      prompt: 'Solve. Give both solutions in the form <i>a</i> ± <i>bi</i>. ' + M(poly([a, b, c]) + ' = 0'), type: 'cset', key: key,
+      keyHTML: M('<i>x</i> = ' + cplxH(h, k)), keyTyped: (h === 0 ? '' : h + ' ') + '± ' + (k === 1 ? '' : k) + 'i',
+      traps: traps,
+      steps: [S(M('<i>a</i> = ' + a + ', <i>b</i> = ' + n$(b) + ', <i>c</i> = ' + c), 'read the coefficients'),
+              S(M('<i>b</i>' + sq(2) + ' − 4<i>ac</i> = ' + (b * b) + ' − ' + (4 * a * c) + ' = ' + D), 'negative: no x-intercepts, so the solutions are not real'),
+              S(M('√' + D + ' = √(' + (-D) + ')·√(−1) = ' + Math.sqrt(-D) + '<i>i</i>'), 'the square root of a negative is a real root times i'),
+              S(M('<i>x</i> = (' + n$(-b) + ' ± ' + Math.sqrt(-D) + '<i>i</i>) / ' + (2 * a)), 'quadratic formula'),
+              S(M('<i>x</i> = ' + cplxH(h, k)), 'divide both parts by ' + (2 * a))],
+      desmos: 'y=' + polyS([a, b, c]), asks: 'x', params: { h: h, k: k, a: a }
+    };
+  });
+  var DOPTS = ['Two real solutions', 'One real solution', 'Two non-real solutions'];
+  def14('T-Q07-c', 'B', 'drill', ['HSA.REI.B.4.B', 'HSN.CN.C.7'], function (R) {
+    var cs = R.int(0, 2), a, b, c, D;
+    if (cs === 1) { a = R.pick([1, 2, 3, 4, -1, -2]); var r = R.nz(-5, 5); b = -2 * a * r; c = a * r * r; }
+    else { do { a = R.nz(-4, 4); b = R.int(-9, 9); c = R.nz(-9, 9); D = b * b - 4 * a * c; } while (D === 0 || (cs === 0) !== (D > 0)); }
+    D = b * b - 4 * a * c;
+    var traps = [];
+    if (cs === 0) traps.push(tr('DISC_SIGN_FLIP', 'conceptual', 'Read a positive discriminant as “no real solutions”', 2, '2'));
+    if (cs === 2) traps.push(tr('DISC_SIGN_FLIP', 'conceptual', 'Read a negative discriminant as two real solutions (check the sign of −4ac)', 0, '0'));
+    if (cs === 1) traps.push(tr('ZERO_AS_TWO', 'conceptual', 'A discriminant of 0 gives one repeated solution, not two', 0, '0'));
+    return {
+      prompt: 'How many solutions does ' + M(poly([a, b, c]) + ' = 0') + ' have, and what kind?', type: 'choice', options: DOPTS, key: cs,
+      keyHTML: DOPTS[cs] + ' (' + M('<i>b</i>' + sq(2) + ' − 4<i>ac</i> = ' + n$(D)) + ')', keyTyped: String(cs), traps: traps,
+      steps: [S(M('<i>a</i> = ' + n$(a) + ', <i>b</i> = ' + n$(b) + ', <i>c</i> = ' + n$(c)), 'read the coefficients, signs included'),
+              S(M('<i>b</i>' + sq(2) + ' − 4<i>ac</i> = ' + (b * b) + ' − (' + (4 * a * c) + ') = ' + D), 'careful: subtracting a negative adds'),
+              S(D > 0 ? 'Positive: two real solutions (the graph crosses the x-axis twice).' : D === 0 ? 'Zero: one real solution (the vertex sits on the x-axis).' : 'Negative: two non-real solutions (the graph never reaches the x-axis).', '')],
+      desmos: 'y=' + polyS([a, b, c]), asks: null, params: { a: a, b: b, c: c, D: D }
+    };
+  });
+  def14('T-Q07-d', 'B', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var a = R.pick([1, 2, 3, 4]), t = R.int(1, 5), c = a * t * t, B = 2 * a * t;
+    return {
+      prompt: 'What value(s) of <i>b</i> make ' + M(poly([a, 0, c]).replace(/ \+ /, ' + <i>bx</i> + ') + ' = 0') + ' have exactly one real solution?',
+      type: 'set', key: [B, -B], keyHTML: M('<i>b</i> = ±' + B), keyTyped: '±' + B,
+      traps: [tr('B_ONLY_POSITIVE', 'procedural', 'Found only the positive value; b² = ' + (B * B) + ' has two square roots', [B], String(B)),
+              tr('B_ONLY_POSITIVE', 'procedural', 'Found only one value; b² = ' + (B * B) + ' has two square roots', [-B], String(-B)),
+              tr('NO_FOUR', 'procedural', 'Set b² = ac and forgot the 4', [a * t, -a * t], '±' + (a * t))],
+      steps: [S('One real solution means ' + M('<i>b</i>' + sq(2) + ' − 4<i>ac</i> = 0'), 'zero discriminant: the vertex touches the x-axis'),
+              S(M('<i>b</i>' + sq(2) + ' − 4(' + a + ')(' + c + ') = 0, so <i>b</i>' + sq(2) + ' = ' + (B * B)), ''),
+              S(M('<i>b</i> = ±' + B), 'both signs work')],
+      desmos: null, asks: null, params: { a: a, c: c }
+    };
+  });
+
+  // ---------- C. What is it asking ----------
+  def14('T-IO-b', 'C', 'drill', ['HSF.IF.B.4', 'HSF.IF.C.8.A'], function (R) {
+    var askY = R.f() < 0.5, ball = R.f() < 0.55, key, other, prompt, st, params, des, extra = [];
+    if (ball) {
+      var ts = R.pick([0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3]), v = 32 * ts, s0 = R.pick([3, 4, 5, 6, 8, 10, 20, 48]), mx = 16 * ts * ts + s0;
+      prompt = 'A ball’s height in feet after <i>t</i> seconds is ' + M('<i>h</i>(<i>t</i>) = ' + poly([-16, v, s0], 't')) + '. ' + (askY ? '<b>What is the ball’s maximum height?</b>' : '<b>How many seconds after it’s thrown does the ball reach its maximum height?</b>');
+      key = askY ? mx : ts; other = askY ? ts : mx;
+      if (askY) extra.push(tr('START_HEIGHT', 'conceptual', 'Gave the starting height h(0), not the maximum', s0, String(s0)));
+      else extra.push(tr('NO_HALF', 'procedural', 'Used −b/a instead of −b/(2a)', 2 * ts, fracStr(2 * ts)));
+      st = [S(M('<i>t</i> = −<i>b</i>/(2<i>a</i>) = −' + v + '/(2·(−16)) = ' + fmtV(ts)), 'the vertex is the top of the arc; its t is the time'),
+            S(M('<i>h</i>(' + fmtV(ts) + ') = ' + fmtV(mx)), 'its height is the maximum height (calculator fine for this arithmetic)'),
+            S(askY ? 'The question asks “how high”: that’s the y-value, ' + fmtV(mx) + ' ft.' : 'The question asks “when”: that’s the t-value, ' + fmtV(ts) + ' s.', '')];
+      params = { ball: true, ts: ts, v: v, s0: s0 }; des = 'y=' + polyS([-16, v, s0]);
+    } else {
+      var a = R.pick([1, 2, 3, 5]), p = R.int(5, 40), K = R.int(5, 90) * 10, C0 = a * p * p - K, B = 2 * a * p;
+      prompt = 'A company’s weekly profit in dollars when it charges <i>x</i> dollars per item is ' + M('<i>P</i>(<i>x</i>) = ' + poly([-a, B, -C0])) + '. ' + (askY ? '<b>What is the maximum weekly profit?</b>' : '<b>What price gives the maximum profit?</b>');
+      key = askY ? K : p; other = askY ? p : K;
+      if (!askY) extra.push(tr('NO_HALF', 'procedural', 'Used −b/a instead of −b/(2a)', 2 * p, String(2 * p)));
+      st = [S(M('<i>x</i> = −<i>b</i>/(2<i>a</i>) = −' + B + '/(2·(−' + a + ')) = ' + p), 'the vertex x is the price'),
+            S(M('<i>P</i>(' + p + ') = ' + K), 'the vertex y is the profit at that price'),
+            S(askY ? 'The question asks for the profit: the y-value, $' + K + '.' : 'The question asks for the price: the x-value, $' + p + '.', '')];
+      params = { ball: false, a: a, p: p, K: K }; des = 'y=' + polyS([-a, B, -C0]);
+    }
+    return {
+      prompt: prompt, type: 'number', key: key, keyHTML: M(fmtV(key)), keyTyped: fracStr(key),
+      traps: [tr('SWAP_XY', 'conceptual', 'Gave the other coordinate of the vertex: ' + (askY ? 'when' : 'how much') + ' instead of ' + (askY ? 'how much' : 'when'), other, fracStr(other))].concat(extra),
+      steps: st, desmos: des, asks: askY ? 'y' : 'x', params: params
+    };
+  });
+  def14('T-IO-c', 'C', 'drill', ['HSF.IF.B.4', 'HSA.SSE.B.3.A'], function (R) {
+    var r1, r2; do { r1 = R.int(-7, 6); r2 = R.int(r1 + 1, 7); } while (r1 === 0 && r2 === 0);
+    var a = R.pick([1, -1, 2, -2]), askPos = R.f() < 0.5, factored = R.f() < 0.5;
+    var inside = [mkIv(r1, false, r2, false)], outside = [mkIv(-Infinity, false, r1, false), mkIv(r2, false, Infinity, false)];
+    var posIsOut = a > 0, key = (askPos === posIsOut) ? outside : inside, other = key === outside ? inside : outside;
+    var fact = function (r) { return r === 0 ? '<i>x</i>' : '(<i>x</i> ' + (r > 0 ? '−' : '+') + ' ' + Math.abs(r) + ')'; };
+    var A = a === 1 ? '' : a === -1 ? '−' : n$(a);
+    var fx = factored ? A + fact(r1) + fact(r2) : poly([a, -a * (r1 + r2), a * r1 * r2]);
+    var closed = key.map(function (iv) { return mkIv(iv.lo, isFinite(iv.lo), iv.hi, isFinite(iv.hi)); });
+    var traps = [tr('OTHER_REGION', 'conceptual', 'Gave where it’s ' + (askPos ? 'negative' : 'positive') + ' instead', other, ivUTyped(other)),
+                 tr('ENDPOINTS_INCLUDED', 'notation', 'Included the zeros; f is 0 there, not ' + (askPos ? 'positive' : 'negative') + ' (use parentheses)', closed, ivUTyped(closed))];
+    if (key === outside) traps.push(tr('AND_FOR_OR', 'notation', '“and” means both at once, which no number can be here; this needs “or” (∪)', 'EMPTY', 'x < ' + r1 + ' and x > ' + r2));
+    var nr = [-r2, -r1], kn = key === outside ? [mkIv(-Infinity, false, nr[0], false), mkIv(nr[1], false, Infinity, false)] : [mkIv(nr[0], false, nr[1], false)];
+    if (!eqUnion(kn, key)) traps.push(tr('SIGN_ROOTS', 'slip', 'Flipped the signs of the zeros (x − 3 gives x = 3)', kn, ivUTyped(kn)));
+    return {
+      prompt: 'For ' + M('<i>f</i>(<i>x</i>) = ' + fx) + ', on what interval(s) is <i>f</i>(<i>x</i>) <b>' + (askPos ? 'positive' : 'negative') + '</b>? Use interval notation.',
+      type: 'union', key: key, keyHTML: M(ivUText(key)), keyTyped: ivUTyped(key), traps: traps,
+      steps: [S(M('zeros: <i>x</i> = ' + n$(r1) + ' and <i>x</i> = ' + n$(r2)), factored ? 'each factor is 0 at one x' : 'factor: ' + A + fact(r1) + fact(r2)),
+              S('The parabola opens ' + (a > 0 ? 'up' : 'down') + ', so it’s ' + (a > 0 ? 'below' : 'above') + ' the x-axis between the zeros and ' + (a > 0 ? 'above' : 'below') + ' outside them.', 'sign of a decides'),
+              S((askPos ? 'Positive' : 'Negative') + ' means ' + (askPos ? 'above' : 'below') + ' the x-axis: ' + M(ivUText(key)), 'the answer is x-values, never points')],
+      desmos: 'y=' + polyS([a, -a * (r1 + r2), a * r1 * r2]), asks: 'xint', params: { r1: r1, r2: r2, a: a, askPos: askPos, factored: factored }
+    };
+  });
+  def14('T-IO-d', 'C', 'drill', ['HSF.IF.B.4', 'HSF.IF.C.7.A'], function (R) {
+    var a = R.pick([1, -1, 2, -2, 3, -3, 0.5, -0.5]), h, k;
+    do { h = R.nz(-6, 6); k = R.int(-9, 9); } while (k === h);
+    var up = a > 0, key = up ? mkIv(k, true, Infinity, false) : mkIv(-Infinity, false, k, true);
+    var other = up ? mkIv(-Infinity, false, k, true) : mkIv(k, true, Infinity, false);
+    var useH = up ? mkIv(h, true, Infinity, false) : mkIv(-Infinity, false, h, true);
+    var open = up ? mkIv(k, false, Infinity, false) : mkIv(-Infinity, false, k, false);
+    var t = function (iv) { return ivUTyped([iv]); };
+    return {
+      prompt: 'What is the range of ' + M('<i>y</i> = ' + vtx(h, k, a)) + '? Use interval notation.', type: 'ineq', ivar: 'y', key: key,
+      keyHTML: M(ivUText([key])), keyTyped: t(key),
+      traps: [tr('BRACKET_DIRECTION', 'conceptual', 'Pointed the range the wrong way: the parabola opens ' + (up ? 'up' : 'down'), other, t(other)),
+              tr('USED_H', 'conceptual', 'Used h, an x-value, for the range; the range is about y', useH, t(useH)),
+              tr('DOMAIN_FOR_RANGE', 'conceptual', 'Gave the domain (all real x) instead of the range', mkIv(-Infinity, false, Infinity, false), '(-inf, inf)'),
+              tr('ENDPOINT_EXCLUDED', 'notation', 'Left out ' + k + ' itself; the vertex is on the graph, so use a bracket', open, t(open))],
+      steps: [S(M('vertex (' + n$(h) + ', ' + n$(k) + ')'), 'read h and k from the vertex form'),
+              S('a = ' + fmtV(a) + (up ? ' > 0: opens up, so ' + k + ' is the lowest y.' : ' < 0: opens down, so ' + k + ' is the highest y.'), ''),
+              S('Range (all the y-values): ' + M(ivUText([key])), 'range is about y; h doesn’t appear')],
+      desmos: 'y=' + vtxS(h, k, a), asks: 'yint', params: { a: a, h: h, k: k }
+    };
+  });
+
+  // ---------- retention (different framing) ----------
+  function graphSVG(f, marks, opt) {
+    opt = opt || {}; var L = -8, Rr = 8, W = 300, s = W / (Rr - L), X = function (x) { return (x - L) * s; }, Y = function (y) { return (Rr - y) * s; };
+    var g = '<svg viewBox="0 0 ' + W + ' ' + W + '" width="100%" style="max-width:320px;display:block;margin:10px auto;touch-action:manipulation" role="img" aria-label="graph">';
+    for (var i = L; i <= Rr; i++) g += '<line x1="' + X(i) + '" y1="0" x2="' + X(i) + '" y2="' + W + '" stroke="var(--line)" stroke-width="' + (i === 0 ? 0 : 1) + '"/><line x1="0" y1="' + Y(i) + '" x2="' + W + '" y2="' + Y(i) + '" stroke="var(--line)" stroke-width="' + (i === 0 ? 0 : 1) + '"/>';
+    g += '<line x1="0" y1="' + Y(0) + '" x2="' + W + '" y2="' + Y(0) + '" stroke="var(--muted)" stroke-width="1.5"/><line x1="' + X(0) + '" y1="0" x2="' + X(0) + '" y2="' + W + '" stroke="var(--muted)" stroke-width="1.5"/>';
+    for (var t = -6; t <= 6; t += 2) if (t) { g += '<text x="' + X(t) + '" y="' + (Y(0) + 13) + '" font-size="10" text-anchor="middle" fill="var(--muted)">' + t + '</text><text x="' + (X(0) - 4) + '" y="' + (Y(t) + 3) + '" font-size="10" text-anchor="end" fill="var(--muted)">' + t + '</text>'; }
+    var d = '', first = true;
+    for (var x = L; x <= Rr + 1e-9; x += 0.05) { var y = f(x); if (y > Rr + 2 || y < L - 2) { first = true; continue; } d += (first ? 'M' : 'L') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1); first = false; }
+    g += '<path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5"/>';
+    (marks || []).forEach(function (p) { g += '<circle cx="' + X(p[0]) + '" cy="' + Y(p[1]) + '" r="4.5" fill="var(--accent)"/>'; });
+    return g + '</svg>';
+  }
+  def14('T-Q06-r', 'A', 'retention', ['HSF.IF.C.8.A', 'HSF.BF.B.3'], function (R) {
+    var a = R.pick([1, -1]), h = R.nz(-4, 4), k = R.int(-4, 4);
+    var key = vtxS(h, k, a), f = function (x) { return a * (x - h) * (x - h) + k; };
+    return {
+      prompt: 'Write the equation of this parabola in vertex form. (The dots are lattice points on the graph.)' + graphSVG(f, [[h, k], [h + 1, k + a], [h - 1, k + a]]),
+      type: 'expr', vars: ['x'], form: 'vertex', key: key, keyHTML: M('<i>y</i> = ' + vtx(h, k, a)), keyTyped: key,
+      traps: [tr('SIGN_H', 'slip', 'Sign flipped inside the parentheses: vertex at x = ' + h + ' means (x ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ')', vtxS(-h, k, a), vtxS(-h, k, a)),
+              tr('A_SIGN', 'conceptual', 'Missed that it opens ' + (a > 0 ? 'up' : 'down') + ' (sign of a)', vtxS(h, k, -a), vtxS(h, k, -a))],
+      steps: [S('Vertex: ' + M('(' + n$(h) + ', ' + n$(k) + ')'), 'the turning point'),
+              S('One step right of the vertex, the graph goes ' + (a > 0 ? 'up' : 'down') + ' 1, so ' + M('<i>a</i> = ' + a), 'compare with y = x², which goes up 1'),
+              S(M('<i>y</i> = ' + vtx(h, k, a)), 'the sign inside is the opposite of the vertex’s x')],
+      desmos: 'y=' + vtxS(h, k, a), asks: 'rule', params: { a: a, h: h, k: k }
+    };
+  });
+  var SOPTS = ['Positive', 'Zero', 'Negative'];
+  def14('T-Q07-r', 'B', 'retention', ['HSA.REI.B.4.B'], function (R) {
+    var cs = R.int(0, 2), a = R.pick([1, -1, 0.5, -0.5]), h = R.int(-4, 4), k;
+    if (cs === 1) k = 0; else { var mag = R.int(1, 4); k = (cs === 0) === (a > 0) ? -mag : mag; }
+    var f = function (x) { return a * (x - h) * (x - h) + k; };
+    var cross = cs === 0 ? 2 : cs === 1 ? 1 : 0;
+    return {
+      prompt: 'This is the graph of ' + M('<i>y</i> = <i>ax</i>' + sq(2) + ' + <i>bx</i> + <i>c</i>') + '. Is ' + M('<i>b</i>' + sq(2) + ' − 4<i>ac</i>') + ' positive, zero, or negative?' + graphSVG(f, []),
+      type: 'choice', options: SOPTS, key: cs, keyHTML: SOPTS[cs], keyTyped: String(cs),
+      traps: cs === 1 ? [] : [tr('DISC_SIGN_FLIP', 'conceptual', 'Mixed up which sign goes with crossing the x-axis', 2 - cs, String(2 - cs))],
+      steps: [S('The graph crosses the x-axis ' + (cross === 2 ? 'twice' : cross === 1 ? 'once (it touches at the vertex)' : 'zero times') + '.', 'x-intercepts are the real solutions'),
+              S((cross === 2 ? 'Two real solutions ↔ positive discriminant.' : cross === 1 ? 'One real solution ↔ zero discriminant.' : 'No real solutions ↔ negative discriminant.'), 'that’s the whole connection')],
+      desmos: null, asks: null, params: { a: a, h: h, k: k }
+    };
+  });
+  def14('T-IO-r', 'C', 'retention', ['HSF.IF.B.4'], function (R) {
+    var a = R.pick([1, -1, 2, -2]), h = R.int(-4, 4), k = R.int(-9, 9), askY = R.f() < 0.5;
+    if (k === h) k = h + 1;
+    var xs = [h - 3, h - 2, h - 1, h, h + 1, h + 2, h + 3], f = function (x) { return a * (x - h) * (x - h) + k; };
+    var word = a > 0 ? 'minimum' : 'maximum';
+    var tbl = '<table style="width:auto;margin:10px 0"><tr><td><i>x</i></td>' + xs.map(function (x) { return '<td>' + n$(x) + '</td>'; }).join('') + '</tr><tr><td><i>f</i>(<i>x</i>)</td>' + xs.map(function (x) { return '<td>' + n$(f(x)) + '</td>'; }).join('') + '</tr></table>';
+    var key = askY ? k : h, other = askY ? h : k;
+    return {
+      prompt: 'The table shows values of a quadratic function <i>f</i>.' + tbl + (askY ? '<b>What is the ' + word + ' value of <i>f</i>?</b>' : '<b>At what <i>x</i> does <i>f</i> reach its ' + word + '?</b>'),
+      type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key),
+      traps: [tr('SWAP_XY', 'conceptual', 'Gave the other coordinate of the turning point', other, String(other))],
+      steps: [S('The values are symmetric around ' + M('<i>x</i> = ' + n$(h)) + ', where f is ' + n$(k) + '.', 'matching values on both sides mark the axis of symmetry'),
+              S(askY ? 'The ' + word + ' value is the y-value there: ' + n$(k) + '.' : 'It happens at the x-value: ' + n$(h) + '.', '“value of f” means y; “at what x” means x')],
+      desmos: null, asks: askY ? 'y' : 'x', params: { a: a, h: h, k: k, askY: askY }
+    };
+  });
+
+  function gen14(id, seed) {
+    var t = T14.filter(function (x) { return x.id === id; })[0];
+    var it = t.gen(makeRng(seed >>> 0));
+    it.template_id = t.id; it.concept = t.concept; it.role = t.role; it.standards = t.standards; it.vars = it.vars || ['x'];
+    it.solution = stepsArr(it.steps);
+    return it;
+  }
+  function hash14(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+
+  var API14 = {
+    version: '1.0', CONCEPTS: CONCEPTS, ASKS: ASKS, TEMPLATES: T14, generate: gen14, grade: grade14, preview: preview14,
+    graphSVG: graphSVG, makeRng: makeRng, hash: hash14, isVertexForm: isVertexForm, parse: parse, evaluate: evaluate
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API14; else root.ALG2C2 = API14;
+})(this);
+
+</script>
+<script>
+(function(){
+'use strict';
+var E = window.ALG2C2;
+var KEY = 'alg2-tutor-14-ch2-v3', KEY_V2 = 'alg2-tutor-14-ch2-v2';
+var APP_FILE = 'alg2-tutor-14-ch2-app-v3.html';
+var VERSION = '3.0';
+var RULE = 'Within a session, a missed concept gets one more item in a different framing before the close. Concepts missed last session return in the next warm-up, sure-but-wrong first. The worked example is skipped after 2 correct independent answers in a row on that concept and returns after 2 misses in a row.';
+var DRILL = { A: ['T-Q06-b', 'T-Q06-c', 'T-Q06-d', 'T-Q06-a'], B: ['T-Q07-a', 'T-Q07-b', 'T-Q07-c', 'T-Q07-d'], C: ['T-IO-b', 'T-IO-c', 'T-IO-d'] };
+var RET = { A: 'T-Q06-r', B: 'T-Q07-r', C: 'T-IO-r' };
+var WORKED = { A: ['T-Q06-b', 'T-Q06-c'], B: ['T-Q07-a', 'T-Q07-b'], C: ['T-IO-b', 'T-IO-c'] };
+var CNAME = {}; E.CONCEPTS.forEach(function(c){ CNAME[c.id] = c.name; });
+var ASKL = {}; E.ASKS.forEach(function(a){ ASKL[a.id] = a.label; });
+var app = document.getElementById('app');
+var S = null, shownAt = 0, cur = null;
+
+function load(){ try{ var s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function txt(html){
+  var d=document.createElement('div'); d.innerHTML=html;
+  [].slice.call(d.querySelectorAll('svg')).forEach(function(s){ s.replaceWith(' [graph] '); });
+  [].slice.call(d.querySelectorAll('table')).forEach(function(t){ var rows=[].slice.call(t.querySelectorAll('tr')).map(function(r){ return [].slice.call(r.children).map(function(c){ return c.textContent.trim(); }).join(' | '); }); t.replaceWith(' [table: '+rows.join(' / ')+'] '); });
+  function wrap(t){ t=t.trim(); return /^[−-]?[0-9a-z.√]+$/i.test(t) ? t : '('+t+')'; }
+  [].slice.call(d.querySelectorAll('sup')).reverse().forEach(function(s){ s.replaceWith('^'+wrap(s.textContent)); });
+  [].slice.call(d.querySelectorAll('.fr')).reverse().forEach(function(f){ var p=f.children; if(p.length===2) f.replaceWith(wrap(p[0].textContent)+'/'+wrap(p[1].textContent)); });
+  return (d.textContent||'').replace(/ /g,' ').replace(/\s+/g,' ').trim();
+}
+function newSeed(){ return (Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0; }
+function fresh(){
+  return { app: APP_FILE, version: VERSION, created: new Date().toISOString(), sessions: [], current: null,
+    cs: { A: {introduced:false, worked:true, streak:0, miss:0}, B: {introduced:false, worked:true, streak:0, miss:0}, C: {introduced:false, worked:true, streak:0, miss:0} },
+    missedLast: [] };
+}
+function gen(id){ var it = E.generate(id, newSeed()); return it; }
+function standalone(){ try{ return !!(navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)); }catch(e){ return false; } }
+
+// ---------------- session plan (the approved adaptive rule) ----------------
+function buildPlan(){
+  // v3 (S10): group-test order. Quadratic formula first (works on every quadratic; calculator and Desmos allowed), then key
+  // features, then completing the square (needs squaring a binomial, still unreliable for him on 11-15).
+  var order = ['B','C','A'], intro = order.filter(function(c){ return S.cs[c].introduced; });
+  var focus = order.filter(function(c){ return !S.cs[c].introduced; })[0];
+  if(!focus){ // all introduced: weakest concept in the last session
+    var last = S.sessions[S.sessions.length-1], acc = {};
+    order.forEach(function(c){ var rs=(last?last.items:[]).filter(function(r){ return r.concept===c && r.graded; }); acc[c] = rs.length ? rs.filter(function(r){return r.verdict==='correct';}).length/rs.length : 1; });
+    focus = order.slice().sort(function(a,b){ return acc[a]-acc[b]; })[0];
+  }
+  var steps = [];
+  // 1. warm-up: last session's misses first (sure-but-wrong first), then key-feature items
+  var warm = S.missedLast.slice().sort(function(a,b){ return (b.sure?1:0)-(a.sure?1:0); }).map(function(m){ return m.template_id; });
+  var fill = ['T-IO-b','T-IO-d','T-IO-r','T-IO-c'];
+  var seen = {}; warm = warm.filter(function(t){ if(seen[t]) return false; seen[t]=1; return true; });
+  while(warm.length < 3){ var f = fill.shift(); if(!seen[f]){ warm.push(f); seen[f]=1; } }
+  warm.slice(0,2).forEach(function(t){ steps.push({ kind:'item', phase:'warm', tid:t }); });
+  // 2. big idea, 3. worked example (unless earned off), 4. faded examples
+  steps.push({ kind:'big', c: focus });
+  if(S.cs[focus].worked){ steps.push({ kind:'worked', c: focus, tid: WORKED[focus][0] }); }
+  steps.push({ kind:'item', phase:'faded', tid: WORKED[focus][0], fade: 2 }); // v2: one faded example (shorter sessions)
+  // 5. independent: three from the focus concept + one interleaved from another introduced concept
+  var d = DRILL[focus].slice(0,3);
+  var other = intro.filter(function(c){ return c!==focus; });
+  var inter = other.length ? DRILL[other[S.sessions.length % other.length]][S.sessions.length % 3] : DRILL[focus][3] || DRILL[focus][0];
+  [d[0], inter, d[1]].forEach(function(t){ steps.push({ kind:'item', phase:'indep', tid:t }); });
+  // 6. close: retention items in a different framing, then the big idea in one sentence
+  steps.push({ kind:'item', phase:'close', tid: RET[focus] });
+  steps.push({ kind:'item', phase:'close', tid: other.length ? RET[other[0]] : RET.C });
+  steps.push({ kind:'sentence', c: focus });
+  steps.push({ kind:'done' });
+  return { focus: focus, steps: steps };
+}
+function startSession(){
+  var p = buildPlan();
+  S.current = { id: S.sessions.length + 1, started: new Date().toISOString(), focus: p.focus, steps: p.steps, idx: 0, items: [], extraFor: {}, sentence: '', device: navigator.userAgent, standalone: standalone(), resumes: 0 };
+  save(); run();
+}
+function run(){
+  var C = S.current; if(!C){ home(); return; }
+  var st = C.steps[C.idx];
+  window.scrollTo(0,0);
+  if(st.kind === 'item') itemScreen(st);
+  else if(st.kind === 'big') bigIdea(st.c, true);
+  else if(st.kind === 'worked') worked(st);
+  else if(st.kind === 'sentence') sentence(st);
+  else finishSession();
+}
+function next(){ S.current.idx++; save(); run(); }
+function header(label){
+  var C = S.current, N = C.steps.length - 1;
+  return '<div class="top"><span class="phase">'+label+'</span><span>Step '+(C.idx+1)+' of '+N+' · saves automatically</span></div><div class="bar"><div style="width:'+(100*C.idx/N)+'%"></div></div>';
+}
+var PH = { warm: 'Warm-up · no hints', faded: 'Finish the example', indep: 'On your own', close: 'Different angle', extra: 'One more, different angle' };
+
+// ---------------- items ----------------
+function keypadFor(it){
+  var k;
+  if(it.type==='union') k=['(',')','[',']','∞','∪','−',','];
+  else if(it.type==='ineq') k=['y','≥','≤','(',')','[',']','∞','−',','];
+  else if(it.type==='expr') k=['x','²','−','+','(',')','/'];
+  else if(it.type==='cset') k=['i','±','−',',','√','/'];
+  else if(it.type==='set') k=['±','−',',','√','/','(',')'];
+  else k=['−','/','√','.','(',')'];
+  return k.map(function(s){ return '<button type="button" data-k="'+esc(s)+'">'+esc(s)+'</button>'; }).join('');
+}
+function itemScreen(st){
+  var C = S.current;
+  if(!st.seed) { st.seed = newSeed(); save(); }
+  var it = E.generate(st.tid, st.seed); cur = it;
+  var fadeHTML = '';
+  if(st.phase === 'faded'){
+    var shown = st.fade===2 ? Math.max(1, it.steps.length - 2) : 1;
+    fadeHTML = '<ol class="steps fade">' + it.steps.map(function(s,i){ return i < shown ? '<li>'+s.m+(s.why?'<span class="why">'+s.why+'</span>':'')+'</li>' : '<li class="hidden">your step</li>'; }).join('') + '</ol><p class="note">Finish it on paper, then type the final answer.</p>';
+  }
+  var asksFirst = it.asks && st.phase !== 'faded' && !st.asked;
+  var body = '<div class="prompt">'+it.prompt+'</div>' + fadeHTML;
+  if(asksFirst){
+    app.innerHTML = header(PH[st.phase]) + '<div class="card">'+body+'<p class="confq">Before you solve it: what is this question asking for?</p><div class="opts" id="asks">'+
+      E.ASKS.map(function(a){ return '<button data-a="'+a.id+'">'+esc(a.label)+'</button>'; }).join('')+'</div><div id="askfb"></div></div>';
+    app.querySelector('#asks').addEventListener('click', function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      var a=b.getAttribute('data-a'); st.asked = { chosen: a, correct: a===it.asks }; save();
+      [].slice.call(app.querySelectorAll('#asks button')).forEach(function(x){ x.disabled=true; if(x.getAttribute('data-a')===it.asks) x.classList.add('right'); else if(x===b) x.classList.add('wrongc'); });
+      document.getElementById('askfb').innerHTML = '<p>'+(st.asked.correct ? '<b>Right.</b> ' : '<b>Not quite.</b> ')+'It asks for '+esc(ASKL[it.asks])+'. That’s what your answer has to be.</p><div class="row"><button class="btn" id="go">Solve it</button></div>';
+      document.getElementById('go').onclick = function(){ itemScreen(st); };
+    });
+    shownAt = Date.now();
+    return;
+  }
+  var input = it.type==='choice'
+    ? '<div class="opts" id="choice">'+it.options.map(function(o,i){ return '<button data-i="'+i+'">'+esc(o)+'</button>'; }).join('')+'</div><input type="hidden" id="ans" value="">'
+    : '<input type="text" id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Your answer"><div class="keys" id="keys">'+keypadFor(it)+'</div>';
+  app.innerHTML = header(PH[st.phase]) + '<div class="card">'+body+
+    '<div class="calc">Calculator OK for arithmetic. Not for the method.</div>'+ input +
+    '<div class="read" id="read"></div>'+
+    '<div class="confq">Submit, and how sure are you?</div><div class="conf">'+
+    '<button class="btn" data-c="sure" disabled>Sure</button><button class="btn" data-c="think" disabled>Think so</button><button class="btn" data-c="guess" disabled>Guessing</button></div>'+
+    '<button class="link" id="skip">I don’t know how to start</button></div>';
+  var inp = document.getElementById('ans'), read = document.getElementById('read');
+  var btns = [].slice.call(app.querySelectorAll('button[data-c]'));
+  function refresh(){
+    var p = E.preview(it, inp.value);
+    if(p.ok){ read.className='read ok'; read.innerHTML = it.type==='choice' ? '' : 'Reads as: <span class="m">'+esc(p.text)+'</span>'; }
+    else { read.className='read err'; read.textContent = p.error || ''; }
+    btns.forEach(function(b){ b.disabled = !p.ok; });
+  }
+  if(it.type==='choice'){
+    app.querySelector('#choice').addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; [].slice.call(app.querySelectorAll('#choice button')).forEach(function(x){ x.classList.toggle('sel', x===b); }); inp.value=b.getAttribute('data-i'); refresh(); });
+  } else {
+    inp.addEventListener('input', refresh);
+    inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(!btns[0].disabled){ read.innerHTML += ' &nbsp;<b>Now tap how sure you are.</b>'; } } });
+    document.getElementById('keys').addEventListener('click', function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      var k=b.getAttribute('data-k'); if(k==='√') k='sqrt('; if(k==='²') k='^2';
+      var s=inp.selectionStart==null?inp.value.length:inp.selectionStart, t=inp.selectionEnd==null?s:inp.selectionEnd;
+      inp.value=inp.value.slice(0,s)+k+inp.value.slice(t); var pos=s+k.length; inp.focus(); try{ inp.setSelectionRange(pos,pos); }catch(_){} refresh();
+    });
+  }
+  btns.forEach(function(b){ b.onclick=function(){ submit(st, it, inp.value, b.getAttribute('data-c')); }; });
+  document.getElementById('skip').onclick=function(){ submit(st, it, '', 'skip'); };
+  shownAt = Date.now();
+}
+function submit(st, it, raw, conf){
+  var C = S.current;
+  var rec = { step: C.idx+1, phase: st.phase, template_id: it.template_id, concept: it.concept, role: it.role, params: it.params,
+    prompt_text: txt(it.prompt), key_text: txt(it.keyHTML), response_raw: raw, confidence: conf, time_ms: Date.now()-shownAt, graded: true };
+  if(st.fade) rec.fade_steps_hidden = st.fade;
+  if(st.asked){ rec.asks_expected = it.asks; rec.asks_chosen = st.asked.chosen; rec.asks_correct = st.asked.correct; }
+  var g = null;
+  if(conf==='skip'){ rec.verdict='skipped'; rec.error_type='no-attempt'; }
+  else {
+    try{ g = E.grade(it, raw); }catch(e){ var r=document.getElementById('read'); r.className='read err'; r.textContent=e.message; return; }
+    rec.verdict = g.verdict; rec.response_read = g.text;
+    if(g.verdict==='form'){ rec.error_type='notation'; rec.form_code=g.formCode; rec.form_issue=g.formMsg; }
+    if(g.verdict==='wrong'){ rec.error_type = g.trap ? g.trap.error_type : 'unknown'; rec.trap_code = g.trap ? g.trap.code : null; rec.trap_label = g.trap ? g.trap.label : null; }
+  }
+  // adaptive bookkeeping (approved rule)
+  var cs = S.cs[it.concept], right = rec.verdict==='correct';
+  if(st.phase==='indep'){
+    if(right){ cs.streak++; cs.miss=0; if(cs.streak>=2) cs.worked=false; }
+    else { cs.miss++; cs.streak=0; if(cs.miss>=2) cs.worked=true; }
+  }
+  if(!right && st.phase!=='extra' && !C.extraFor[it.concept]){
+    C.extraFor[it.concept] = true;
+    var closeAt = C.steps.findIndex(function(s){ return s.phase==='close'; });
+    var at = Math.max(closeAt < 0 ? C.idx+1 : closeAt, C.idx+1);
+    var xt = it.template_id===RET[it.concept] ? DRILL[it.concept][0] : RET[it.concept];
+    C.steps.splice(at, 0, { kind:'item', phase:'extra', tid: xt });
+  }
+  C.items.push(rec); save();
+  feedback(st, it, rec, g);
+}
+function feedback(st, it, rec, g){
+  var v = rec.verdict, cls = v==='correct' ? 'good' : v==='form' ? 'warn' : 'bad';
+  var head = v==='correct' ? 'Right.' : v==='form' ? 'Right value, wrong form.' : v==='skipped' ? 'Here’s how to start.' : 'Not quite.';
+  var parts = '';
+  if(v==='wrong' && rec.trap_label) parts += '<p><b>What happened:</b> '+esc(rec.trap_label)+'.</p>';
+  if(v==='form') parts += '<p>'+esc(rec.form_issue)+'</p>';
+  if(v!=='correct') parts += '<p><b>Answer:</b> '+it.keyHTML+'</p>';
+  parts += (v==='correct' ? '<details><summary>See the steps</summary>'+it.solution+'</details>' : '<div class="lbl" style="font-weight:700;margin-top:10px">The steps</div>'+it.solution);
+  if(it.desmos && (st.phase==='indep' || st.phase==='close' || st.phase==='extra')) parts += '<p class="note">Check it in Desmos: type <span class="kbd">'+esc(it.desmos)+'</span> and tap the points. <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Open Desmos</a></p>';
+  app.innerHTML = header(PH[st.phase]) + '<div class="card"><div class="prompt" style="font-size:1rem">'+it.prompt+'</div>'+
+    (v!=='skipped' ? '<p class="note">You wrote: <span class="m">'+esc(rec.response_read||rec.response_raw)+'</span>'+(rec.confidence?' · '+esc(rec.confidence):'')+'</p>' : '')+
+    '<div class="verdict '+cls+'">'+head+'</div>'+parts+'<div class="row"><button class="btn" id="nx">Next</button></div></div>';
+  document.getElementById('nx').onclick = next;
+}
+
+// ---------------- big idea (interactive) ----------------
+var BIG = {
+  A: { q: 'Which number makes '+'<span class="m"><i>x</i><sup>2</sup> + 10<i>x</i> + ___</span>'+' a perfect square, like (<i>x</i> + something)<sup>2</sup>? Think first, then slide.',
+       line: 'x² + bx is a square with two strips; the missing corner is (b/2)². Add it to both sides and the left becomes (x + b/2)².' },
+  B: { q: 'Slide c until the parabola just touches the x-axis at one point. What is b² − 4ac right then? Then slide past it.',
+       line: 'b² − 4ac tells you how many x-intercepts there are before you solve: positive two, zero one, negative none (non-real solutions).' },
+  C: { q: '“When is the ball highest?” and “How high does it get?” point at the same spot on the graph. Which coordinate answers each one?',
+       line: 'Every answer is either about x (when, where, which inputs) or about y (how much, how high, which outputs). Decide which before you solve.' }
+};
+function bigIdea(c, inSession){
+  var html = '<h2 style="margin-top:.4em">'+esc(CNAME[c])+': the big idea</h2><p class="big">'+BIG[c].q+'</p><div id="viz"></div><p class="big"><b>The idea:</b> '+esc(BIG[c].line)+'</p>';
+  app.innerHTML = (inSession ? header('Big idea') : '') + '<div class="card">'+html+'<div class="row"><button class="btn" id="nx">'+(inSession?'Got it: show me an example':'Back')+'</button></div></div>';
+  var viz = document.getElementById('viz');
+  if(c==='A') vizA(viz); else if(c==='B') vizB(viz); else vizC(viz);
+  document.getElementById('nx').onclick = inSession ? function(){ S.cs[c].introduced = true; next(); } : home;
+}
+function svgEl(w,h){ return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" style="max-width:340px;display:block;margin:8px auto">'; }
+function vizA(el){
+  el.innerHTML = '<label class="note">b = <b id="bv">10</b></label><input type="range" id="bs" min="2" max="12" step="2" value="10"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function draw(){
+    var b=+document.getElementById('bs').value, hb=b/2, x=6, u=20, W=(x+hb)*u+20, H=W;
+    document.getElementById('bv').textContent=b;
+    var s=svgEl(W,H)+'<rect x="10" y="10" width="'+x*u+'" height="'+x*u+'" fill="var(--soft)" stroke="var(--accent)"/><text x="'+(10+x*u/2)+'" y="'+(10+x*u/2)+'" text-anchor="middle" fill="var(--ink)" font-size="14">x²</text>'+
+      '<rect x="'+(10+x*u)+'" y="10" width="'+hb*u+'" height="'+x*u+'" fill="var(--good-bg)" stroke="var(--accent)"/><text x="'+(10+x*u+hb*u/2)+'" y="'+(10+x*u/2)+'" text-anchor="middle" font-size="12" fill="var(--ink)">'+hb+'x</text>'+
+      '<rect x="10" y="'+(10+x*u)+'" width="'+x*u+'" height="'+hb*u+'" fill="var(--good-bg)" stroke="var(--accent)"/><text x="'+(10+x*u/2)+'" y="'+(10+x*u+hb*u/2+4)+'" text-anchor="middle" font-size="12" fill="var(--ink)">'+hb+'x</text>'+
+      '<rect x="'+(10+x*u)+'" y="'+(10+x*u)+'" width="'+hb*u+'" height="'+hb*u+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="4 3"/><text x="'+(10+x*u+hb*u/2)+'" y="'+(10+x*u+hb*u/2+4)+'" text-anchor="middle" font-size="12" fill="var(--warn)">'+(hb*hb)+'</text></svg>';
+    document.getElementById('pic').innerHTML=s;
+    document.getElementById('eq').innerHTML='<i>x</i><sup>2</sup> + '+b+'<i>x</i> + <b>'+(hb*hb)+'</b> = (<i>x</i> + '+hb+')<sup>2</sup>';
+  }
+  document.getElementById('bs').oninput=draw; draw();
+}
+function vizB(el){
+  el.innerHTML = '<label class="note">c = <b id="cv">2</b> &nbsp; (graph of y = x² + 4x + c)</label><input type="range" id="cs" min="-6" max="8" step="1" value="2"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function draw(){
+    var c=+document.getElementById('cs').value, D=16-4*c; document.getElementById('cv').textContent=c;
+    var marks=[]; if(D>0){ marks=[[-2+Math.sqrt(D)/2,0],[-2-Math.sqrt(D)/2,0]]; } else if(D===0) marks=[[-2,0]];
+    document.getElementById('pic').innerHTML=E.graphSVG(function(x){ return x*x+4*x+c; }, marks);
+    document.getElementById('eq').innerHTML='<i>b</i><sup>2</sup> − 4<i>ac</i> = 16 − 4('+c+') = <b>'+D+'</b> → '+(D>0?'two x-intercepts':D===0?'one (touches)':'none: two non-real solutions');
+  }
+  document.getElementById('cs').oninput=draw; draw();
+}
+function vizC(el){
+  el.innerHTML = '<label class="note">t = <b id="tv">1.0</b> s &nbsp; (h = −16t² + 32t + 4)</label><input type="range" id="ts" min="0" max="2" step="0.25" value="1"><div id="pic"></div><p id="eq" style="text-align:center"></p>';
+  function draw(){
+    var t=+document.getElementById('ts').value, h=-16*t*t+32*t+4; document.getElementById('tv').textContent=t.toFixed(2);
+    var sx=function(v){ return 30+v*130; }, sy=function(v){ return 200-v*8; };
+    var d='',i; for(i=0;i<=40;i++){ var tt=i*2.1/40, hh=-16*tt*tt+32*tt+4; if(hh<0) break; d+=(i?'L':'M')+sx(tt).toFixed(1)+' '+sy(hh).toFixed(1); }
+    document.getElementById('pic').innerHTML=svgEl(330,215)+'<line x1="30" y1="200" x2="320" y2="200" stroke="var(--muted)"/><line x1="30" y1="0" x2="30" y2="200" stroke="var(--muted)"/><text x="300" y="214" font-size="11" fill="var(--muted)">t (when)</text><text x="34" y="12" font-size="11" fill="var(--muted)">h (how high)</text><path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.5"/>'+
+      '<line x1="'+sx(t)+'" y1="200" x2="'+sx(t)+'" y2="'+sy(h)+'" stroke="var(--warn)" stroke-dasharray="3 3"/><line x1="30" y1="'+sy(h)+'" x2="'+sx(t)+'" y2="'+sy(h)+'" stroke="var(--good)" stroke-dasharray="3 3"/><circle cx="'+sx(t)+'" cy="'+sy(h)+'" r="6" fill="var(--accent)"/></svg>';
+    document.getElementById('eq').innerHTML='Point ('+t.toFixed(2)+', '+h+'): <span style="color:var(--warn)">when = '+t.toFixed(2)+' s</span>, <span style="color:var(--good)">how high = '+h+' ft</span>'+(t===1?' ← the top':'');
+  }
+  document.getElementById('ts').oninput=draw; draw();
+}
+
+// ---------------- worked example ----------------
+function worked(st){
+  if(!st.seed){ st.seed=newSeed(); save(); }
+  var it=E.generate(st.tid, st.seed), shown=1;
+  function draw(){
+    app.innerHTML = header('Worked example') + '<div class="card"><div class="prompt">'+it.prompt+'</div><ol class="steps">'+
+      it.steps.slice(0,shown).map(function(s){ return '<li>'+s.m+(s.why?'<span class="why">'+s.why+'</span>':'')+'</li>'; }).join('')+'</ol>'+
+      (shown<it.steps.length ? '<div class="row"><button class="btn" id="more">Next step</button></div>' : '<p><b>Answer:</b> '+it.keyHTML+'</p><div class="row"><button class="btn" id="nx">Now you finish one</button></div>')+'</div>';
+    var m=document.getElementById('more'); if(m) m.onclick=function(){ shown++; draw(); };
+    var n=document.getElementById('nx'); if(n) n.onclick=next;
+  }
+  draw();
+}
+function sentence(st){
+  app.innerHTML = header('Last thing') + '<div class="card"><p class="big">In one sentence, in your own words: what is the big idea of <b>'+esc(CNAME[st.c])+'</b>?</p>'+
+    '<textarea id="sent" style="height:90px;font:1rem system-ui" aria-label="Your sentence"></textarea><p class="note">Not graded. Saying it yourself is what makes it stick.</p><div class="row"><button class="btn" id="nx">Finish session</button></div></div>';
+  document.getElementById('nx').onclick=function(){ S.current.sentence=document.getElementById('sent').value; next(); };
+}
+
+// ---------------- finish, progress, export ----------------
+function finishSession(){
+  var C=S.current; C.finished=new Date().toISOString();
+  S.missedLast = C.items.filter(function(r){ return r.verdict!=='correct'; }).map(function(r){ return { template_id: r.template_id, concept: r.concept, sure: r.confidence==='sure' }; });
+  S.sessions.push(C); S.current=null; save();
+  summary(S.sessions.length-1);
+}
+function stats(items){
+  var g=items.filter(function(r){ return r.graded; }), c=g.filter(function(r){ return r.verdict==='correct'; }).length;
+  var sure=g.filter(function(r){ return r.confidence==='sure'; }), sr=sure.filter(function(r){ return r.verdict==='correct'; }).length;
+  var asks=g.filter(function(r){ return 'asks_correct' in r; }), ac=asks.filter(function(r){ return r.asks_correct; }).length;
+  return { n:g.length, correct:c, acc: g.length? c/g.length : null, sure:sure.length, sureRight: sr, sureAcc: sure.length? sr/sure.length : null, asks: asks.length, asksRight: ac };
+}
+function pct(v){ return v==null ? '–' : Math.round(100*v)+'%'; }
+function progressTable(){
+  if(!S.sessions.length) return '<p class="note">No finished sessions yet.</p>';
+  var rows = S.sessions.map(function(s){
+    var cells = ['A','B','C'].map(function(c){ var st=stats(s.items.filter(function(r){ return r.concept===c; })); return '<td>'+(st.n? pct(st.acc)+' <span class="note">('+st.correct+'/'+st.n+')</span>' : '–')+'</td>'; }).join('');
+    var all=stats(s.items);
+    return '<tr><td>'+(new Date(s.started)).toLocaleDateString()+'</td>'+cells+'<td>'+pct(all.sureAcc)+'</td><td>'+(all.asks? all.asksRight+'/'+all.asks : '–')+'</td></tr>';
+  }).join('');
+  return '<div style="overflow-x:auto"><table class="prog"><tr><th>Session</th><th>Completing the square</th><th>Formula &amp; discriminant</th><th>What is it asking</th><th>Right when sure</th><th>Asking-for taps</th></tr>'+rows+'</table></div>';
+}
+function payload(i){
+  var s=S.sessions[i];
+  return { app: APP_FILE, version: VERSION, engine_version: E.version, session: s.id, focus_concept: s.focus,
+    started: s.started, finished: s.finished, device: s.device, standalone: s.standalone, resumes: s.resumes, adaptive_rule: RULE,
+    totals: stats(s.items), concept_state_after: S.cs, big_idea_sentence: s.sentence, items: s.items,
+    history: S.sessions.map(function(x){ return { session:x.id, started:x.started, focus:x.focus, totals:stats(x.items),
+      by_concept: ['A','B','C'].reduce(function(o,c){ o[c]=stats(x.items.filter(function(r){ return r.concept===c; })); return o; },{}) }; }) };
+}
+function fname(i){ var d=new Date(S.sessions[i].finished||Date.now()); function p(n){return (n<10?'0':'')+n;} return 'alg2-tutor-14-results-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+'.json'; }
+function summary(i){
+  var s=S.sessions[i], st=stats(s.items);
+  var missed=s.items.filter(function(r){ return r.verdict!=='correct'; });
+  app.innerHTML='<h1>Session done.</h1><p>'+st.correct+' of '+st.n+' right'+(st.sure? '; right on '+st.sureRight+' of the '+st.sure+' you were sure about':'')+'.</p>'+
+    '<div class="card"><b>Send it</b><p class="note">Download the results file and send it to your dad. It’s what the next session gets built from.</p><div class="row"><button class="btn" id="dl">Download results</button><button class="btn ghost" id="cp">Copy results</button></div><div id="cpbox"></div></div>'+
+    (missed.length? '<div class="card"><b>Coming back next time</b><p class="note">These come back in your next warm-up, the ones you were sure about first:</p><ul class="tight">'+missed.map(function(r){ return '<li>'+esc(CNAME[r.concept])+': '+esc(r.trap_label||r.form_issue||(r.verdict==='skipped'?'skipped':'missed'))+'</li>'; }).join('')+'</ul></div>' : '')+
+    '<h2>Your progress</h2><div class="card">'+progressTable()+'</div><div class="row"><button class="link" id="home">Back to start</button></div>';
+  document.getElementById('dl').onclick=function(){
+    try{ var P=payload(i), blob=new Blob([JSON.stringify(P,null,2)],{type:'application/json'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname(i); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); }catch(e){ showCopy(); }
+  };
+  document.getElementById('cp').onclick=function(){
+    var t=JSON.stringify(payload(i));
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){ document.getElementById('cpbox').innerHTML='<p class="note">Copied. Paste it into a message to your dad.</p>'; }, showCopy); } else showCopy();
+  };
+  function showCopy(){ var b=document.getElementById('cpbox'); b.innerHTML='<p class="note">Select all of this, copy it, and paste it into a message:</p><textarea readonly>'+esc(JSON.stringify(payload(i)))+'</textarea>'; b.querySelector('textarea').select(); }
+  document.getElementById('home').onclick=home;
+  window.scrollTo(0,0);
+}
+
+// ---------------- stuck on homework ----------------
+function stuck(lesson){
+  var ids = lesson==='2-5' ? ['T-Q06-b','T-Q06-c','T-Q06-d'] : ['T-Q07-a','T-Q07-b','T-Q07-c'];
+  var c = lesson==='2-5' ? 'A' : 'B';
+  var it=E.generate(ids[Math.floor(Math.random()*ids.length)], newSeed());
+  app.innerHTML='<h1>Stuck on '+lesson+' homework?</h1><div class="card"><p class="big"><b>The idea:</b> '+esc(BIG[c].line)+'</p></div>'+
+    '<div class="card"><p class="note">Here’s a problem like yours, fully worked. Do yours the same way, step by step.</p><div class="prompt">'+it.prompt+'</div>'+it.solution+'<p><b>Answer:</b> '+it.keyHTML+'</p>'+
+    '<div class="row"><button class="btn ghost" id="again">Show another</button><button class="btn ghost" id="big">See the big idea</button></div></div><div class="row"><button class="link" id="home">Back to start</button></div>';
+  document.getElementById('again').onclick=function(){ stuck(lesson); };
+  document.getElementById('big').onclick=function(){ bigIdea(c, false); };
+  document.getElementById('home').onclick=home; window.scrollTo(0,0);
+}
+
+// ---------------- home ----------------
+function home(){
+  var C=S.current;
+  app.innerHTML='<h1>Chapter 2: quadratics</h1><p>About 12–15 minutes a session. Each one: a warm-up, the big idea, an example, then problems on your own. Every answer starts with one question: what is this asking for?</p>'+
+    '<div class="card"><ul class="tight"><li>No hints until you answer. That’s how the test works too.</li><li>After each answer, tap how sure you are.</li><li>Calculator is fine for arithmetic. The method is yours.</li><li>Close it any time; it picks up where you left off on this device.</li></ul></div>'+
+    '<div class="row">'+(C ? '<button class="btn" id="resume">Resume session ('+(C.idx+1)+' of '+(C.steps.length-1)+')</button>' : '<button class="btn" id="start">Start session '+(S.sessions.length+1)+'</button>')+'</div>'+
+    '<h2>Stuck on homework?</h2><div class="row"><button class="btn ghost" id="h25">2-5 Completing the square</button><button class="btn ghost" id="h26">2-6 Quadratic formula</button></div>'+
+    '<h2>Your progress</h2><div class="card">'+progressTable()+'</div>'+
+    (S.sessions.length ? '<div class="row"><button class="link" id="last">Last session’s results and download</button></div>' : '')+
+    '<details><summary>Typing math</summary><ul class="tight"><li>Two answers: <span class="kbd">-3, 5</span> or <span class="kbd">2 ± sqrt(3)</span></li><li>Complex: <span class="kbd">1 ± 2i</span></li><li>Intervals: <span class="kbd">(-inf, -2) U (3, inf)</span> or <span class="kbd">x &lt; -2 or x &gt; 3</span></li><li>Range: <span class="kbd">[4, inf)</span> or <span class="kbd">y &gt;= 4</span></li><li>Vertex form: <span class="kbd">(x-3)^2 + 2</span></li><li>Check “Reads as” under the box before you submit.</li></ul></details>';
+  var r=document.getElementById('resume'); if(r) r.onclick=function(){ S.current.resumes++; save(); run(); };
+  var s=document.getElementById('start'); if(s) s.onclick=startSession;
+  document.getElementById('h25').onclick=function(){ stuck('2-5'); };
+  document.getElementById('h26').onclick=function(){ stuck('2-6'); };
+  var l=document.getElementById('last'); if(l) l.onclick=function(){ summary(S.sessions.length-1); };
+  window.scrollTo(0,0);
+}
+
+S = load(); if(!S || S.version!==VERSION){ S = fresh(); try{ var o = JSON.parse(localStorage.getItem(KEY_V2)||'null'); if(o && o.sessions && o.sessions.length){ S.sessions=o.sessions; S.cs=o.cs; S.missedLast=o.missedLast||[]; S.migrated_from='v2'; } }catch(e){} save(); }
+window.APP14 = { current: function(){ return cur; }, state: function(){ return S; } };
+home();
+})();
+</script>
+</body>
+</html>
