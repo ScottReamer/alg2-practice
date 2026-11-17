@@ -1,0 +1,2090 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Algebra Foundations</title>
+<!-- alg2-tutor-15-foundations-app-v6 (2026-11-16, S12). Changelog v6: teaching features. Every question has three exits: Show me
+     how (a twin problem stepped through, then back to his own), a three-level hint ladder, and Skip. Learn tab with a short lesson per
+     skill. Find-the-mistake items from his recorded errors. Line-by-line work checking. Skill ladder on the home screen. Assisted
+     answers recorded and handled by the adaptive rule. Changelog v5 (2026-11-16, S11): Lesson 10 quadratic formula one step at a time and Lesson
+     11 vertex and max/min, first in the plan for the 11-18 test; ten new templates; carries v4 and older progress. Changelog v4 (2026-11-13, S09): merges every earlier store on the device and marks the old
+     v2 Lesson 5/6 sessions as legacy so they don't skip the new lessons; plan is Lessons 6-9 (combining held, Lesson 5 dropped from the
+     plan); Lesson 6 adds box-corner and two-coefficient items; three new traps. Changelog v3: short lessons (about 10 min) for the Chapter 2 group test
+     week: Lesson 5 combine like terms, 6 squares and vertex form, 7 factoring as the box backward, 8 solve by factoring, 9 mixed cold,
+     then review. Eight new templates, factored-form check, learner name removed from the results file. Continues from v2 on the
+     same device. -->
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d2430; --muted:#5b6472; --line:#e3dfd6;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --good:#2e7d4f; --warn:#b26a00; --bad:#b3372f;
+  --good-bg:#e3f1e8; --warn-bg:#f8ecd9; --bad-bg:#f6e1df;
+  --soft:#eef3f7; --mfont:"Cambria Math","STIX Two Math","Latin Modern Math",Cambria,Georgia,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14181e; --card:#1c222b; --ink:#e7eaef; --muted:#9aa4b2; --line:#2c3440;
+    --accent:#5aa7dc; --accent-ink:#0e141a; --good:#5cc08a; --warn:#e0a23a; --bad:#ec7a70; --soft:#202a35;
+    --good-bg:#1f3328; --warn-bg:#3a2e1a; --bad-bg:#3d2523; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:1.6rem;margin:.2em 0 .4em}
+h2{font-size:1.15rem;margin:1.6em 0 .5em}
+p,li{color:var(--ink)}
+.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+.m{font-family:var(--mfont);font-size:1.12em;white-space:nowrap}
+.m i{font-style:italic}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .12em;font-size:.92em;line-height:1.15}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.sys{margin:.6em 0 .2em 1em;line-height:2}
+.hint{color:var(--muted);font-size:.9rem;margin-top:.5em}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:.9rem}
+.bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:8px 0 4px}
+.bar>div{height:100%;background:var(--accent);transition:width .25s}
+.prompt{font-size:1.15rem;line-height:1.7;overflow-x:auto}
+input[type=text]{width:100%;font:1.25rem var(--mfont);padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:14px}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.keys{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.keys button{font:1.1rem var(--mfont);min-width:48px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.read{min-height:1.6em;margin-top:10px;font-size:.95rem}
+.read.ok{color:var(--muted)} .read.err{color:var(--bad)}
+.confq{margin:18px 0 8px;font-weight:600}
+.conf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button.btn{font:600 1rem system-ui,sans-serif;min-height:48px;padding:12px 10px;border-radius:10px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;touch-action:manipulation}
+button.btn.ghost{background:transparent;color:var(--accent)}
+button.btn:disabled{opacity:.45;cursor:default}
+button.link{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.95rem;padding:12px 0;margin-top:6px;min-height:44px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+ul.tight{padding-left:1.2em} ul.tight li{margin:.3em 0}
+code,.kbd{font-family:var(--mfont);background:var(--soft);padding:1px 6px;border-radius:5px}
+table{width:100%;border-collapse:collapse}
+td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+.dots span{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:var(--line)}
+.dots .g{background:var(--good)} .dots .w{background:var(--warn)} .dots .b{background:var(--bad)}
+.tag{font-size:.8rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+.tag.solid{background:var(--good-bg);color:var(--good)}
+.tag.fragile,.tag.untested{background:var(--warn-bg);color:var(--warn)}
+.tag.gap{background:var(--bad-bg);color:var(--bad)}
+.flag{display:block;font-size:.78rem;color:var(--bad);font-weight:600;margin-top:3px}
+.rev{border-left:4px solid var(--line);padding:2px 0 2px 14px;margin:18px 0}
+.rev.bad{border-color:var(--bad)} .rev.warn{border-color:var(--warn)}
+.rev .lbl{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:8px}
+ol.steps{padding-left:1.3em;margin:.4em 0} ol.steps li{margin:.45em 0}
+.why{display:block;color:var(--muted);font-size:.88rem}
+textarea{width:100%;height:140px;font:12px monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+.note{font-size:.9rem;color:var(--muted)}
+</style>
+<style>
+.phase{font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.opts{display:grid;gap:8px;margin-top:12px}
+.opts button{font:1rem system-ui,sans-serif;text-align:left;min-height:48px;padding:10px 14px;border:2px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.opts button.sel{border-color:var(--accent);background:var(--card)}
+.opts button.right{border-color:var(--good);background:var(--good-bg)}
+.opts button.wrongc{border-color:var(--bad);background:var(--bad-bg)}
+.verdict{font-size:1.2rem;font-weight:700;margin:.2em 0 .4em}
+.verdict.good{color:var(--good)} .verdict.warn{color:var(--warn)} .verdict.bad{color:var(--bad)}
+input[type=range]{width:100%;height:44px;accent-color:var(--accent)}
+.calc{font-size:.85rem;color:var(--muted)}
+.fade li.hidden{color:var(--muted);list-style:'… '}
+.big{font-size:1.05rem}
+.prog td,.prog th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+.pbar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;min-width:60px}
+.pbar>div{height:100%;background:var(--accent)}
+table.ptab{border-collapse:collapse;margin:10px auto}table.ptab td{border:1px solid var(--line);padding:6px 14px;font-size:1.05rem;text-align:center}
+.helprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.helprow button{font:600 .95rem system-ui,sans-serif;min-height:46px;padding:8px 14px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--accent);cursor:pointer;touch-action:manipulation}
+.hintbox{background:var(--soft);border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin-top:12px}
+.workbox{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px}
+.workbox .wl{display:flex;gap:8px;align-items:baseline;padding:4px 0;font-size:1.05rem}
+.workbox .wl.ok b{color:var(--good)} .workbox .wl.no b{color:var(--bad)}
+.ladder td,.ladder th{padding:7px 6px;border-bottom:1px solid var(--line);font-size:.92rem;text-align:center}
+.ladder td:first-child,.ladder th:first-child{text-align:left}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid var(--line)} .dot.on{background:var(--good);border-color:var(--good)}
+.learnlist button{display:block;width:100%;text-align:left;font:1rem system-ui,sans-serif;min-height:52px;padding:10px 14px;margin-top:8px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+details summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+/* alg2-tutor-14 Chapter 2 app engine v1 (2026-10-30, S04).
+   Core parser and checkers copied verbatim from alg2-tutor-06-engine-v2 (lines 4-486), plus:
+   complex solution sets, unions of intervals, multiple choice, vertex-form and exact-form checks,
+   and the 12 Chapter 2 templates (completing the square, quadratic formula/discriminant, key features).
+   Pure JS, no DOM. Browser: window.ALG2C2. Node: module.exports. */
+(function (root) {
+  'use strict';
+
+  // ---------- RNG ----------
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function makeRng(seed) {
+    var r = mulberry32(seed);
+    var R = {
+      f: r,
+      int: function (lo, hi) { return lo + Math.floor(r() * (hi - lo + 1)); },
+      nz: function (lo, hi) { var v; do { v = lo + Math.floor(r() * (hi - lo + 1)); } while (v === 0); return v; },
+      pick: function (arr) { return arr[Math.floor(r() * arr.length)]; },
+      shuffle: function (arr) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    };
+    return R;
+  }
+
+  // ---------- number helpers ----------
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a; }
+  function lcm(a, b) { return Math.abs(a * b) / gcd(a, b); }
+  function reduce(p, q) { if (q < 0) { p = -p; q = -q; } var g = gcd(p, q) || 1; return [p / g, q / g]; }
+  function isSquarefree(n) { if (n < 2) return false; for (var k = 2; k * k <= n; k++) if (n % (k * k) === 0) return false; return true; }
+  function simplifySqrt(n) { // returns [outside, inside]
+    var out = 1, ins = n;
+    for (var k = Math.floor(Math.sqrt(n)); k >= 2; k--) { if (ins % (k * k) === 0) { out *= k; ins /= (k * k); k = Math.floor(Math.sqrt(ins)) + 1; } }
+    return [out, ins];
+  }
+  function approxEq(a, b) { return Math.abs(a - b) <= 1e-7 * Math.max(1, Math.abs(a), Math.abs(b)); }
+
+  // ---------- normalization ----------
+  var SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+  function normalize(s) {
+    s = String(s == null ? '' : s).toLowerCase();
+    s = s.replace(/[−–—]/g, '-').replace(/[×·⋅∙]/g, '*').replace(/÷/g, '/');
+    s = s.replace(/≤/g, '<=').replace(/≥/g, '>=').replace(/=</g, '<=').replace(/=>/g, '>=');
+    s = s.replace(/∞/g, 'inf').replace(/infinity/g, 'inf');
+    s = s.replace(/\+\/-|\+-/g, '±');
+    // superscripts -> ^(...)
+    s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, function (m) { var t = ''; for (var i = 0; i < m.length; i++) t += SUP[m[i]]; return '^(' + t + ')'; });
+    s = s.replace(/√\s*\(/g, 'sqrt(');
+    s = s.replace(/√\s*([0-9.]+|[a-z])/g, 'sqrt($1)');
+    s = s.replace(/sqrt\s*(?!\s*\()([0-9.]+|[a-z])/g, 'sqrt($1)');
+    s = s.replace(/\s+/g, ' ').trim();
+    return s;
+  }
+
+  // ---------- tokenizer / parser ----------
+  function tokenize(s) {
+    var toks = [], i = 0;
+    while (i < s.length) {
+      var ch = s[i];
+      if (ch === ' ') { i++; continue; }
+      if (/[0-9.]/.test(ch)) {
+        var j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++;
+        var str = s.slice(i, j);
+        if ((str.match(/\./g) || []).length > 1 || str === '.') throw new Error('“' + str + '” isn’t a number');
+        toks.push({ t: 'num', v: parseFloat(str), dec: str.indexOf('.') >= 0 ? str.length - str.indexOf('.') - 1 : 0 }); i = j; continue;
+      }
+      if (/[a-z]/.test(ch)) {
+        if (s.slice(i, i + 4) === 'sqrt') { toks.push({ t: 'fn', v: 'sqrt' }); i += 4; continue; }
+        toks.push({ t: 'var', v: ch }); i++; continue;
+      }
+      if ('+-*/^(),'.indexOf(ch) >= 0) { toks.push({ t: ch }); i++; continue; }
+      if (ch === '[' || ch === ']') { toks.push({ t: ch === '[' ? '(' : ')' }); i++; continue; }
+      throw new Error('I don’t recognize “' + ch + '”');
+    }
+    // implicit multiplication
+    var out = [];
+    for (var k = 0; k < toks.length; k++) {
+      var a = out[out.length - 1], b = toks[k];
+      if (a && (a.t === 'num' || a.t === 'var' || a.t === ')') && (b.t === 'num' || b.t === 'var' || b.t === 'fn' || b.t === '(')) out.push({ t: '*' });
+      out.push(b);
+    }
+    return out;
+  }
+  function parse(str) {
+    var toks = tokenize(normalize(str));
+    if (!toks.length) throw new Error('Nothing typed yet');
+    var p = 0;
+    function peek() { return toks[p]; }
+    function eat(t) { var k = toks[p]; if (!k || k.t !== t) throw new Error('Expected “' + t + '”'); p++; return k; }
+    function expr() {
+      var n = term();
+      while (peek() && (peek().t === '+' || peek().t === '-')) { var op = toks[p++].t; var r = term(); n = { t: op === '+' ? 'add' : 'sub', a: n, b: r }; }
+      return n;
+    }
+    function term() {
+      var n = unary();
+      while (peek() && (peek().t === '*' || peek().t === '/')) { var op = toks[p++].t; var r = unary(); n = { t: op === '*' ? 'mul' : 'div', a: n, b: r }; }
+      return n;
+    }
+    function unary() {
+      if (peek() && peek().t === '-') { p++; return { t: 'neg', a: unary() }; }
+      if (peek() && peek().t === '+') { p++; return unary(); }
+      return power();
+    }
+    function power() {
+      var base = primary();
+      if (peek() && peek().t === '^') { p++; var e = unary(); return { t: 'pow', a: base, b: e }; }
+      return base;
+    }
+    function primary() {
+      var k = peek();
+      if (!k) throw new Error('The expression ends too early');
+      if (k.t === 'num') { p++; var nn = { t: 'num', v: k.v }; if (k.dec) nn.dec = k.dec; return nn; }
+      if (k.t === 'var') { p++; return { t: 'var', v: k.v }; }
+      if (k.t === 'fn') { p++; eat('('); var a = expr(); eat(')'); return { t: 'sqrt', a: a }; }
+      if (k.t === '(') { p++; var e = expr(); eat(')'); return { t: 'paren', a: e }; }
+      throw new Error('Unexpected “' + k.t + '”');
+    }
+    var tree = expr();
+    if (p < toks.length) throw new Error('Unexpected “' + toks[p].t + '”');
+    return strip(tree);
+  }
+  function strip(n) { // remove paren nodes
+    if (!n) return n;
+    if (n.t === 'paren') return strip(n.a);
+    var m = { t: n.t }; if ('v' in n) m.v = n.v; if (n.dec) m.dec = n.dec;
+    if (n.a) m.a = strip(n.a); if (n.b) m.b = strip(n.b);
+    return m;
+  }
+  function evaluate(n, env) {
+    switch (n.t) {
+      case 'num': return n.v;
+      case 'var': if (!(n.v in env)) return NaN; return env[n.v];
+      case 'add': return evaluate(n.a, env) + evaluate(n.b, env);
+      case 'sub': return evaluate(n.a, env) - evaluate(n.b, env);
+      case 'mul': return evaluate(n.a, env) * evaluate(n.b, env);
+      case 'div': return evaluate(n.a, env) / evaluate(n.b, env);
+      case 'neg': return -evaluate(n.a, env);
+      case 'pow': return Math.pow(evaluate(n.a, env), evaluate(n.b, env));
+      case 'sqrt': var v = evaluate(n.a, env); return v < 0 ? NaN : Math.sqrt(v);
+    }
+    return NaN;
+  }
+  function varsIn(n, set) {
+    set = set || {};
+    if (!n) return set;
+    if (n.t === 'var') set[n.v] = true;
+    varsIn(n.a, set); varsIn(n.b, set);
+    return set;
+  }
+  function hasAddSub(n) { if (!n) return false; if (n.t === 'add' || n.t === 'sub') return true; if (n.t === 'sqrt') return false; return hasAddSub(n.a) || hasAddSub(n.b); }
+
+  // pretty printer (unicode) for the "we read this as" preview
+  var PREC = { add: 1, sub: 1, mul: 2, div: 2, neg: 3, pow: 4, num: 5, var: 5, sqrt: 5 };
+  var SUPS = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
+  function fmtN(v) { var s = (Math.round(v * 1e9) / 1e9).toString(); return s.replace('-', '−'); }
+  function pretty(n) {
+    function wrap(c, minP) { var s = pretty(c); return PREC[c.t] < minP ? '(' + s + ')' : s; }
+    switch (n.t) {
+      case 'num': return fmtN(n.v);
+      case 'var': return n.v;
+      case 'add': return pretty(n.a) + ' + ' + wrap(n.b, 2);
+      case 'sub': return pretty(n.a) + ' − ' + wrap(n.b, 2);
+      case 'mul':
+        var L = wrap(n.a, 2), R = wrap(n.b, 3);
+        var juxt = (n.b.t === 'var' || n.b.t === 'sqrt' || (n.b.t === 'pow' && n.b.a.t === 'var') || R[0] === '(') && n.a.t !== 'div';
+        return juxt ? L + R : L + '·' + R;
+      case 'div': return wrap(n.a, 2) + '/' + wrap(n.b, 3);
+      case 'neg': return '−' + wrap(n.a, 3);
+      case 'pow':
+        var base = n.a.t === 'num' && n.a.v < 0 ? '(' + pretty(n.a) + ')' : wrap(n.a, 5);
+        if (n.b.t === 'num' && Number.isInteger(n.b.v) && n.b.v >= 0) return base + String(n.b.v).split('').map(function (d) { return SUPS[d]; }).join('');
+        if (n.b.t === 'neg' && n.b.a.t === 'num' && Number.isInteger(n.b.a.v)) return base + '⁻' + String(n.b.a.v).split('').map(function (d) { return SUPS[d]; }).join('');
+        return base + '^(' + pretty(n.b) + ')';
+      case 'sqrt': var a = pretty(n.a); return (n.a.t === 'num' || n.a.t === 'var') ? '√' + a : '√(' + a + ')';
+    }
+    return '?';
+  }
+
+  // ---------- equivalence ----------
+  var SAMPLES = [-2.31, -1.17, 0.73, 1.91, 2.63, 3.37, -0.41, 4.19, 0.29, -3.07];
+  function equivExpr(A, B, vars) {
+    var good = 0;
+    for (var i = 0; i < SAMPLES.length; i++) {
+      var env = {};
+      for (var j = 0; j < vars.length; j++) env[vars[j]] = SAMPLES[(i + 3 * j) % SAMPLES.length] + 0.13 * j;
+      var a = evaluate(A, env), b = evaluate(B, env);
+      if (!isFinite(a) || !isFinite(b)) { if (isFinite(a) !== isFinite(b)) return false; continue; }
+      if (!approxEq(a, b)) return false;
+      good++;
+    }
+    return good >= 4;
+  }
+
+  // ---------- form checks ----------
+  function flattenMul(n, out) {
+    out = out || [];
+    if (n.t === 'mul') { flattenMul(n.a, out); flattenMul(n.b, out); }
+    else if (n.t === 'neg') { flattenMul(n.a, out); }
+    else out.push(n);
+    return out;
+  }
+  function flattenAdd(n, out) {
+    out = out || [];
+    if (n.t === 'add' || n.t === 'sub') { flattenAdd(n.a, out); flattenAdd(n.b, out); } else out.push(n);
+    return out;
+  }
+  function isExpanded(n) {
+    if (!n) return true;
+    if (n.t === 'mul' && (hasAddSub(n.a) || hasAddSub(n.b))) return false;
+    if (n.t === 'pow' && hasAddSub(n.a)) return false;
+    if (n.t === 'neg' && hasAddSub(n.a)) return false;
+    return isExpanded(n.a) && isExpanded(n.b);
+  }
+  function factoredCount(n) {
+    var fs = flattenMul(n), c = 0;
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i]; if (!Object.keys(varsIn(f)).length) continue;
+      if (f.t === 'pow' && f.b.t === 'num' && Number.isInteger(f.b.v) && f.b.v >= 2 && hasAddSub(f.a)) c += f.b.v;
+      else c += 1;
+    }
+    return c;
+  }
+  function isMonomialForm(n) {
+    if (n.t === 'div') return false;
+    var fs = flattenMul(n), seen = {}, nums = 0;
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i];
+      if (f.t === 'num') { nums++; continue; }
+      var v = null;
+      if (f.t === 'var') v = f.v;
+      else if (f.t === 'pow' && f.a.t === 'var' && f.b.t === 'num') v = f.a.v;
+      else return false;
+      if (seen[v]) return false; seen[v] = true;
+    }
+    return nums <= 1;
+  }
+  function radicalsSimplified(n) {
+    if (!n) return true;
+    if (n.t === 'sqrt') {
+      if (Object.keys(varsIn(n.a)).length) return false;
+      var v = evaluate(n.a, {});
+      if (!Number.isInteger(v) || !isSquarefree(v)) return false;
+    }
+    if (n.t === 'div' && containsSqrt(n.b)) return false;
+    if (n.t === 'pow' && n.b.t !== 'num') return false; // no fractional exponents left
+    return radicalsSimplified(n.a) && radicalsSimplified(n.b);
+  }
+  function containsSqrt(n) { if (!n) return false; if (n.t === 'sqrt') return true; return containsSqrt(n.a) || containsSqrt(n.b); }
+  function isLowestFraction(n) {
+    var m = n.t === 'neg' ? n.a : n;
+    if (m.t === 'num') return Number.isInteger(m.v);
+    if (m.t === 'div' && m.a.t === 'num' && m.b.t === 'num' && Number.isInteger(m.a.v) && Number.isInteger(m.b.v)) return gcd(m.a.v, m.b.v) === 1 && m.b.v !== 1;
+    return false;
+  }
+  // v2: a bare decimal (e.g. 8.485 for 6√2) on an exact-radical item. Notation, not a wrong idea.
+  function isDecimalApprox(item, r) {
+    if (item.form !== 'radical' || item.type !== 'number') return false;
+    var m = r.ast.t === 'neg' ? r.ast.a : r.ast;
+    if (m.t !== 'num' || !m.dec) return false;
+    // accept the exact value rounded or truncated to the number of decimal places typed
+    return Math.abs(r.value - item.key) <= Math.pow(10, -m.dec) + 1e-12;
+  }
+
+  // ---------- answer parsing by type ----------
+  function stripLead(s, names) {
+    s = normalize(s);
+    for (var i = 0; i < names.length; i++) {
+      var re = new RegExp('^\\s*' + names[i] + '\\s*=\\s*');
+      if (re.test(s)) return s.replace(re, '');
+    }
+    return s;
+  }
+  function expandPM(s) {
+    var i = s.indexOf('±');
+    if (i < 0) return [s];
+    return [s.slice(0, i) + '+' + s.slice(i + 1), s.slice(0, i) + '-' + s.slice(i + 1)];
+  }
+  function parseNumber(raw) {
+    var s = stripLead(raw, ['x', 'y', 'a', 't']);
+    var ast = parse(s);
+    var vs = Object.keys(varsIn(ast));
+    if (vs.length) throw new Error('This answer should be a number, without “' + vs[0] + '”');
+    var v = evaluate(ast, {});
+    if (!isFinite(v)) throw new Error('That doesn’t evaluate to a real number');
+    return { ast: ast, value: v, text: pretty(ast) };
+  }
+  function parseExprAns(raw, vars) {
+    var s = stripLead(raw, ['y']).replace(/^\s*[a-z]\s*\([^=]*\)\s*=\s*/, '');
+    var ast = parse(s);
+    var vs = Object.keys(varsIn(ast));
+    for (var i = 0; i < vs.length; i++) if (vars.indexOf(vs[i]) < 0) throw new Error('Unexpected letter “' + vs[i] + '”; use ' + vars.join(', '));
+    return { ast: ast, text: pretty(ast) };
+  }
+  function parseSet(raw) {
+    var s = normalize(raw).replace(/\bor\b|\band\b|;/g, ',');
+    var parts = s.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    if (!parts.length) throw new Error('Nothing typed yet');
+    var vals = [], texts = [];
+    parts.forEach(function (pt) {
+      expandPM(pt.replace(/^x\s*=\s*/, '')).forEach(function (q) {
+        var r = parseNumber(q); vals.push(r.value); texts.push(r.text);
+      });
+    });
+    return { values: vals, text: texts.join(', ') };
+  }
+  function parsePair(raw) {
+    var s = normalize(raw);
+    var mx = s.match(/x\s*=\s*([^,;]+)/), my = s.match(/y\s*=\s*([^,;]+)/);
+    var a, b;
+    if (mx && my) { a = mx[1]; b = my[1]; }
+    else {
+      var inner = s.replace(/^\(/, '').replace(/\)$/, '');
+      var parts = inner.split(',');
+      if (parts.length !== 2) throw new Error('Type two numbers, like (2, 5)');
+      a = parts[0]; b = parts[1];
+    }
+    var A = parseNumber(a), B = parseNumber(b);
+    return { values: [A.value, B.value], text: '(' + A.text + ', ' + B.text + ')' };
+  }
+  var FLIP = { '<': '>', '>': '<', '<=': '>=', '>=': '<=' };
+  function parseIneq(raw) {
+    var s = normalize(raw).replace(/\s/g, '');
+    var iv = s.match(/^([\[(])(-?inf|[^,]+),(-?inf|[^\])]+)([\])])$/);
+    if (iv) {
+      var lo = /-inf/.test(iv[2]) ? -Infinity : parseNumber(iv[2]).value;
+      var hi = /^inf$|^\+inf$/.test(iv[3]) ? Infinity : parseNumber(iv[3]).value;
+      return mkIv(lo, iv[1] === '[', hi, iv[4] === ']');
+    }
+    var parts = s.split(/(<=|>=|<|>)/);
+    if (parts.length === 3) {
+      var A = parts[0], op = parts[1], B = parts[2];
+      if (A === 'x') return single(op, parseNumber(B).value);
+      if (B === 'x') return single(FLIP[op], parseNumber(A).value);
+      throw new Error('Write it with x on one side, like x < 4');
+    }
+    if (parts.length === 5 && parts[2] === 'x') {
+      var a = parseNumber(parts[0]).value, b = parseNumber(parts[4]).value, o1 = parts[1], o2 = parts[3];
+      if (o1[0] === '<' && o2[0] === '<') return mkIv(a, o1 === '<=', b, o2 === '<=');
+      if (o1[0] === '>' && o2[0] === '>') return mkIv(b, o2 === '>=', a, o1 === '>=');
+      throw new Error('Both signs in a compound inequality should point the same way');
+    }
+    throw new Error('Write an inequality like x < 4 or −3 < x < 7');
+    function single(op, v) {
+      if (op === '<') return mkIv(-Infinity, false, v, false);
+      if (op === '<=') return mkIv(-Infinity, false, v, true);
+      if (op === '>') return mkIv(v, false, Infinity, false);
+      return mkIv(v, true, Infinity, false);
+    }
+  }
+  function mkIv(lo, loIn, hi, hiIn) {
+    if (lo > hi) throw new Error('That range has no numbers in it');
+    var iv = { lo: lo, loIn: isFinite(lo) ? loIn : false, hi: hi, hiIn: isFinite(hi) ? hiIn : false };
+    iv.text = ivText(iv);
+    return iv;
+  }
+  function ivText(iv) {
+    var f = function (v) { return fmtN(v); };
+    if (!isFinite(iv.lo)) return 'x ' + (iv.hiIn ? '≤' : '<') + ' ' + f(iv.hi);
+    if (!isFinite(iv.hi)) return 'x ' + (iv.loIn ? '≥' : '>') + ' ' + f(iv.lo);
+    return f(iv.lo) + ' ' + (iv.loIn ? '≤' : '<') + ' x ' + (iv.hiIn ? '≤' : '<') + ' ' + f(iv.hi);
+  }
+  function eqIv(a, b) {
+    function e(x, y) { return (!isFinite(x) && !isFinite(y) && x === y) || (isFinite(x) && isFinite(y) && approxEq(x, y)); }
+    return e(a.lo, b.lo) && e(a.hi, b.hi) && a.loIn === b.loIn && a.hiIn === b.hiIn;
+  }
+  function eqMultiset(a, b) {
+    if (a.length !== b.length) return false;
+    var used = b.map(function () { return false; });
+    for (var i = 0; i < a.length; i++) {
+      var hit = -1;
+      for (var j = 0; j < b.length; j++) if (!used[j] && approxEq(a[i], b[j])) { hit = j; break; }
+      if (hit < 0) return false; used[hit] = true;
+    }
+    return true;
+  }
+  function dedupe(arr) { var out = []; arr.forEach(function (v) { if (!out.some(function (w) { return approxEq(v, w); })) out.push(v); }); return out; }
+
+  // preview: parse for display without grading. Returns {ok, text} or {ok:false, error}
+  function preview(item, raw) {
+    if (!String(raw).trim()) return { ok: false, error: '' };
+    try {
+      var r = readAnswer(item, raw);
+      return { ok: true, text: r.text };
+    } catch (e) { return { ok: false, error: e.message }; }
+  }
+  function readAnswer(item, raw) {
+    switch (item.type) {
+      case 'number': return parseNumber(raw);
+      case 'expr': return parseExprAns(raw, item.vars);
+      case 'set': return parseSet(raw);
+      case 'pair': return parsePair(raw);
+      case 'ineq': return parseIneq(raw);
+    }
+    throw new Error('Unknown answer type');
+  }
+  var FORM_MSG = {
+    'lowest': 'Right value, but give it as a fraction in lowest terms.',
+    'expanded': 'Right value, but it isn’t fully multiplied out and simplified.',
+    'factored': 'Right value, but it isn’t factored completely.',
+    'radical': 'Right value, but the radical isn’t fully simplified.',
+    'monomial': 'Right value, but it isn’t simplified to a single term.',
+    'decimal': 'That’s the right size as a decimal, but the question wants the exact answer with a square root.'
+  };
+  function matches(item, r, key) {
+    switch (item.type) {
+      case 'number': return approxEq(r.value, key);
+      case 'expr': return equivExpr(r.ast, typeof key === 'string' ? parse(key) : key, item.vars);
+      case 'set': return eqMultiset(dedupe(r.values), dedupe(key));
+      case 'pair': return approxEq(r.values[0], key[0]) && approxEq(r.values[1], key[1]);
+      case 'ineq': return eqIv(r, key);
+    }
+    return false;
+  }
+  function formOk(item, r) {
+    var f = item.form; if (!f) return true;
+    var ast = r.ast;
+    if (f === 'lowest') return isLowestFraction(ast);
+    if (f === 'expanded') return isExpanded(ast) && flattenAdd(ast).length <= item.terms;
+    if (f === 'factored') return factoredCount(ast) >= 2;
+    if (f === 'radical') return radicalsSimplified(ast);
+    if (f === 'monomial') return isMonomialForm(ast);
+    return true;
+  }
+  // grade: returns {verdict:'correct'|'form'|'wrong', trap, text, formMsg, formCode}
+  function grade(item, raw) {
+    var r = readAnswer(item, raw);
+    if (matches(item, r, item.key)) {
+      if (!formOk(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM_MSG[item.form], formCode: 'FORM_' + item.form.toUpperCase() };
+      return { verdict: 'correct', text: r.text };
+    }
+    if (isDecimalApprox(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM_MSG.decimal, formCode: 'DECIMAL_FOR_EXACT' };
+    var trap = null;
+    for (var i = 0; i < (item.traps || []).length; i++) {
+      var t = item.traps[i];
+      try { if (matches(item, r, t.key)) { trap = t; break; } } catch (e) { }
+    }
+    return { verdict: 'wrong', text: r.text, trap: trap ? { code: trap.code, error_type: trap.error_type, label: trap.label } : null };
+  }
+
+  // ---------- HTML formatting helpers for prompts ----------
+  var M = function (s) { return '<span class="m">' + s + '</span>'; };
+  function n$(v) { return v < 0 ? '−' + Math.abs(v) : String(v); }
+  function frac(p, q) { // html stacked fraction, reduced, sign in front
+    var r = reduce(p, q); p = r[0]; q = r[1];
+    if (q === 1) return n$(p);
+    return (p < 0 ? '−' : '') + '<span class="fr"><span>' + Math.abs(p) + '</span><span>' + q + '</span></span>';
+  }
+  function fracTxt(p, q) { var r = reduce(p, q); return r[1] === 1 ? String(r[0]) : r[0] + '/' + r[1]; }
+  // polynomial from coefficients high->low degree
+  function poly(c, v) {
+    v = v || 'x';
+    var deg = c.length - 1, out = '';
+    for (var i = 0; i < c.length; i++) {
+      var a = c[i], d = deg - i; if (a === 0) continue;
+      var abs = Math.abs(a), sign = a < 0 ? '−' : '+';
+      var coef = (abs === 1 && d > 0) ? '' : String(abs);
+      var vv = d === 0 ? '' : (d === 1 ? '<i>' + v + '</i>' : '<i>' + v + '</i><sup>' + d + '</sup>');
+      if (out === '') out = (a < 0 ? '−' : '') + coef + vv;
+      else out += ' ' + sign + ' ' + coef + vv;
+    }
+    return out || '0';
+  }
+  function polyS(c, v) { // ascii for keys
+    v = v || 'x';
+    var deg = c.length - 1, out = '';
+    for (var i = 0; i < c.length; i++) {
+      var a = c[i], d = deg - i; if (a === 0) continue;
+      var t = (Math.abs(a) === 1 && d > 0 ? (a < 0 ? '-' : '') : String(a)) + (d === 0 ? '' : (d === 1 ? v : v + '^' + d));
+      out += (out && a > 0 ? '+' : '') + t;
+    }
+    return out || '0';
+  }
+  function nz(c) { return c.filter(function (x) { return x !== 0; }).length; }
+  // "x + a" style binomial in html, e.g. lin(1,-3) = x − 3
+  function bin(a, b, v) { return poly([a, b], v); }
+  function paren(s) { return '(' + s + ')'; }
+  function sq(n) { return '<sup>' + n + '</sup>'; }
+  function X(v) { return '<i>' + (v || 'x') + '</i>'; }
+  function radHTML(out, ins) { if (ins === 1) return String(out); return (out === 1 ? '' : out) + '√' + ins; }
+  function step(s, why) { return '<li>' + s + (why ? '<span class="why">' + why + '</span>' : '') + '</li>'; }
+  function steps(arr) { return '<ol class="steps">' + arr.join('') + '</ol>'; }
+  function ivHTML(iv) { return ivText(iv).replace(/x/g, '<i>x</i>'); }
+
+
+  // =====================================================================
+  // App 14 additions
+  // =====================================================================
+  function fmtV(v) { return fmtN(v); }
+  function isInt(v) { return Math.abs(v - Math.round(v)) < 1e-9; }
+  function fracStr(v) { // exact-ish fraction text for keys/typing, e.g. -5/3
+    for (var q = 1; q <= 400; q++) { var p = Math.round(v * q); if (Math.abs(p / q - v) < 1e-10) { var r = reduce(p, q); return r[1] === 1 ? String(r[0]) : r[0] + '/' + r[1]; } }
+    return String(v);
+  }
+  function fracH(v) { for (var q = 1; q <= 400; q++) { var p = Math.round(v * q); if (Math.abs(p / q - v) < 1e-10) return frac(p, q); } return fmtV(v); }
+  // h ± o√m pieces from h and n (n > 0, not a perfect square)
+  function pmRad(h, n) {
+    var s = simplifySqrt(n), o = s[0], m = s[1];
+    var rad = (o === 1 ? '' : o) + '√' + m, radT = (o === 1 ? '' : o + '*') + 'sqrt(' + m + ')';
+    return {
+      html: h === 0 ? '±' + rad : n$(h) + ' ± ' + rad,
+      typed: h === 0 ? '±' + radT : String(h) + ' ± ' + radT,
+      values: [h + Math.sqrt(n), h - Math.sqrt(n)], o: o, m: m
+    };
+  }
+  function cplxH(re, im) { // a ± bi html
+    var b = Math.abs(im), bi = (b === 1 ? '' : b) + '<i>i</i>';
+    return re === 0 ? '±' + bi : n$(re) + ' ± ' + bi;
+  }
+  function stepsArr(arr) { return steps(arr.map(function (s) { return step(s.m, s.why); })); }
+  function S(m, why) { return { m: m, why: why }; }
+  function sgn(v) { return v === 0 ? '' : (v < 0 ? ' − ' : ' + ') + Math.abs(v); }
+  function vtx(h, k, a, v) { // html for a(x - h)^2 + k
+    v = v || 'x';
+    var A = a === 1 ? '' : a === -1 ? '−' : (Number.isInteger(a) ? n$(a) : fracH(a));
+    var inner = h === 0 ? '<i>' + v + '</i>' : '(<i>' + v + '</i> ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ')';
+    var base = h === 0 ? inner + sq(2) : inner + sq(2);
+    var kk = k === 0 ? '' : ' ' + (k > 0 ? '+' : '−') + ' ' + Math.abs(k);
+    return A + base + kk;
+  }
+  function vtxS(h, k, a) { // ascii
+    var A = a === 1 ? '' : a === -1 ? '-' : '(' + fracStr(a) + ')*';
+    var inner = h === 0 ? 'x' : '(x' + (h > 0 ? '-' : '+') + Math.abs(h) + ')';
+    return A + inner + '^2' + (k === 0 ? '' : (k > 0 ? '+' : '-') + Math.abs(k));
+  }
+  function ivUText(ivs) { // union text in interval notation
+    return ivs.map(function (iv) {
+      var lo = isFinite(iv.lo) ? fmtV(iv.lo) : '−∞', hi = isFinite(iv.hi) ? fmtV(iv.hi) : '∞';
+      return (iv.loIn ? '[' : '(') + lo + ', ' + hi + (iv.hiIn ? ']' : ')');
+    }).join(' ∪ ');
+  }
+  function ivUTyped(ivs) {
+    return ivs.map(function (iv) {
+      var lo = isFinite(iv.lo) ? fracStr(iv.lo) : '-inf', hi = isFinite(iv.hi) ? fracStr(iv.hi) : 'inf';
+      return (iv.loIn ? '[' : '(') + lo + ', ' + hi + (iv.hiIn ? ']' : ')');
+    }).join(' U ');
+  }
+
+  // ---------- new readers ----------
+  var ALLREALS = /^(all real( numbers)?|all reals|r|\(-inf,inf\))$/;
+  function readIneqVar(raw, v) {
+    var s = normalize(raw).replace(/\s/g, '');
+    if (ALLREALS.test(s.replace(/,/g, ',')) || ALLREALS.test(normalize(raw))) return mkIv(-Infinity, false, Infinity, false);
+    var wrongVar = false;
+    if (v && v !== 'x') { if (/x/.test(s.replace(/max|inf/g, ''))) wrongVar = true; s = s.replace(new RegExp(v, 'g'), 'x'); }
+    if (/[a-wyz]/.test(s.replace(/inf/g, '').replace(/sqrt/g, ''))) throw new Error('Use ' + (v || 'x') + ' in the inequality');
+    var r = parseIneq(s);
+    if (v && v !== 'x' && !wrongVar) r.text = r.text.replace(/x/g, v);
+    if (wrongVar) r.wrongVar = true;
+    return r;
+  }
+  function intersect(a, b) {
+    var lo, loIn, hi, hiIn;
+    if (a.lo > b.lo || (a.lo === b.lo && !a.loIn)) { lo = a.lo; loIn = a.loIn; } else { lo = b.lo; loIn = b.loIn; }
+    if (a.hi < b.hi || (a.hi === b.hi && !a.hiIn)) { hi = a.hi; hiIn = a.hiIn; } else { hi = b.hi; hiIn = b.hiIn; }
+    if (lo > hi || (lo === hi && !(loIn && hiIn))) return null;
+    return { lo: lo, loIn: loIn, hi: hi, hiIn: hiIn };
+  }
+  function readUnion(raw) {
+    var s = normalize(raw).replace(/∪/g, ' u ');
+    if (!s) throw new Error('Nothing typed yet');
+    if (ALLREALS.test(s.replace(/\s/g, '')) || /^all real/.test(s)) { var all = mkIv(-Infinity, false, Infinity, false); return { ivs: [all], text: '(−∞, ∞)' }; }
+    if (/\band\b|&/.test(s)) {
+      var parts = s.split(/\s*(?:\band\b|&)\s*/).filter(Boolean);
+      var acc = null;
+      parts.forEach(function (p) { var iv = readIneqVar(p, 'x'); acc = acc === null ? iv : (acc ? intersect(acc, iv) : null); });
+      if (!acc) return { ivs: [], empty: true, viaAnd: true, text: 'no numbers (an “and” of two conditions that can’t both be true)' };
+      var one = mkIv(acc.lo, acc.loIn, acc.hi, acc.hiIn);
+      return { ivs: [one], text: ivUText([one]) };
+    }
+    var pieces = s.split(/\s*\bu\b\s*|\s+\bor\b\s+/).filter(Boolean);
+    var ivs = pieces.map(function (p) { return readIneqVar(p, 'x'); });
+    ivs.sort(function (a, b) { return a.lo - b.lo; });
+    return { ivs: ivs, text: ivUText(ivs) };
+  }
+  function eqUnion(A, B) {
+    if (A.length !== B.length) return false;
+    var used = B.map(function () { return false; });
+    for (var i = 0; i < A.length; i++) {
+      var hit = -1;
+      for (var j = 0; j < B.length; j++) if (!used[j] && eqIv(A[i], B[j])) { hit = j; break; }
+      if (hit < 0) return false; used[hit] = true;
+    }
+    return true;
+  }
+  var NONE = /^(no( real)? solutions?|none|no solution|∅|\{\}|dne)$/;
+  function readCset(raw) {
+    var s = normalize(raw);
+    if (NONE.test(s.replace(/\s+/g, ' ').trim())) return { none: true, values: [], text: 'no solution' };
+    var parts = s.replace(/\bor\b|;/g, ',').split(',').map(function (x) { return x.trim().replace(/^x\s*=\s*/, ''); }).filter(Boolean);
+    if (!parts.length) throw new Error('Nothing typed yet');
+    var vals = [], texts = [];
+    parts.forEach(function (pt) {
+      expandPM(pt).forEach(function (q) {
+        var ast = parse(q), vs = Object.keys(varsIn(ast));
+        vs.forEach(function (v) { if (v !== 'i') throw new Error('Unexpected letter “' + v + '”; use i for the imaginary unit'); });
+        if (/sqrt\(\s*-/.test(q)) throw new Error('Write the square root of a negative using i, like 3i');
+        var f0 = evaluate(ast, { i: 0 }), f1 = evaluate(ast, { i: 1 }), f2 = evaluate(ast, { i: 2 });
+        if (![f0, f1, f2].every(isFinite)) throw new Error('That doesn’t evaluate to a number');
+        if (!approxEq(f2 - f0, 2 * (f1 - f0))) throw new Error('Simplify so i appears once, like 3 + 2i (no i²)');
+        vals.push([f0, f1 - f0]); texts.push(pretty(ast));
+      });
+    });
+    return { values: vals, text: texts.join(', ') };
+  }
+  function eqCset(A, B) {
+    var d = function (arr) { var out = []; arr.forEach(function (v) { if (!out.some(function (w) { return approxEq(v[0], w[0]) && approxEq(v[1], w[1]); })) out.push(v); }); return out; };
+    A = d(A); B = d(B);
+    if (A.length !== B.length) return false;
+    return A.every(function (a) { return B.some(function (b) { return approxEq(a[0], b[0]) && approxEq(a[1], b[1]); }); });
+  }
+
+  // ---------- form checks ----------
+  function isVertexForm(n) {
+    var terms = flattenAdd(n), withX = 0, ok = true;
+    terms.forEach(function (t) {
+      var vs = Object.keys(varsIn(t));
+      if (!vs.length) return;
+      withX++;
+      var u = t; while (u.t === 'neg') u = u.a;
+      if (u.t === 'mul') { var f = flattenMul(u).filter(function (q) { return Object.keys(varsIn(q)).length; }); if (f.length !== 1) { ok = false; return; } u = f[0]; }
+      if (u.t !== 'pow' || u.b.t !== 'num' || u.b.v !== 2) { ok = false; return; }
+      var base = u.a;
+      if (base.t === 'var') return;
+      if ((base.t === 'add' || base.t === 'sub') && base.a.t === 'var' && !Object.keys(varsIn(base.b)).length) return;
+      if (base.t === 'add' && base.b.t === 'var' && !Object.keys(varsIn(base.a)).length) return;
+      ok = false;
+    });
+    return ok && withX === 1;
+  }
+  function hasDecimal(n) { if (!n) return false; if (n.t === 'num' && n.dec) return true; return hasDecimal(n.a) || hasDecimal(n.b); }
+  function intCoefs(n, out) { // coefficients of a sum of integers and integer*sqrt terms; null if other shapes
+    out = out || [];
+    var terms = flattenAdd(n);
+    for (var i = 0; i < terms.length; i++) {
+      var t = terms[i]; while (t.t === 'neg') t = t.a;
+      if (t.t === 'num' && Number.isInteger(t.v)) { out.push(t.v); continue; }
+      if (t.t === 'sqrt') { out.push(1); continue; }
+      if (t.t === 'mul' && t.a.t === 'num' && Number.isInteger(t.a.v) && t.b.t === 'sqrt') { out.push(t.a.v); continue; }
+      return null;
+    }
+    return out;
+  }
+  function fractionReduced(n) {
+    var m = n; while (m.t === 'neg') m = m.a;
+    if (m.t !== 'div' || m.b.t !== 'num' || !Number.isInteger(m.b.v)) return true;
+    var c = intCoefs(m.a); if (!c) return true;
+    var g = Math.abs(m.b.v); c.forEach(function (x) { g = gcd(g, x); });
+    return g === 1;
+  }
+  var FORM14 = {
+    radical: 'Right value, but simplify it: pull perfect squares out of the root and reduce the fraction.',
+    exact: 'Right size as a decimal, but give the exact answer (a fraction or a square root).',
+    vertex: 'Same function, but it isn’t in vertex form. Write it as (x − h)² + k.',
+    expanded: 'Right value, but finish it: multiply everything out and combine like terms.',
+    monomial: 'Right value, but simplify it to a single term.'
+  };
+
+  // ---------- one reader / grader for all types ----------
+  function read14(item, raw) {
+    if (!String(raw).trim()) throw new Error('');
+    switch (item.type) {
+      case 'number': return parseNumber(raw);
+      case 'expr': return parseExprAns(raw, item.vars || ['x']);
+      case 'set':
+        var r = parseSet(raw); r.asts = [];
+        normalize(raw).replace(/\bor\b|\band\b|;/g, ',').split(',').map(function (x) { return x.trim(); }).filter(Boolean).forEach(function (pt) {
+          expandPM(pt.replace(/^x\s*=\s*/, '')).forEach(function (q) { r.asts.push(parse(q)); });
+        });
+        return r;
+      case 'cset': return readCset(raw);
+      case 'union': return readUnion(raw);
+      case 'ineq': return readIneqVar(raw, item.ivar || 'x');
+      case 'choice': var k = parseInt(raw, 10); if (!(k >= 0 && k < item.options.length)) throw new Error('Pick one'); return { choice: k, text: item.options[k] };
+    }
+    throw new Error('Unknown answer type');
+  }
+  function preview14(item, raw) {
+    if (!String(raw).trim()) return { ok: false, error: '' };
+    try { var r = read14(item, raw); return { ok: true, text: r.text }; } catch (e) { return { ok: false, error: e.message }; }
+  }
+  function match14(item, r, key) {
+    switch (item.type) {
+      case 'number': return approxEq(r.value, key);
+      case 'expr': return equivExpr(r.ast, parse(key), item.vars || ['x']);
+      case 'set': return eqMultiset(dedupe(r.values), dedupe(key));
+      case 'cset': if (key === 'NONE') return !!r.none; return !r.none && eqCset(r.values, key);
+      case 'union': if (key === 'EMPTY') return !!r.empty; return !r.empty && eqUnion(r.ivs, key);
+      case 'ineq': return eqIv(r, key);
+      case 'choice': return r.choice === key;
+    }
+    return false;
+  }
+  function decimalClose(item, r) { // right value typed as a rounded decimal
+    if (item.form !== 'exact' && item.form !== 'radical') return false;
+    var near = function (v, k, ast) { var m = ast; while (m && m.t === 'neg') m = m.a; if (!m || m.t !== 'num' || !m.dec) return false; return Math.abs(v - k) <= Math.pow(10, -m.dec) + 1e-12 && !approxEq(v, k); };
+    if (item.type === 'number') return near(r.value, item.key, r.ast);
+    if (item.type === 'set') {
+      var ks = dedupe(item.key), vs = r.values;
+      if (dedupe(vs).length !== ks.length) return false;
+      var anyDec = false;
+      var ok = vs.every(function (v, i) {
+        return ks.some(function (k) { if (approxEq(v, k)) return true; if (near(v, k, r.asts[i])) { anyDec = true; return true; } return false; });
+      });
+      return ok && anyDec;
+    }
+    return false;
+  }
+  function form14(item, r) {
+    if (item.form === 'vertex') return isVertexForm(r.ast) ? null : 'vertex';
+    if (item.form === 'expanded') return (isExpanded(r.ast) && flattenAdd(r.ast).length <= item.terms) ? null : 'expanded';
+    if (item.form === 'monomial') return isMonomialForm(r.ast) ? null : 'monomial';
+    if (item.form === 'radical' && item.type === 'set') {
+      var bad = r.asts.some(function (a) { return !radicalsSimplified(a) || !fractionReduced(a); });
+      return bad ? 'radical' : null;
+    }
+    return null;
+  }
+  function grade14(item, raw) {
+    var r = read14(item, raw);
+    if (r.wrongVar) return { verdict: 'wrong', text: r.text, trap: { code: 'X_FOR_Y', error_type: 'conceptual', label: 'Wrote the range with x; the range is the y-values, so write it with y (or in interval notation)' } };
+    if (match14(item, r, item.key)) {
+      var f = form14(item, r);
+      if (f) return { verdict: 'form', text: r.text, formMsg: FORM14[f], formCode: 'FORM_' + f.toUpperCase() };
+      return { verdict: 'correct', text: r.text };
+    }
+    if (decimalClose(item, r)) return { verdict: 'form', text: r.text, formMsg: FORM14.exact, formCode: 'DECIMAL_FOR_EXACT' };
+    var hit = null;
+    (item.traps || []).some(function (t) { try { if (match14(item, r, t.key)) { hit = t; return true; } } catch (e) { } return false; });
+    return { verdict: 'wrong', text: r.text, trap: hit ? { code: hit.code, error_type: hit.error_type, label: hit.label } : null };
+  }
+
+
+  // =====================================================================
+  // App 15: Algebra 1 foundations, lessons F1 (like terms, multiplying x's, distributing) and F2 (multiplying binomials)
+  // v2 (2026-11-06, S06): F0-m signed products, F0-c mixed-sign sums, F0-r retention (pattern table / number line),
+  // F1-e distributing with the box, F2-k one piece of the box, F2-s draw-your-own box; traps from his Lesson 1-2 answers.
+  // v3 (2026-11-12, S08): F1-k finish combining, F1-s sort like terms, F2-q pieces of a square, F2-v vertex form to standard form,
+  // F3 factoring (F3-k two numbers, F3-a factor, F3-z solve by factoring, F3-r box backward retention); factored-form check.
+  // v4 (2026-11-13, S09): traps from his Lesson 5 (v2) answers: F2-c ADD_FIRST, F2-d ADD_NUMBERS, F2-b SQUARE_X_ONLY.
+  // v5 (2026-11-16, S11): F4 quadratic formula in steps (F4-c, F4-d, F4-n, F4-s, F4-r) and F5 vertex and max/min (F5-x, F5-y,
+  // F5-m, F5-t, F5-r), built after he skipped every multi-step quadratic-formula item on 11-16.
+  // v6 (2026-11-16, S12): find-the-mistake items built from his recorded errors (FM-sq, FM-xx, FM-dist, FM-d).
+  // =====================================================================
+  var CONCEPTS = [
+    { id: 'F0', concept: 'P-01', name: 'Signed numbers', lessons: 'warm-up' },
+    { id: 'F1', concept: 'P-03, P-08', name: 'Like terms and distributing', lessons: 'Lesson 1' },
+    { id: 'F2', concept: 'P-09', name: 'Multiplying binomials', lessons: 'Lesson 2' },
+    { id: 'F3', concept: 'P-10', name: 'Factoring', lessons: 'Lessons 7-8' },
+    { id: 'F4', concept: 'C-QUAD-007', name: 'Quadratic formula', lessons: 'Lesson 10' },
+    { id: 'F5', concept: 'C-QUAD-001', name: 'Vertex and max/min', lessons: 'Lesson 11' }
+  ];
+  var ASKS = [];
+  var T14 = [];
+  function def14(id, concept, role, std, gen) { T14.push({ id: id, concept: concept, role: role, standards: std, gen: gen }); }
+  function tr(code, et, label, key, typed) { return { code: code, error_type: et, label: label, key: key, typed: typed }; }
+  function sgn(v) { return v === 0 ? '' : (v < 0 ? ' − ' : ' + ') + Math.abs(v); }
+  function S(m, why) { return { m: m, why: why }; }
+  function stepsArr(arr) { return steps(arr.map(function (s) { return step(s.m, s.why); })); }
+  function mono(a, p) { // html a·x^p
+    if (p === 0) return n$(a);
+    var c = a === 1 ? '' : a === -1 ? '−' : n$(a);
+    return c + '<i>x</i>' + (p === 1 ? '' : sq(p));
+  }
+  function monoT(a, p) { if (p === 0) return n$(a); return (a === 1 ? '' : a === -1 ? '−' : n$(a)) + 'x' + (p === 2 ? '²' : p === 3 ? '³' : ''); }
+  function monoS(a, p) { if (p === 0) return String(a); return (a === 1 ? '' : a === -1 ? '-' : String(a)) + 'x' + (p === 1 ? '' : '^' + p); }
+  function lin(a, b) { return poly([a, b]); }            // ax + b html
+  function linP(a, b) { return '(' + poly([a, b]) + ')'; }
+  function quadS(a, b, c) { return polyS([a, b, c]); }
+  function distinctE(a, b) { // two expression strings not equivalent
+    try { return !equivExpr(parse(a), parse(b), ['x']); } catch (e) { return false; }
+  }
+  function pushTrap(arr, key, t) { if (distinctE(key, t.key) && arr.every(function (u) { return distinctE(u.key, t.key); })) arr.push(t); }
+
+  // ---------- F0: signed numbers (warm-up, confidence) ----------
+  def14('F0-a', 'F0', 'drill', ['7.NS.A.1', '7.NS.A.2'], function (R) {
+    var kind = R.int(0, 3), a = R.int(2, 12), b = R.int(2, 12), key, prompt, traps = [], st;
+    if (kind === 0) { key = a + b; prompt = n$(a) + ' − (−' + b + ')'; traps.push(tr('MINUS_NEG', 'slip', 'Subtracting a negative adds; it doesn’t subtract', a - b, String(a - b)));
+      st = [S(M(prompt + ' = ' + a + ' + ' + b), 'minus a negative is plus'), S(M('= ' + key), '')]; }
+    else if (kind === 1) { key = -a - b; prompt = '−' + a + ' − ' + b; traps.push(tr('SIGN_SUM', 'slip', 'Started at −' + a + ' but then moved the wrong way', -a + b, String(-a + b)));
+      st = [S(M(prompt), 'start at −' + a + ', then go ' + b + ' further left'), S(M('= ' + n$(key)), '')]; }
+    else if (kind === 2) { key = a * b; prompt = '(−' + a + ')(−' + b + ')'; traps.push(tr('NEG_TIMES_NEG', 'slip', 'Negative times negative is positive', -a * b, String(-a * b))); if (a + b !== a * b) traps.push(tr('ADD_FOR_MULT', 'conceptual', 'Added the sizes; two numbers side by side in parentheses means multiply', a + b, String(a + b)));
+      st = [S(M(prompt + ' = +' + key), 'two negatives: positive')]; }
+    else { key = -a + b; prompt = '−' + a + ' + ' + b; if (key !== -a - b) traps.push(tr('SIGN_SUM', 'slip', 'Added the sizes; the signs are different, so subtract', -a - b, String(-a - b)));
+      if (key !== a - b) traps.push(tr('DROP_SIGN', 'slip', 'Lost track of which number was negative', a - b, String(a - b)));
+      st = [S(M(prompt), 'different signs: subtract the sizes (' + Math.max(a, b) + ' − ' + Math.min(a, b) + '), keep the sign of the bigger one'), S(M('= ' + n$(key)), '')]; }
+    return { prompt: 'Evaluate: ' + M(prompt), type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps, steps: st, params: { kind: kind, a: a, b: b } };
+  });
+
+  // ---------- F1: like terms, multiplying x's, distributing ----------
+  def14('F1-a', 'F1', 'drill', ['7.EE.A.1', 'HSA.SSE.A.1.A'], function (R) {
+    var p, q, r, s;
+    do { p = R.nz(-6, 6); q = R.nz(-8, 8); r = R.nz(-6, 6); s = R.nz(-8, 8); } while (p + r === 0 || q + s === 0 || p + q + r + s === 0 || p + r === q + s);
+    var terms = R.shuffle([[p, 2], [q, 1], [r, 2], [s, 1]]);
+    var html = terms.map(function (t, i) { var m = mono(Math.abs(t[0]), t[1]); return i === 0 ? (t[0] < 0 ? '−' : '') + m : (t[0] < 0 ? ' − ' : ' + ') + m; }).join('');
+    var key = quadS(p + r, q + s, 0), tot = p + q + r + s, traps = [];
+    pushTrap(traps, key, tr('MERGE_UNLIKE', 'conceptual', 'Combined x² terms with x terms; they’re different kinds (areas vs lengths) and stay separate', monoS(tot, 2), monoS(tot, 2)));
+    pushTrap(traps, key, tr('MERGE_UNLIKE', 'conceptual', 'Combined x² terms with x terms into one term', monoS(tot, 1), monoS(tot, 1)));
+    pushTrap(traps, key, tr('SIGN_OF_BIGGER', 'slip', 'Sizes right, signs lost: with different signs, the answer takes the sign of the bigger one (−6 + 5 = −1)', quadS(-(p + r), -(q + s), 0), quadS(-(p + r), -(q + s), 0)));
+    pushTrap(traps, key, tr('ADD_EXPONENTS', 'conceptual', 'Added the exponents when adding terms; exponents only add when you multiply', monoS(tot, 3), monoS(tot, 3)));
+    return {
+      prompt: 'Simplify: ' + M(html), type: 'expr', vars: ['x'], form: 'expanded', terms: 2, key: key, keyHTML: M(poly([p + r, q + s, 0])), keyTyped: key, traps: traps,
+      steps: [S(M('<i>x</i>' + sq(2) + ' terms: ' + n$(p) + ' + (' + n$(r) + ') = ' + n$(p + r)), 'collect the x² terms: same kind'),
+              S(M('<i>x</i> terms: ' + n$(q) + ' + (' + n$(s) + ') = ' + n$(q + s)), 'collect the x terms separately'),
+              S(M(poly([p + r, q + s, 0])), 'x² and x can’t combine: like adding square feet to feet')],
+      params: { p: p, q: q, r: r, s: s }
+    };
+  });
+  def14('F1-b', 'F1', 'drill', ['8.EE.A.1', 'HSA.APR.A.1'], function (R) {
+    var a = R.nz(-6, 6), b = R.nz(-6, 6), m = R.pick([1, 1, 2]), n = R.pick([1, 2]);
+    if (Math.abs(a) < 2) a = a * 2; if (Math.abs(b) < 2) b = b * 3;
+    var key = monoS(a * b, m + n), traps = [];
+    pushTrap(traps, key, tr('ADD_COEF', 'conceptual', 'Added the numbers in front; multiplying means multiply them', monoS(a + b, m + n), monoS(a + b, m + n)));
+    if (m === n && a + b !== 0) pushTrap(traps, key, tr('ADDED_TERMS', 'conceptual', 'Added them as like terms; side by side in parentheses means multiply, so the numbers multiply and x·x = x²', monoS(a + b, m), monoS(a + b, m)));
+    pushTrap(traps, key, tr('NO_EXP_CHANGE', 'conceptual', 'Forgot that x times x makes x²: the exponents add', monoS(a * b, Math.max(m, n)), monoS(a * b, Math.max(m, n))));
+    if (m * n !== m + n) pushTrap(traps, key, tr('MULT_EXP', 'procedural', 'Multiplied the exponents; when you multiply powers of x you add them', monoS(a * b, m * n), monoS(a * b, m * n)));
+    pushTrap(traps, key, tr('SIGN', 'slip', 'Sign of the product: ' + (a * b > 0 ? 'same signs give positive' : 'different signs give negative'), monoS(-a * b, m + n), monoS(-a * b, m + n)));
+    var xs = function (k) { var o = []; for (var i = 0; i < k; i++) o.push('<i>x</i>'); return o.join('·'); };
+    return {
+      prompt: 'Multiply: ' + M('(' + mono(a, m) + ')(' + mono(b, n) + ')'), type: 'expr', vars: ['x'], form: 'monomial', key: key, keyHTML: M(mono(a * b, m + n)), keyTyped: key, traps: traps,
+      steps: [S(M('(' + n$(a) + ' · ' + n$(b) + ') · (' + xs(m) + ' · ' + xs(n) + ')'), 'numbers with numbers, x’s with x’s'),
+              S(M(n$(a) + ' · ' + n$(b) + ' = ' + n$(a * b)), a * b > 0 ? 'same signs: positive' : 'different signs: negative'),
+              S(M('that’s ' + (m + n) + ' x’s multiplied: <i>x</i>' + sq(m + n)), 'count them; that’s why exponents add'),
+              S(M(mono(a * b, m + n)), '')],
+      params: { a: a, b: b, m: m, n: n }
+    };
+  });
+  def14('F1-c', 'F1', 'drill', ['7.EE.A.1', 'HSA.APR.A.1'], function (R) {
+    var a = R.f() < 0.65 ? -R.int(2, 6) : R.int(2, 6), b = R.nz(-5, 5), c = R.nz(-9, 9);
+    var key = polyS([a * b, a * c]), traps = [];
+    pushTrap(traps, key, tr('FIRST_ONLY', 'procedural', 'Multiplied only the first term; ' + n$(a) + ' multiplies every term inside', polyS([a * b, c]), polyS([a * b, c])));
+    pushTrap(traps, key, tr('ADD_FOR_MULT', 'conceptual', 'Added ' + n$(a) + ' to each term; a number touching parentheses multiplies each term', polyS([a + b, a + c]), polyS([a + b, a + c])));
+    pushTrap(traps, key, tr('SIGN_SECOND', 'slip', n$(a) + ' times ' + n$(c) + ' is ' + n$(a * c) + ': watch the sign on the second term', polyS([a * b, -a * c]), polyS([a * b, -a * c])));
+    return {
+      prompt: 'Multiply out: ' + M(n$(a) + linP(b, c)), type: 'expr', vars: ['x'], form: 'expanded', terms: 2, key: key, keyHTML: M(lin(a * b, a * c)), keyTyped: key, traps: traps,
+      steps: [S(M(n$(a) + ' · ' + mono(b, 1) + ' = ' + mono(a * b, 1)), n$(a) + ' times the first term'),
+              S(M(n$(a) + ' · ' + (c < 0 ? '(' + n$(c) + ')' : c) + ' = ' + n$(a * c)), 'and times the second term, sign included'),
+              S(M(lin(a * b, a * c)), 'check: put x = 1 in both: ' + n$(a) + '·(' + (b + c) + ') = ' + (a * (b + c)) + ', and ' + n$(a * b) + ' + (' + n$(a * c) + ') = ' + (a * b + a * c))],
+      params: { a: a, b: b, c: c }
+    };
+  });
+  def14('F1-d', 'F1', 'drill', ['7.EE.A.1', 'HSA.APR.A.1'], function (R) {
+    var p, q, a, b, c, d;
+    do { p = R.int(2, 5); q = R.int(2, 5); a = R.nz(-4, 4); c = R.nz(-4, 4); b = R.nz(-9, 9); d = R.nz(-9, 9); } while (p * a - q * c === 0 || p * b - q * d === 0);
+    var X = p * a - q * c, K = p * b - q * d, key = polyS([X, K]), traps = [];
+    pushTrap(traps, key, tr('NEG_FIRST_ONLY', 'procedural', 'The −' + q + ' has to multiply both terms in the second parentheses, not just the first', polyS([X, p * b + q * d]), polyS([X, p * b + q * d])));
+    pushTrap(traps, key, tr('DROPPED_NEG', 'procedural', 'Lost the minus sign in front of ' + q + ': it’s −' + q + ' that distributes', polyS([p * a + q * c, p * b + q * d]), polyS([p * a + q * c, p * b + q * d])));
+    return {
+      prompt: 'Simplify: ' + M(p + linP(a, b) + ' − ' + q + linP(c, d)), type: 'expr', vars: ['x'], form: 'expanded', terms: 2, key: key, keyHTML: M(lin(X, K)), keyTyped: key, traps: traps,
+      steps: [S(M(p + linP(a, b) + ' = ' + lin(p * a, p * b)), 'distribute ' + p + ' to both terms'),
+              S(M('−' + q + linP(c, d) + ' = ' + lin(-q * c, -q * d)), 'distribute −' + q + ' to both terms: the minus goes with it'),
+              S(M(lin(p * a, p * b) + ' ' + (-q * c < 0 ? '−' : '+') + ' ' + mono(Math.abs(q * c), 1) + sgn(-q * d)), 'write it all out'),
+              S(M(lin(X, K)), 'combine x terms, then the numbers')],
+      params: { p: p, q: q, a: a, b: b, c: c, d: d }
+    };
+  });
+  function rectSVG(cols, rows, cells) { // area model: cols/rows = labels, cells[r][c] html (or '?')
+    var cw = 110, rh = 64, L = 36, T = 26, W = L + cw * cols.length + 8, H = T + rh * rows.length + 8;
+    var g = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="max-width:' + Math.min(360, W + 40) + 'px;display:block;margin:10px auto" role="img" aria-label="area model">';
+    cols.forEach(function (c, i) { g += '<text x="' + (L + cw * i + cw / 2) + '" y="18" text-anchor="middle" font-size="15" fill="var(--ink)" font-style="italic">' + c + '</text>'; });
+    rows.forEach(function (r, j) { g += '<text x="' + (L - 8) + '" y="' + (T + rh * j + rh / 2 + 5) + '" text-anchor="end" font-size="15" fill="var(--ink)" font-style="italic">' + r + '</text>'; });
+    rows.forEach(function (r, j) { cols.forEach(function (c, i) {
+      g += '<rect x="' + (L + cw * i) + '" y="' + (T + rh * j) + '" width="' + cw + '" height="' + rh + '" fill="' + (cells[j][i] === '?' ? 'var(--card)' : 'var(--soft)') + '" stroke="var(--accent)" stroke-width="1.5"/>';
+      g += '<text x="' + (L + cw * i + cw / 2) + '" y="' + (T + rh * j + rh / 2 + 6) + '" text-anchor="middle" font-size="16" fill="var(--ink)">' + cells[j][i] + '</text>';
+    }); });
+    return g + '</svg>';
+  }
+  function lbl(v) { return (v < 0 ? '−' : '+') + Math.abs(v); }
+  def14('F1-r', 'F1', 'retention', ['7.EE.A.1'], function (R) {
+    var a = R.int(2, 7), b = R.int(1, 9);
+    var key = polyS([a, a * b]), traps = [];
+    pushTrap(traps, key, tr('FIRST_ONLY', 'procedural', 'Only the x-piece got multiplied; the ' + b + '-piece is ' + a + ' by ' + b + ' too', polyS([a, b]), polyS([a, b])));
+    pushTrap(traps, key, tr('ADDED_SIDES', 'conceptual', 'Added the sides; area means multiply the sides', 'x+' + (a + b), 'x+' + (a + b)));
+    return {
+      prompt: 'A rectangle is ' + a + ' tall and ' + M('<i>x</i> + ' + b) + ' wide, split into two pieces. Write its total area with no parentheses.' + rectSVG(['x', String(b)], [String(a)], [['?', '?']]),
+      type: 'expr', vars: ['x'], form: 'expanded', terms: 2, key: key, keyHTML: M(lin(a, a * b)), keyTyped: key, traps: traps,
+      steps: [S('Left piece: ' + a + ' by <i>x</i>, area ' + M(mono(a, 1)), ''), S('Right piece: ' + a + ' by ' + b + ', area ' + (a * b), ''),
+              S('Total: ' + M(lin(a, a * b)) + '. That’s ' + M(a + '(<i>x</i> + ' + b + ')') + ' multiplied out: distributing is just adding the pieces.', '')],
+      params: { a: a, b: b }
+    };
+  });
+
+  // ---------- F2: multiplying binomials ----------
+  def14('F2-a', 'F2', 'drill', ['HSA.APR.A.1'], function (R) {
+    var a, b; do { a = R.nz(-9, 9); b = R.nz(-9, 9); } while (a === -b || a === b);
+    var key = quadS(1, a + b, a * b), traps = [];
+    pushTrap(traps, key, tr('ADD_NOT_MULT', 'conceptual', 'Added ' + n$(a) + ' and ' + n$(b) + ' and stopped: you need all four products (x·x, x·' + n$(b) + ', ' + n$(a) + '·x, ' + n$(a) + '·' + n$(b) + ')', 'x^2+' + (a + b), 'x^2+' + (a + b)));
+    pushTrap(traps, key, tr('FIRST_LAST_ONLY', 'procedural', 'Multiplied firsts and lasts but skipped the two middle pieces', quadS(1, 0, a * b), quadS(1, 0, a * b)));
+    pushTrap(traps, key, tr('SIGN_LAST', 'slip', n$(a) + ' times ' + n$(b) + ' is ' + n$(a * b) + ': check the sign of the last term', quadS(1, a + b, -a * b), quadS(1, a + b, -a * b)));
+    return {
+      prompt: 'Multiply and simplify: ' + M(linP(1, a) + linP(1, b)), type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([1, a + b, a * b])), keyTyped: key, traps: traps,
+      steps: [S('Box it: ' + rectSVG(['x', lbl(b)], ['x', lbl(a)], [['x²', monoT(b, 1)], [monoT(a, 1), n$(a * b)]]), 'every term in one times every term in the other: 4 pieces'),
+              S(M('<i>x</i>' + sq(2) + ' + ' + mono(b, 1).replace(/^−/, '−') + ' + ' + mono(a, 1) + ' + ' + (a * b < 0 ? '(' + n$(a * b) + ')' : a * b)), 'write the 4 pieces'),
+              S(M(poly([1, a + b, a * b])), 'combine the two middle pieces: ' + n$(a) + ' + ' + (b < 0 ? '(' + n$(b) + ')' : b) + ' = ' + n$(a + b)),
+              S('Check with <i>x</i> = 2: ' + M('(' + (2 + a) + ')(' + (2 + b) + ') = ' + ((2 + a) * (2 + b))) + ' and ' + M('4 + ' + (2 * (a + b) < 0 ? '(' + 2 * (a + b) + ')' : 2 * (a + b)) + ' + ' + (a * b < 0 ? '(' + a * b + ')' : a * b) + ' = ' + (4 + 2 * (a + b) + a * b)), 'same number: the expansion is right')],
+      params: { a: a, b: b }
+    };
+  });
+  def14('F2-b', 'F2', 'drill', ['HSA.APR.A.1', 'HSA.SSE.A.2'], function (R) {
+    var a = R.int(1, 9), s = R.pick([1, -1]), h = s * a;
+    var key = quadS(1, 2 * h, a * a), traps = [];
+    pushTrap(traps, key, tr('SQUARE_EACH', 'conceptual', 'Squared each part separately; (x ' + (h < 0 ? '−' : '+') + ' ' + a + ')² is (x ' + (h < 0 ? '−' : '+') + ' ' + a + ')(x ' + (h < 0 ? '−' : '+') + ' ' + a + '): 4 pieces, including two middle ones', quadS(1, 0, a * a), quadS(1, 0, a * a)));
+    pushTrap(traps, key, tr('SQUARE_AS_DOUBLE', 'conceptual', 'Treated “squared” as “times 2”; squared means times itself', polyS([1, 2 * h]), polyS([1, 2 * h])));
+    pushTrap(traps, key, tr('SQUARE_X_ONLY', 'conceptual', 'Squared the x but not the number, and skipped the middle: write it twice, (x ' + (h < 0 ? '−' : '+') + ' ' + a + ')(x ' + (h < 0 ? '−' : '+') + ' ' + a + '), and box it', quadS(1, 0, h), quadS(1, 0, h)));
+    pushTrap(traps, key, tr('MIDDLE_ONCE', 'procedural', 'Counted the middle piece once; there are two of them', quadS(1, h, a * a), quadS(1, h, a * a)));
+    if (2 * a !== a * a) pushTrap(traps, key, tr('DOUBLE_LAST', 'conceptual', 'Doubled ' + a + ' instead of squaring it, and counted one middle piece: write it twice and box it', quadS(1, h, 2 * a), quadS(1, h, 2 * a)));
+    pushTrap(traps, key, tr('SIGN_LAST', 'slip', n$(h) + ' times ' + n$(h) + ' is +' + a * a, quadS(1, 2 * h, -a * a), quadS(1, 2 * h, -a * a)));
+    return {
+      prompt: 'Multiply and simplify: ' + M(linP(1, h) + sq(2)), type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([1, 2 * h, a * a])), keyTyped: key, traps: traps,
+      steps: [S(M(linP(1, h) + sq(2) + ' = ' + linP(1, h) + linP(1, h)), 'squared means times itself'),
+              S('Box it: ' + rectSVG(['x', lbl(h)], ['x', lbl(h)], [['x²', monoT(h, 1)], [monoT(h, 1), String(a * a)]]), 'two identical middle pieces'),
+              S(M(poly([1, 2 * h, a * a])), 'middle: ' + n$(h) + 'x twice = ' + n$(2 * h) + 'x; last: ' + n$(h) + ' · ' + n$(h) + ' = ' + (a * a)),
+              S('Check with <i>x</i> = 2: ' + M('(' + (2 + h) + ')' + sq(2) + ' = ' + ((2 + h) * (2 + h))) + ' and ' + M('4 + ' + (4 * h < 0 ? '(' + 4 * h + ')' : 4 * h) + ' + ' + a * a + ' = ' + (4 + 4 * h + a * a)), 'match')],
+      params: { a: a, s: s }
+    };
+  });
+  def14('F2-c', 'F2', 'drill', ['HSA.APR.A.1'], function (R) {
+    var p, q, a, b; do { p = R.int(1, 4); q = R.int(2, 4); a = R.nz(-7, 7); b = R.nz(-7, 7); } while (p * b + q * a === 0);
+    var key = quadS(p * q, p * b + q * a, a * b), traps = [];
+    pushTrap(traps, key, tr('FIRST_LAST_ONLY', 'procedural', 'Skipped the two middle pieces', quadS(p * q, 0, a * b), quadS(p * q, 0, a * b)));
+    pushTrap(traps, key, tr('ONE_MIDDLE', 'procedural', 'Got only one of the two middle pieces', quadS(p * q, p * b, a * b), quadS(p * q, p * b, a * b)));
+    pushTrap(traps, key, tr('ADD_NOT_MULT', 'conceptual', 'Added instead of multiplying the pieces', polyS([p + q, a + b]), polyS([p + q, a + b])));
+    pushTrap(traps, key, tr('ADD_FIRST', 'conceptual', n$(p) + 'x times ' + n$(q) + 'x is ' + p * q + 'x², not ' + (p + q) + 'x: the x-pieces multiply too, and there are two middle pieces', polyS([p + q, a * b]), polyS([p + q, a * b])));
+    return {
+      prompt: 'Multiply and simplify: ' + M(linP(p, a) + linP(q, b)), type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([p * q, p * b + q * a, a * b])), keyTyped: key, traps: traps,
+      steps: [S('Box it: ' + rectSVG([monoT(q, 1), lbl(b)], [monoT(p, 1), lbl(a)], [[monoT(p * q, 2), monoT(p * b, 1)], [monoT(q * a, 1), n$(a * b)]]), '4 pieces'),
+              S(M(poly([p * q, p * b + q * a, a * b])), 'middle pieces: ' + n$(p * b) + 'x and ' + n$(q * a) + 'x combine to ' + n$(p * b + q * a) + 'x')],
+      params: { p: p, q: q, a: a, b: b }
+    };
+  });
+  def14('F2-d', 'F2', 'drill', ['HSA.APR.A.1'], function (R) {
+    var a, b; do { a = R.nz(-6, 6); b = R.nz(-6, 6); } while (a === -b || (2 + a) * (2 + b) === 0);
+    var wrong = R.f() < 0.5, claimC = wrong ? -a * b : a * b, claim = quadS(1, a + b, claimC);
+    var key = (2 + a) * (2 + b), claimV = 4 + 2 * (a + b) + claimC;
+    if (claimV === key) { wrong = false; }
+    var addN = (key !== a + b && claimV !== a + b && -key !== a + b) ? [tr('ADD_NUMBERS', 'conceptual', 'Added the two numbers; put x = 2 into each parentheses first: (' + (2 + a) + ')(' + (2 + b) + ')', a + b, String(a + b))] : [];
+    return {
+      prompt: 'Someone says ' + M(linP(1, a) + linP(1, b) + ' = ' + poly([1, a + b, claimC])) + '. Check it the fast way: what does ' + M(linP(1, a) + linP(1, b)) + ' equal when <i>x</i> = 2?',
+      type: 'number', key: key, keyHTML: M(String(key)) + ' (their version gives ' + claimV + (claimV === key ? ': it checks out' : ': it’s wrong') + ')', keyTyped: String(key),
+      traps: (claimV !== key ? [tr('EVAL_CLAIM', 'procedural', 'Put 2 into their expansion instead of into the original; check the original', claimV, String(claimV))] : []).concat(key !== 0 && -key !== claimV ? [tr('SIGN_PRODUCT', 'slip', '(' + (2 + a) + ')(' + (2 + b) + '): ' + ((2 + a) * (2 + b) < 0 ? 'different signs give a negative' : 'same signs give a positive'), -key, String(-key))] : []).concat(addN),
+      steps: [S(M('(2 ' + sgn(a).trim() + ')(2 ' + sgn(b).trim() + ') = (' + (2 + a) + ')(' + (2 + b) + ') = ' + key), 'put 2 in the original'),
+              S('Their version: ' + M('4 + ' + (2 * (a + b) < 0 ? '(' + 2 * (a + b) + ')' : 2 * (a + b)) + ' + ' + (claimC < 0 ? '(' + claimC + ')' : claimC) + ' = ' + claimV), claimV === key ? 'same: it checks out' : 'different: their expansion is wrong'),
+              S('Use this on every multiplication you do: 10 seconds, catches sign mistakes.', '')],
+      params: { a: a, b: b, wrong: claimV !== key }
+    };
+  });
+  def14('F2-r', 'F2', 'retention', ['HSA.APR.A.1'], function (R) {
+    var a, b; do { a = R.nz(-8, 8); b = R.nz(-8, 8); } while (a === -b || a === b);
+    var key = quadS(1, a + b, a * b), traps = [];
+    pushTrap(traps, key, tr('FIRST_LAST_ONLY', 'procedural', 'Left out the two middle pieces of the box', quadS(1, 0, a * b), quadS(1, 0, a * b)));
+    pushTrap(traps, key, tr('ADD_NOT_MULT', 'conceptual', 'Added the numbers instead of filling the box', 'x^2+' + (a + b), 'x^2+' + (a + b)));
+    pushTrap(traps, key, tr('SIGN_LAST', 'slip', 'Sign of the corner piece', quadS(1, a + b, -a * b), quadS(1, a + b, -a * b)));
+    return {
+      prompt: 'Fill in the four pieces in your head, then write the total as one simplified expression.' + rectSVG(['x', lbl(b)], ['x', lbl(a)], [['?', '?'], ['?', '?']]),
+      type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([1, a + b, a * b])) + ' = ' + M(linP(1, a) + linP(1, b)), keyTyped: key, traps: traps,
+      steps: [S('Pieces: ' + M('<i>x</i>' + sq(2) + ', ' + mono(b, 1) + ', ' + mono(a, 1) + ', ' + n$(a * b)), 'side times side in each box'),
+              S(M(poly([1, a + b, a * b])), 'the box is (x ' + sgn(a).trim() + ')(x ' + sgn(b).trim() + ') drawn as a picture')],
+      params: { a: a, b: b }
+    };
+  });
+
+  // ---------- v2 (S06): templates built from his Lesson 1-2 answers ----------
+  function pushN(arr, key, t) { if (t.key !== key && arr.every(function (u) { return u.key !== t.key; })) arr.push(t); }
+  def14('F0-m', 'F0', 'drill', ['7.NS.A.2'], function (R) {
+    var a, b; do { a = R.int(2, 9); b = R.int(2, 9); } while (a * b === a + b);
+    var kind = R.int(0, 2), A = kind === 1 ? a : -a, B = kind === 2 ? b : -b, key = A * B, traps = [];
+    var prompt = kind === 0 ? '(−' + a + ')(−' + b + ')' : kind === 1 ? a + '(−' + b + ')' : '(−' + a + ')(' + b + ')';
+    pushN(traps, key, tr('SIGN_PRODUCT', 'slip', key > 0 ? 'Two negatives multiply to a positive' : 'Exactly one negative: the product is negative', -key, String(-key)));
+    pushN(traps, key, tr('ADD_FOR_MULT', 'conceptual', 'Added them; numbers side by side in parentheses multiply', A + B, String(A + B)));
+    pushN(traps, key, tr('ADD_SIZES', 'conceptual', 'Added the sizes; side by side means multiply', a + b, String(a + b)));
+    return { prompt: 'Evaluate: ' + M(prompt), type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: [S(M('sizes: ' + a + ' · ' + b + ' = ' + a * b), 'side by side means multiply: do the sizes first'),
+              S(kind === 0 ? 'signs: two negatives, so the answer is positive' : 'signs: one negative, so the answer is negative', 'an even number of negatives gives +, an odd number gives −'),
+              S(M(prompt + ' = ' + n$(key)), '')],
+      params: { kind: kind, a: a, b: b } };
+  });
+  def14('F0-c', 'F0', 'drill', ['7.NS.A.1'], function (R) {
+    var a, b; do { a = R.int(2, 12); b = R.int(2, 12); } while (a === b);
+    var kind = R.int(0, 1), key, prompt, traps = [], big, small, bigNeg;
+    if (kind === 0) { key = -a + b; prompt = '−' + a + ' + ' + b; bigNeg = a > b; }
+    else { if (a > b) { var t = a; a = b; b = t; } key = a - b; prompt = a + ' − ' + b; bigNeg = true; }
+    big = Math.max(a, b); small = Math.min(a, b);
+    pushN(traps, key, tr('SIGN_OF_BIGGER', 'slip', 'Right size, wrong sign: the answer takes the sign of the bigger number', -key, String(-key)));
+    if (kind === 0) pushN(traps, key, tr('ADD_SIZES', 'slip', 'Added the sizes; the signs are different, so subtract the sizes', -a - b, String(-a - b)));
+    return { prompt: 'Evaluate: ' + M(prompt), type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: [S(kind === 1 ? M(prompt + ' = ' + a + ' + (−' + b + ')') : M(prompt), kind === 1 ? 'subtracting ' + b + ' is adding −' + b : 'one negative, one positive'),
+              S(M(big + ' − ' + small + ' = ' + (big - small)), 'different signs: subtract the sizes'),
+              S(M('= ' + n$(key)), 'the bigger size is the ' + (bigNeg ? 'negative' : 'positive') + ' one, so the answer is ' + (bigNeg ? 'negative' : 'positive'))],
+      params: { kind: kind, a: a, b: b } };
+  });
+  function numLineSVG(start, label) { // number line −20..20, start dot
+    var W = 340, L = 15, Rr = 325, y = 40, sx = function (v) { return L + (v + 20) * (Rr - L) / 40; };
+    var g = '<svg viewBox="0 0 ' + W + ' 70" width="100%" style="max-width:360px;display:block;margin:10px auto" role="img" aria-label="number line">';
+    g += '<line x1="' + L + '" y1="' + y + '" x2="' + Rr + '" y2="' + y + '" stroke="var(--ink)" stroke-width="1.5"/>';
+    for (var v = -20; v <= 20; v += 5) g += '<line x1="' + sx(v) + '" y1="' + (y - 5) + '" x2="' + sx(v) + '" y2="' + (y + 5) + '" stroke="var(--ink)"/><text x="' + sx(v) + '" y="' + (y + 20) + '" text-anchor="middle" font-size="11" fill="var(--muted)">' + n$(v) + '</text>';
+    g += '<circle cx="' + sx(start) + '" cy="' + y + '" r="5" fill="var(--accent)"/><text x="' + sx(start) + '" y="' + (y - 12) + '" text-anchor="middle" font-size="12" fill="var(--ink)">' + label + '</text>';
+    return g + '</svg>';
+  }
+  def14('F0-r', 'F0', 'retention', ['7.NS.A.1', '7.NS.A.2'], function (R) {
+    var kind = R.int(0, 1), traps = [], key, prompt, st, P;
+    if (kind === 0) {
+      var b = R.int(2, 6), k = R.int(1, 3); key = k * b;
+      var rows = '', n;
+      for (n = 3; n >= -k; n--) rows += '<tr><td>' + (n < 0 ? '(' + n$(n) + ')' : n) + ' × (−' + b + ')</td><td>' + (n >= 0 ? n$(-n * b) : '?') + '</td></tr>';
+      prompt = 'Follow the pattern down the table. What goes in the last row: ' + M('(' + n$(-k) + ') × (−' + b + ')') + '?<table class="ptab">' + rows + '</table>';
+      pushN(traps, key, tr('SIGN_PRODUCT', 'slip', 'Each row goes up by ' + b + ', and it keeps going past 0: negative times negative is positive', -key, String(-key)));
+      pushN(traps, key, tr('ADD_SIZES', 'conceptual', 'Added the sizes; the table multiplies', k + b, String(k + b)));
+      st = [S('Going down one row, the answer goes up by ' + b + ': ' + n$(-3 * b) + ', ' + n$(-2 * b) + ', ' + n$(-b) + ', 0, …', 'look at what changes from row to row'),
+            S('Keep going past 0: ' + Array.apply(null, Array(k)).map(function (_, i) { return (i + 1) * b; }).join(', '), 'that’s why negative times negative is positive'),
+            S(M('(' + n$(-k) + ') × (−' + b + ') = ' + key), '')];
+      P = { kind: 0, b: b, k: k };
+    } else {
+      var a, w; do { a = R.int(3, 15); w = R.int(2, 20); } while (a === w || w - a > 20);
+      key = w - a;
+      prompt = 'At 6 a.m. it’s ' + n$(-a) + '°F at the base of the mountain. By noon it has warmed up ' + w + ' degrees. What’s the temperature at noon?' + numLineSVG(-a, '6 a.m.');
+      pushN(traps, key, tr('SIGN_OF_BIGGER', 'slip', 'Right size, wrong sign: ' + n$(-a) + ' + ' + w + ' takes the sign of the bigger number', -key, String(-key)));
+      pushN(traps, key, tr('ADD_SIZES', 'slip', 'Went the wrong way: warming up moves right on the number line', -a - w, String(-a - w)));
+      st = [S(M(n$(-a) + ' + ' + w), 'warming up adds'), S(M(Math.max(a, w) + ' − ' + Math.min(a, w) + ' = ' + Math.abs(w - a)), 'different signs: subtract the sizes'),
+            S(M('= ' + n$(key)) + '°F', 'the bigger size is the ' + (w > a ? 'positive' : 'negative') + ' one')];
+      P = { kind: 1, a: a, w: w };
+    }
+    return { prompt: prompt, type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps, steps: st, params: P };
+  });
+  def14('F1-e', 'F1', 'drill', ['7.EE.A.1', 'HSA.APR.A.1'], function (R) {
+    var p, q, a, b, c, d;
+    do { p = R.int(2, 5); q = R.int(2, 5); a = R.nz(-4, 4); c = R.nz(-4, 4); b = R.nz(-9, 9); d = R.nz(-9, 9); } while (p * a - q * c === 0 || p * b - q * d === 0);
+    var X = p * a - q * c, K = p * b - q * d, key = polyS([X, K]), traps = [];
+    pushTrap(traps, key, tr('DROPPED_NEG', 'procedural', 'The bottom box’s side is −' + q + ', not ' + q + ': the minus goes into both pieces', polyS([p * a + q * c, p * b + q * d]), polyS([p * a + q * c, p * b + q * d])));
+    pushTrap(traps, key, tr('NEG_FIRST_ONLY', 'procedural', 'The −' + q + ' has to multiply both pieces of its box, not just the first', polyS([X, p * b + q * d]), polyS([X, p * b + q * d])));
+    pushTrap(traps, key, tr('ADD_FOR_MULT', 'conceptual', 'Added the side to each piece; each piece is side times top', polyS([p + a - q + c, p + b - q + d]), polyS([p + a - q + c, p + b - q + d])));
+    return {
+      prompt: 'Simplify: ' + M(p + linP(a, b) + ' − ' + q + linP(c, d)) + '<p class="note">Use two boxes. The number in front goes on the side, with its sign: ' + p + ' and −' + q + '. Fill each piece (side times top), then combine.</p>' +
+        rectSVG([monoT(a, 1), n$(b)], [String(p)], [['?', '?']]) + rectSVG([monoT(c, 1), n$(d)], ['−' + q], [['?', '?']]),
+      type: 'expr', vars: ['x'], form: 'expanded', terms: 2, key: key, keyHTML: M(lin(X, K)), keyTyped: key, traps: traps,
+      steps: [S('Top box: ' + rectSVG([monoT(a, 1), n$(b)], [String(p)], [[monoT(p * a, 1), n$(p * b)]]), p + ' times each piece'),
+              S('Bottom box: ' + rectSVG([monoT(c, 1), n$(d)], ['−' + q], [[monoT(-q * c, 1), n$(-q * d)]]), '−' + q + ' times each piece: watch both signs'),
+              S(M(mono(p * a, 1) + sgn(p * b) + ' ' + (-q * c < 0 ? '−' : '+') + ' ' + mono(Math.abs(q * c), 1) + sgn(-q * d)), 'all four pieces'),
+              S(M(lin(X, K)), 'x pieces together, number pieces together')],
+      params: { p: p, q: q, a: a, b: b, c: c, d: d }
+    };
+  });
+  def14('F2-k', 'F2', 'drill', ['HSA.APR.A.1'], function (R) {
+    var a, b; do { a = R.nz(-9, 9); b = R.nz(-9, 9); } while (a === -b || a === b || (Math.abs(a) < 2 && Math.abs(b) < 2) || a * b === a + b);
+    var kind = R.int(0, 1), key, traps = [], ask, box;
+    if (kind === 0) {
+      key = a * b; ask = 'What goes in the corner piece, where the ? is?';
+      box = rectSVG(['x', lbl(b)], ['x', lbl(a)], [['x²', monoT(b, 1)], [monoT(a, 1), '?']]);
+      pushN(traps, key, tr('SIGN_PRODUCT', 'slip', n$(a) + ' times ' + n$(b) + ': ' + (a * b > 0 ? 'same signs give a positive' : 'different signs give a negative'), -key, String(-key)));
+      pushN(traps, key, tr('ADD_FOR_MULT', 'conceptual', 'Added the sides; each piece is side times top', a + b, String(a + b)));
+    } else {
+      key = a + b; ask = 'The two ? pieces are both x-pieces. Combine them: what number goes in front of x?';
+      box = rectSVG(['x', lbl(b)], ['x', lbl(a)], [['x²', '?'], ['?', n$(a * b)]]);
+      pushN(traps, key, tr('MULT_FOR_ADD', 'conceptual', 'Multiplied the two x-pieces; they sit side by side with a + between them, so they add', a * b, String(a * b)));
+      pushN(traps, key, tr('SIGN_OF_BIGGER', 'slip', 'Right size, wrong sign when combining ' + n$(b) + 'x and ' + n$(a) + 'x', -key, String(-key)));
+    }
+    return {
+      prompt: 'This is the box for ' + M(linP(1, a) + linP(1, b)) + '. ' + ask + box, type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: kind === 0 ? [S('Corner: side ' + n$(a) + ' times top ' + n$(b), 'every piece is side times top'), S(M(n$(a) + ' · ' + (b < 0 ? '(' + n$(b) + ')' : b) + ' = ' + n$(key)), a * b > 0 ? 'same signs: positive' : 'different signs: negative')]
+                        : [S('The pieces are ' + M(mono(b, 1)) + ' and ' + M(mono(a, 1)), 'side times top in each'), S(M(n$(b) + ' + ' + (a < 0 ? '(' + n$(a) + ')' : a) + ' = ' + n$(key)), 'combine like terms: x-pieces add')],
+      params: { kind: kind, a: a, b: b }
+    };
+  });
+  def14('F2-s', 'F2', 'drill', ['HSA.APR.A.1', 'HSA.SSE.A.2'], function (R) {
+    var sqr = R.f() < 0.35, a, b;
+    if (sqr) { a = R.nz(-9, 9); if (Math.abs(a) < 2) a = a * 3; b = a; } else { do { a = R.nz(-9, 9); b = R.nz(-9, 9); } while (a === -b || a === b); }
+    var key = quadS(1, a + b, a * b), traps = [], A = Math.abs(a);
+    pushTrap(traps, key, tr('ADD_NOT_MULT', 'conceptual', 'Added the numbers and stopped: the box has four pieces, each side times top', 'x^2+' + (a + b), 'x^2+' + (a + b)));
+    if (sqr) {
+      pushTrap(traps, key, tr('SQUARE_AS_DOUBLE', 'conceptual', 'Treated “squared” as “times 2”; squared means times itself, so write it twice', polyS([1, 2 * a]), polyS([1, 2 * a])));
+      pushTrap(traps, key, tr('SQUARE_EACH', 'conceptual', 'Squared each part; the box has two middle pieces too', quadS(1, 0, a * a), quadS(1, 0, a * a)));
+      pushTrap(traps, key, tr('MIDDLE_ONCE', 'procedural', 'Counted one middle piece; there are two', quadS(1, a, a * a), quadS(1, a, a * a)));
+      if (2 * A !== A * A) pushTrap(traps, key, tr('DOUBLE_LAST', 'conceptual', 'Doubled ' + A + ' instead of squaring it, and counted one middle piece', quadS(1, a, 2 * A), quadS(1, a, 2 * A)));
+    } else pushTrap(traps, key, tr('FIRST_LAST_ONLY', 'procedural', 'Left out the two middle pieces', quadS(1, 0, a * b), quadS(1, 0, a * b)));
+    pushTrap(traps, key, tr('SIGN_LAST', 'slip', 'Sign of the corner piece: ' + n$(a) + ' times ' + n$(b) + ' is ' + n$(a * b), quadS(1, a + b, -a * b), quadS(1, a + b, -a * b)));
+    var expr = sqr ? linP(1, a) + sq(2) : linP(1, a) + linP(1, b), st = [];
+    if (sqr) st.push(S(M(expr + ' = ' + linP(1, a) + linP(1, a)), 'squared means times itself: write it twice'));
+    st.push(S('Label and fill: ' + rectSVG(['x', lbl(b)], ['x', lbl(a)], [['x²', monoT(b, 1)], [monoT(a, 1), n$(a * b)]]), 'first parentheses down the side, second across the top; each piece is side times top'));
+    st.push(S(M(poly([1, a + b, a * b])), 'x² piece, then the two x-pieces combined (' + n$(b) + ' + ' + (a < 0 ? '(' + n$(a) + ')' : a) + ' = ' + n$(a + b) + '), then the corner'));
+    st.push(S('Check with <i>x</i> = 2: ' + M('(' + (2 + a) + ')(' + (2 + b) + ') = ' + (2 + a) * (2 + b)) + ' and ' + M('4 + ' + (2 * (a + b) < 0 ? '(' + 2 * (a + b) + ')' : 2 * (a + b)) + ' + ' + (a * b < 0 ? '(' + a * b + ')' : a * b) + ' = ' + (4 + 2 * (a + b) + a * b)), 'same number: it’s right'));
+    return {
+      prompt: 'Multiply and simplify: ' + M(expr) + '<p class="note">Draw this box on your paper. Label the side and the top from the parentheses, fill the four pieces, then add them up.</p>' + rectSVG(['?', '?'], ['?', '?'], [[' ', ' '], [' ', ' ']]),
+      type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([1, a + b, a * b])), keyTyped: key, traps: traps, steps: st,
+      params: { a: a, b: b, sq: sqr }
+    };
+  });
+
+  // ---------- v3 (S08): combining, squares, vertex form, factoring ----------
+  function sx(v) { return (v < 0 ? ' − ' : ' + ') + (Math.abs(v) === 1 ? '' : Math.abs(v)) + '<i>x</i>'; } // signed x-term, html
+  function sn(v) { return (v < 0 ? ' − ' : ' + ') + Math.abs(v); }
+  function par(v) { return v < 0 ? '(' + n$(v) + ')' : String(v); }
+  function sgnOf(v) { return v < 0 ? -1 : 1; }
+  function wrongMid(a, b) { // the size error he makes when combining a·x and b·x
+    return sgnOf(a) === sgnOf(b) ? sgnOf(a) * Math.abs(Math.abs(a) - Math.abs(b)) : sgnOf(a + b) * (Math.abs(a) + Math.abs(b));
+  }
+  def14('F1-k', 'F1', 'drill', ['HSA.SSE.A.1.A', 'HSA.APR.A.1'], function (R) {
+    var kind = R.int(0, 1), traps = [], key, prompt, st, P;
+    if (kind === 0) {
+      var a, b; do { a = R.nz(-9, 9); b = R.nz(-9, 9); } while (a === -b || a === b);
+      key = quadS(1, a + b, a * b);
+      prompt = 'Finish it: combine like terms. ' + M('<i>x</i>' + sq(2) + sx(b) + sx(a) + sn(a * b));
+      pushTrap(traps, key, tr('MID_SIGN', 'slip', 'Right size, wrong sign on the x-term: ' + n$(b) + ' and ' + n$(a) + ' combine to ' + n$(a + b), quadS(1, -(a + b), a * b), quadS(1, -(a + b), a * b)));
+      if (wrongMid(a, b) !== 0) pushTrap(traps, key, tr('SIZES', 'slip', sgnOf(a) === sgnOf(b) ? 'Same signs: add the sizes and keep the sign (' + n$(b) + ' + ' + par(a) + ' = ' + n$(a + b) + ')' : 'Different signs: subtract the sizes and keep the sign of the bigger one', quadS(1, wrongMid(a, b), a * b), quadS(1, wrongMid(a, b), a * b)));
+      pushTrap(traps, key, tr('MERGE_UNLIKE', 'conceptual', 'Merged the number into the x-term; numbers and x-terms stay separate', quadS(1, a + b + a * b, 0), quadS(1, a + b + a * b, 0)));
+      st = [S('Sort: ' + M('<i>x</i>' + sq(2)) + ' alone; x-terms ' + M(mono(b, 1) + ' and ' + mono(a, 1)) + '; number ' + M(n$(a * b)), 'same kind goes with same kind'),
+            S(M(n$(b) + ' + ' + par(a) + ' = ' + n$(a + b)), 'combine the x-terms like signed numbers'),
+            S(M(poly([1, a + b, a * b])), 'one of each kind')];
+      P = { kind: 0, a: a, b: b };
+      return { prompt: prompt, type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([1, a + b, a * b])), keyTyped: key, traps: traps, steps: st, params: P };
+    }
+    var A, B, C, D; do { A = R.nz(-16, 16); C = R.nz(-12, 12); B = R.nz(-30, 30); D = R.nz(-30, 30); } while (A + C === 0 || B + D === 0 || A === -C || Math.abs(A) < 2);
+    key = polyS([A + C, B + D]);
+    prompt = 'Finish it: combine like terms. ' + M(mono(A, 1) + sn(B) + sx(C) + sn(D));
+    pushTrap(traps, key, tr('MID_SIGN', 'slip', 'Right size, wrong sign on the x-term: ' + n$(A) + ' and ' + n$(C) + ' combine to ' + n$(A + C), polyS([-(A + C), B + D]), polyS([-(A + C), B + D])));
+    if (wrongMid(A, C) !== 0) pushTrap(traps, key, tr('SIZES', 'slip', 'Combine x-terms like signed numbers: ' + n$(A) + ' + ' + par(C) + ' = ' + n$(A + C), polyS([wrongMid(A, C), B + D]), polyS([wrongMid(A, C), B + D])));
+    pushTrap(traps, key, tr('NUM_SIGN', 'slip', 'Numbers: ' + n$(B) + ' + ' + par(D) + ' = ' + n$(B + D), polyS([A + C, -(B + D)]), polyS([A + C, -(B + D)])));
+    st = [S('x-terms: ' + M(n$(A) + ' + ' + par(C) + ' = ' + n$(A + C)), 'combine like signed numbers'), S('numbers: ' + M(n$(B) + ' + ' + par(D) + ' = ' + n$(B + D)), ''), S(M(lin(A + C, B + D)), 'one x-term, one number')];
+    return { prompt: prompt, type: 'expr', vars: ['x'], form: 'expanded', terms: 2, key: key, keyHTML: M(lin(A + C, B + D)), keyTyped: key, traps: traps, steps: st, params: { kind: 1, A: A, B: B, C: C, D: D } };
+  });
+  def14('F1-s', 'F1', 'drill', ['HSA.SSE.A.1.A'], function (R) {
+    var p, q, r, s; do { p = R.nz(-6, 6); q = R.nz(-8, 8); r = R.nz(-6, 6); s = R.nz(-8, 8); } while (p + r === 0 || q + s === 0 || p + q + r + s === 0 || p + r === q + s || p + r === -(q + s));
+    var kind = R.int(0, 1), terms = R.shuffle([[p, 2], [q, 1], [r, 2], [s, 1]]);
+    var html = terms.map(function (t, i) { var m = mono(Math.abs(t[0]), t[1]); return i === 0 ? (t[0] < 0 ? '−' : '') + m : (t[0] < 0 ? ' − ' : ' + ') + m; }).join('');
+    var key = kind === 0 ? p + r : q + s, traps = [];
+    pushN(traps, key, tr('SIGN_OF_BIGGER', 'slip', 'Right size, wrong sign: combine them like signed numbers', -key, String(-key)));
+    pushN(traps, key, tr('MERGE_UNLIKE', 'conceptual', 'Counted every term; only the ' + (kind === 0 ? 'x²' : 'x') + ' terms go together', p + q + r + s, String(p + q + r + s)));
+    var which = kind === 0 ? '<i>x</i>' + sq(2) : '<i>x</i>', pair = kind === 0 ? [p, r] : [q, s];
+    return {
+      prompt: 'In ' + M(html) + ', put only the ' + which + ' terms together. What number goes in front of ' + which + '?', type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: [S('The ' + which + ' terms: ' + M(mono(pair[0], kind === 0 ? 2 : 1) + ' and ' + mono(pair[1], kind === 0 ? 2 : 1)), 'same variable, same power'),
+              S(M(n$(pair[0]) + ' + ' + par(pair[1]) + ' = ' + n$(key)), 'combine like signed numbers'),
+              S('So the whole thing is ' + M(poly([p + r, q + s, 0])), 'x² and x stay separate')],
+      params: { kind: kind, p: p, q: q, r: r, s: s }
+    };
+  });
+  def14('F2-q', 'F2', 'drill', ['HSA.APR.A.1', 'HSA.SSE.A.2'], function (R) {
+    var a = R.int(2, 9), s = R.pick([1, -1]), h = s * a, kind = R.int(0, 1), key, traps = [], ask;
+    var expr = linP(1, h) + sq(2);
+    if (kind === 0) {
+      key = a * a; ask = 'what is the number at the end (the corner piece)?';
+      pushN(traps, key, tr('SQUARE_AS_DOUBLE', 'conceptual', 'Doubled ' + a + '; squared means times itself: ' + n$(h) + ' · ' + n$(h) + ' = ' + a * a, 2 * a, String(2 * a)));
+      pushN(traps, key, tr('SIGN_PRODUCT', 'slip', n$(h) + ' times ' + n$(h) + ': same signs, positive', -a * a, String(-a * a)));
+      pushN(traps, key, tr('SQUARE_AS_DOUBLE', 'conceptual', 'Doubled ' + a + ' and kept the sign; squared means times itself', 2 * h, String(2 * h)));
+    } else {
+      key = 2 * h; ask = 'what number goes in front of x?';
+      pushN(traps, key, tr('MIDDLE_ONCE', 'procedural', 'Counted one middle piece; there are two (' + n$(h) + 'x and ' + n$(h) + 'x)', h, String(h)));
+      pushN(traps, key, tr('SIGN', 'slip', 'Sign of the middle: both pieces are ' + n$(h) + 'x', -2 * h, String(-2 * h)));
+      pushN(traps, key, tr('SQUARED_MIDDLE', 'conceptual', 'Put the squared number in the middle; the middle is the two x-pieces added', a * a, String(a * a)));
+    }
+    return {
+      prompt: 'When you multiply out ' + M(expr) + ', ' + ask, type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: [S(M(expr + ' = ' + linP(1, h) + linP(1, h)), 'write it twice first'),
+              S('Box: ' + rectSVG(['x', lbl(h)], ['x', lbl(h)], [['x²', monoT(h, 1)], [monoT(h, 1), String(a * a)]]), 'two middle pieces, both ' + n$(h) + 'x; corner ' + n$(h) + ' · ' + n$(h) + ' = ' + a * a),
+              S(M(poly([1, 2 * h, a * a])), kind === 0 ? 'the number at the end is ' + a * a : 'the x-term is ' + n$(2 * h) + 'x')],
+      params: { kind: kind, a: a, s: s }
+    };
+  });
+  def14('F2-v', 'F2', 'drill', ['HSF.IF.C.8.A', 'HSA.SSE.A.2'], function (R) {
+    var a = R.pick([1, 1, 1, 2, -1]), h, k; do { h = R.nz(-6, 6); k = R.nz(-9, 9); } while (a * h * h + k === 0);
+    var c = a * h * h + k, key = quadS(a, -2 * a * h, c), traps = [];
+    pushTrap(traps, key, tr('SQUARE_EACH', 'conceptual', 'Squared each part; (x ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ')² has two middle pieces', quadS(a, 0, c), quadS(a, 0, c)));
+    pushTrap(traps, key, tr('MIDDLE_ONCE', 'procedural', 'Counted one middle piece; write it twice and there are two', quadS(a, -a * h, c), quadS(a, -a * h, c)));
+    pushTrap(traps, key, tr('DOUBLE_LAST', 'conceptual', 'Doubled ' + Math.abs(h) + ' instead of squaring it', quadS(a, -2 * a * h, a * 2 * Math.abs(h) + k), quadS(a, -2 * a * h, a * 2 * Math.abs(h) + k)));
+    pushTrap(traps, key, tr('K_LOST', 'procedural', 'Dropped the ' + n$(k) + ' at the end', quadS(a, -2 * a * h, a * h * h), quadS(a, -2 * a * h, a * h * h)));
+    pushTrap(traps, key, tr('SIGN_H', 'slip', 'Sign of the middle: (x ' + (h > 0 ? '−' : '+') + ' ' + Math.abs(h) + ')² gives ' + n$(-2 * h) + 'x', quadS(a, 2 * a * h, c), quadS(a, 2 * a * h, c)));
+    if (a !== 1) pushTrap(traps, key, tr('A_FIRST_ONLY', 'procedural', 'The ' + n$(a) + ' in front multiplies every piece of the square, not just x²', quadS(a, -2 * h, h * h + k), quadS(a, -2 * h, h * h + k)));
+    var A = a === 1 ? '' : a === -1 ? '−' : String(a), vf = A + linP(1, -h) + sq(2) + sn(k);
+    var st = [S(M(linP(1, -h) + sq(2) + ' = ' + linP(1, -h) + linP(1, -h) + ' = ' + poly([1, -2 * h, h * h])), 'write it twice, box it: two middle pieces of ' + n$(-h) + 'x, corner ' + h * h)];
+    if (a !== 1) st.push(S(M(A + '(' + poly([1, -2 * h, h * h]) + ') = ' + poly([a, -2 * a * h, a * h * h])), 'the ' + n$(a) + ' multiplies every piece'));
+    st.push(S(M(poly([a, -2 * a * h, a * h * h]) + sn(k) + ' = ' + poly([a, -2 * a * h, c])), 'combine the numbers: ' + n$(a * h * h) + ' + ' + par(k) + ' = ' + n$(c)));
+    st.push(S('Check with <i>x</i> = 0: vertex form gives ' + M(n$(a * h * h + k)) + ', standard form gives ' + M(n$(c)), 'same: it’s right'));
+    return {
+      prompt: 'Write ' + M('<i>y</i> = ' + vf) + ' in standard form, ' + M('<i>y</i> = <i>ax</i>' + sq(2) + ' + <i>bx</i> + <i>c</i>') + '. Type just the right side.',
+      type: 'expr', vars: ['x'], form: 'expanded', terms: 3, key: key, keyHTML: M(poly([a, -2 * a * h, c])), keyTyped: key, traps: traps, steps: st,
+      params: { a: a, h: h, k: k }
+    };
+  });
+  // ---- F3: factoring = the box run backward ----
+  function pairs(c) { var o = []; for (var i = 1; i <= Math.abs(c); i++) if (Math.abs(c) % i === 0) { var j = c / i; o.push([i, j]); o.push([-i, -j]); } return o; }
+  function fac(p, q) { return '(x' + (p < 0 ? '' : '+') + p + ')(x' + (q < 0 ? '' : '+') + q + ')'; }
+  function facH(p, q) { return linP(1, p) + linP(1, q); }
+  function pq(R) { var p, q; do { p = R.nz(-9, 9); q = R.nz(-9, 9); } while (p === q || p === -q); return [p, q]; }
+  function pairList(p, q) {
+    var c = p * q, b = p + q, seen = {}, list = pairs(c).filter(function (t) { var k = Math.min(t[0], t[1]) + ',' + Math.max(t[0], t[1]); if (seen[k]) return false; seen[k] = 1; return true; });
+    return list.slice(0, 8).map(function (t) { return par(t[0]) + ' · ' + par(t[1]) + ' (adds to ' + n$(t[0] + t[1]) + ')' + (t[0] + t[1] === b ? ' ✓' : ''); }).join('; ');
+  }
+  def14('F3-k', 'F3', 'drill', ['HSA.SSE.A.2'], function (R) {
+    var z = pq(R), p = z[0], q = z[1], b = p + q, c = p * q, traps = [];
+    var pushS = function (t) { var k = t.key.slice().sort(function (x, y) { return x - y; }).join(','); var kk = [p, q].sort(function (x, y) { return x - y; }).join(','); if (k !== kk && traps.every(function (u) { return u.key.slice().sort(function (x, y) { return x - y; }).join(',') !== k; })) traps.push(t); };
+    pushS(tr('SIGN_FLIP', 'slip', 'They multiply to ' + n$(c) + ' but add to ' + n$(-b) + ', not ' + n$(b), [-p, -q], n$(-p).replace('−', '-') + ', ' + n$(-q).replace('−', '-')));
+    if (1 + c !== b) pushS(tr('MULT_ONLY', 'procedural', '1 and ' + n$(c) + ' multiply to ' + n$(c) + ' but add to ' + n$(1 + c) + '; they have to do both', [1, c], '1, ' + String(c)));
+    return {
+      prompt: 'Find two numbers that <b>multiply</b> to ' + M(n$(c)) + ' and <b>add</b> to ' + M(n$(b)) + '. Type both, with a comma between.', type: 'set', key: [p, q], keyHTML: M(n$(p) + ', ' + n$(q)), keyTyped: p + ', ' + q, traps: traps,
+      steps: [S('Pairs that multiply to ' + n$(c) + ': ' + pairList(p, q), 'list them, then check which pair adds to ' + n$(b)), S(M(n$(p) + ' and ' + n$(q)), n$(p) + ' · ' + par(q) + ' = ' + n$(c) + ' and ' + n$(p) + ' + ' + (q < 0 ? '(' + n$(q) + ')' : q) + ' = ' + n$(b))],
+      params: { p: p, q: q }
+    };
+  });
+  function factorTraps(p, q, key) {
+    var traps = [];
+    pushTrap(traps, key, tr('SIGN_FLIP', 'slip', 'Signs flipped: ' + fac(-p, -q).replace(/-/g, '−') + ' multiplies out to ' + polyS([1, -(p + q), p * q]).replace(/-/g, '−'), fac(-p, -q), fac(-p, -q)));
+    pushTrap(traps, key, tr('ONE_SIGN', 'slip', 'One sign is off: check the middle by adding ' + n$(p) + ' and ' + n$(q), fac(p, -q), fac(p, -q)));
+    if (1 + p * q !== p + q) pushTrap(traps, key, tr('MULT_ONLY', 'procedural', '1 and ' + n$(p * q) + ' multiply right but don’t add to ' + n$(p + q), fac(1, p * q), fac(1, p * q)));
+    return traps;
+  }
+  function factorSteps(p, q) {
+    return [S('Box backward: the pieces are ' + rectSVG(['x', '?'], ['x', '?'], [['x²', '?'], ['?', n$(p * q)]]), 'x² goes top-left, the number ' + n$(p * q) + ' bottom-right'),
+            S('Two numbers that multiply to ' + n$(p * q) + ' and add to ' + n$(p + q) + ': ' + pairList(p, q), 'corner = multiply, middle = add'),
+            S('Sides: ' + rectSVG(['x', lbl(q)], ['x', lbl(p)], [['x²', monoT(q, 1)], [monoT(p, 1), n$(p * q)]]), 'read the sides off the box'),
+            S(M(facH(p, q)), 'check: multiply back and you get ' + poly([1, p + q, p * q]))];
+  }
+  def14('F3-a', 'F3', 'drill', ['HSA.SSE.A.2', 'HSA.SSE.B.3.A'], function (R) {
+    var z = pq(R), p = z[0], q = z[1], key = fac(p, q);
+    return { prompt: 'Factor: ' + M(poly([1, p + q, p * q])), type: 'expr', vars: ['x'], factored: true, key: key, keyHTML: M(facH(p, q)), keyTyped: key, traps: factorTraps(p, q, key), steps: factorSteps(p, q), params: { p: p, q: q } };
+  });
+  def14('F3-z', 'F3', 'drill', ['HSA.REI.B.4.B', 'HSA.SSE.B.3.A'], function (R) {
+    var z = pq(R), p = z[0], q = z[1], traps = [], kk = [-p, -q];
+    traps.push(tr('ROOT_SIGN', 'conceptual', 'Took the numbers from the parentheses; x + ' + Math.abs(p) + ' = 0 means x = −' + Math.abs(p) + ': set each one equal to 0', [p, q], p + ', ' + q));
+    traps.push(tr('ONE_ROOT', 'procedural', 'There are two solutions, one from each parentheses', [-p], String(-p)));
+    var st = factorSteps(p, q).slice(1);
+    st.push(S(M(linP(1, p) + ' = 0') + ' or ' + M(linP(1, q) + ' = 0'), 'if a product is 0, one of the factors is 0'));
+    st.push(S(M('<i>x</i> = ' + n$(-p) + ' or <i>x</i> = ' + n$(-q)), 'these are the x-intercepts of the parabola'));
+    return { prompt: 'Solve by factoring: ' + M(poly([1, p + q, p * q]) + ' = 0'), type: 'set', key: kk, keyHTML: M('<i>x</i> = ' + n$(-p) + ', ' + n$(-q)), keyTyped: (-p) + ', ' + (-q), traps: traps, steps: st, params: { p: p, q: q } };
+  });
+  def14('F3-r', 'F3', 'retention', ['HSA.SSE.A.2'], function (R) {
+    var z = pq(R), p = z[0], q = z[1], key = fac(p, q);
+    return {
+      prompt: 'These are the four pieces of a box. What are its sides? Write its area as two parentheses multiplied.' + rectSVG(['x', '?'], ['x', '?'], [['x²', monoT(q, 1)], [monoT(p, 1), n$(p * q)]]),
+      type: 'expr', vars: ['x'], factored: true, key: key, keyHTML: M(facH(p, q)), keyTyped: key, traps: factorTraps(p, q, key),
+      steps: [S('Top-right piece ' + M(mono(q, 1)) + ' is x times the top side, so the top side is ' + M(n$(q)) + '; bottom-left ' + M(mono(p, 1)) + ' gives the side ' + M(n$(p)), 'each piece is side times top'),
+              S('Corner check: ' + M(n$(p) + ' · ' + par(q) + ' = ' + n$(p * q)), ''), S(M(facH(p, q)), 'the area as sides multiplied')],
+      params: { p: p, q: q }
+    };
+  });
+
+  // ---------- v5 (S11): quadratic formula and vertex, one step per item ----------
+  function graphSVG5(f, marks) {
+    var L = -8, Rr = 8, W = 300, s = W / (Rr - L), X = function (x) { return (x - L) * s; }, Y = function (y) { return (Rr - y) * s; };
+    var g = '<svg viewBox="0 0 ' + W + ' ' + W + '" width="100%" style="max-width:320px;display:block;margin:10px auto;touch-action:manipulation" role="img" aria-label="graph">';
+    for (var i = L; i <= Rr; i++) g += '<line x1="' + X(i) + '" y1="0" x2="' + X(i) + '" y2="' + W + '" stroke="var(--line)" stroke-width="' + (i === 0 ? 0 : 1) + '"/><line x1="0" y1="' + Y(i) + '" x2="' + W + '" y2="' + Y(i) + '" stroke="var(--line)" stroke-width="' + (i === 0 ? 0 : 1) + '"/>';
+    g += '<line x1="0" y1="' + Y(0) + '" x2="' + W + '" y2="' + Y(0) + '" stroke="var(--muted)" stroke-width="1.5"/><line x1="' + X(0) + '" y1="0" x2="' + X(0) + '" y2="' + W + '" stroke="var(--muted)" stroke-width="1.5"/>';
+    for (var t = -6; t <= 6; t += 2) if (t) g += '<text x="' + X(t) + '" y="' + (Y(0) + 13) + '" font-size="10" text-anchor="middle" fill="var(--muted)">' + t + '</text><text x="' + (X(0) - 4) + '" y="' + (Y(t) + 3) + '" font-size="10" text-anchor="end" fill="var(--muted)">' + t + '</text>';
+    var d = '', first = true;
+    for (var x = L; x <= Rr + 1e-9; x += 0.05) { var y = f(x); if (y > Rr + 2 || y < L - 2) { first = true; continue; } d += (first ? 'M' : 'L') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1); first = false; }
+    g += '<path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="2.5"/>';
+    (marks || []).forEach(function (p) { g += '<circle cx="' + X(p[0]) + '" cy="' + Y(p[1]) + '" r="4.5" fill="var(--accent)"/>'; });
+    return g + '</svg>';
+  }
+  function abcRand(R) { var a = R.pick([1, 1, 2, 3, -1, -2]), b = R.nz(-9, 9), c = R.nz(-15, 15); return [a, b, c]; }
+  function eqH(a, b, c) { return poly([a, b, c]) + ' = 0'; }
+  var NOPTS = ['Two real solutions', 'One real solution', 'No real solutions'];
+  def14('F4-c', 'F4', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var z = abcRand(R), a = z[0], b = z[1], c = z[2], moved = R.f() < 0.6, ask = R.int(0, 2), names = ['a', 'b', 'c'], key = z[ask], traps = [];
+    var shown = moved ? poly([a, b, 0]) + ' = ' + n$(-c) : eqH(a, b, c);
+    if (ask === 2 && moved) pushN(traps, key, tr('FORGOT_MOVE', 'procedural', 'Get 0 on one side first: moving ' + n$(-c) + ' across makes it ' + n$(c), -c, String(-c)));
+    pushN(traps, key, tr('DROPPED_SIGN', 'slip', 'The sign in front belongs to the number: ' + names[ask] + ' = ' + n$(key), -key, String(-key)));
+    if (ask !== 0) pushN(traps, key, tr('WRONG_LETTER', 'conceptual', 'a goes with x², b with x, c is the number alone', a, String(a)));
+    var st = [];
+    if (moved) st.push(S(M(shown + ' → ' + eqH(a, b, c)), 'get 0 on one side: subtract ' + n$(-c) + ' from both sides'));
+    st.push(S(M('<i>a</i> = ' + n$(a) + ', <i>b</i> = ' + n$(b) + ', <i>c</i> = ' + n$(c)), 'a with x², b with x, c alone, each with its sign'));
+    return { prompt: 'To use the quadratic formula on ' + M(shown) + ', what is ' + M('<i>' + names[ask] + '</i>') + '?', type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps, steps: st, params: { a: a, b: b, c: c, moved: moved, ask: ask } };
+  });
+  function discSteps(a, b, c) {
+    return [S(M('<i>b</i>' + sq(2) + ' = ' + par(b) + sq(2) + ' = ' + b * b), b < 0 ? 'a negative squared is positive' : 'b times itself'),
+            S(M('4<i>ac</i> = 4 · ' + par(a) + ' · ' + par(c) + ' = ' + n$(4 * a * c)), 'multiply all three; watch the signs'),
+            S(M('<i>b</i>' + sq(2) + ' − 4<i>ac</i> = ' + b * b + ' − ' + par(4 * a * c) + ' = ' + n$(b * b - 4 * a * c)), 4 * a * c < 0 ? 'subtracting a negative adds' : 'subtract 4ac from b²')];
+  }
+  def14('F4-d', 'F4', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var z = abcRand(R), a = z[0], b = z[1], c = z[2], key = b * b - 4 * a * c, traps = [];
+    if (b < 0) pushN(traps, key, tr('NEG_SQUARE', 'slip', '(' + n$(b) + ')² is +' + b * b + ': a negative times a negative is positive', -b * b - 4 * a * c, String(-b * b - 4 * a * c)));
+    pushN(traps, key, tr('SIGN_4AC', 'slip', 'Sign of 4ac: 4 · ' + par(a) + ' · ' + par(c) + ' = ' + n$(4 * a * c) + ', then subtract it', b * b + 4 * a * c, String(b * b + 4 * a * c)));
+    pushN(traps, key, tr('SQUARE_AS_DOUBLE', 'conceptual', 'b² means b times b, not 2 times b', 2 * Math.abs(b) - 4 * a * c, String(2 * Math.abs(b) - 4 * a * c)));
+    pushN(traps, key, tr('LEFT_OUT_C', 'procedural', '4ac is 4 times a times c: all three', b * b - 4 * a, String(b * b - 4 * a)));
+    return { prompt: 'For ' + M(eqH(a, b, c)) + ', find the discriminant ' + M('<i>b</i>' + sq(2) + ' − 4<i>ac</i>') + '.', type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps, steps: [S(M('<i>a</i> = ' + n$(a) + ', <i>b</i> = ' + n$(b) + ', <i>c</i> = ' + n$(c)), 'write them down first')].concat(discSteps(a, b, c)), params: { a: a, b: b, c: c } };
+  });
+  def14('F4-n', 'F4', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var want = R.int(0, 2), a, b, c, D;
+    if (want === 1) { var h = R.nz(-6, 6); a = R.pick([1, 2, -1]); b = -2 * a * h; c = a * h * h; }
+    else { do { var z = abcRand(R); a = z[0]; b = z[1]; c = z[2]; D = b * b - 4 * a * c; } while (want === 0 ? D <= 0 : D >= 0); }
+    D = b * b - 4 * a * c; var key = D > 0 ? 0 : D === 0 ? 1 : 2;
+    return { prompt: 'How many real solutions does ' + M(eqH(a, b, c)) + ' have? Work out ' + M('<i>b</i>' + sq(2) + ' − 4<i>ac</i>') + ' first.', type: 'choice', options: NOPTS, key: key, keyHTML: NOPTS[key], keyTyped: String(key),
+      traps: key === 1 ? [] : [tr('DISC_SIGN_FLIP', 'conceptual', 'Positive discriminant means two real solutions; negative means none', 2 - key, String(2 - key))],
+      steps: discSteps(a, b, c).concat([S(D > 0 ? 'Positive: two real solutions (the graph crosses the x-axis twice).' : D === 0 ? 'Zero: one real solution (the graph just touches the x-axis).' : 'Negative: no real solutions (the graph never reaches the x-axis).', 'the sign of the discriminant is the whole answer')]), params: { a: a, b: b, c: c } };
+  });
+  def14('F4-s', 'F4', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var a = R.pick([1, 1, 2, 3]), r, q; do { r = R.nz(-6, 6); q = R.nz(-6, 6); } while (r === q || r === -q);
+    var b = -a * (r + q), c = a * r * q, D = b * b - 4 * a * c, sD = Math.sqrt(D), traps = [];
+    traps.push(tr('SIGN_OF_B', 'slip', 'The formula starts with −b: here −b = ' + n$(-b), [-r, -q], n$(-r).replace('−', '-') + ', ' + n$(-q).replace('−', '-')));
+    if (a !== 1) traps.push(tr('DIVIDE_BY_A', 'procedural', 'Divide by 2a = ' + 2 * a + ', not by a', [(-b + sD) / a, (-b - sD) / a], ((-b + sD) / a) + ', ' + ((-b - sD) / a)));
+    traps.push(tr('ONE_ROOT', 'procedural', 'There are two: one with + √, one with − √', [r], String(r)));
+    var st = [S(M('<i>a</i> = ' + n$(a) + ', <i>b</i> = ' + n$(b) + ', <i>c</i> = ' + n$(c)), 'write them down first')].concat(discSteps(a, b, c));
+    st.push(S('Square root: √' + D + ' = ' + sD, 'the square root of the discriminant (calculator is fine)'));
+    st.push(S(M('<i>x</i> = (' + n$(-b) + ' ± ' + sD + ') / ' + 2 * a), '−b, plus or minus the root, all over 2a'));
+    st.push(S(M('<i>x</i> = ' + n$((-b + sD) / (2 * a)) + ' or <i>x</i> = ' + n$((-b - sD) / (2 * a))), 'one with +, one with −. Check: they are where the graph crosses the x-axis'));
+    return { prompt: 'Solve with the quadratic formula: ' + M(eqH(a, b, c)) + '. Give both solutions, separated by a comma.', type: 'set', key: [r, q], keyHTML: M('<i>x</i> = ' + n$(r) + ', ' + n$(q)), keyTyped: r + ', ' + q, traps: traps, steps: st, params: { a: a, r: r, q: q } };
+  });
+  def14('F4-r', 'F4', 'retention', ['HSA.REI.B.4.B'], function (R) {
+    var key = R.int(0, 2), a = R.pick([1, -1, 0.5, -0.5]), h = R.int(-4, 4), k;
+    if (key === 1) k = 0; else { var mag = R.int(1, 4); k = (key === 0) === (a > 0) ? -mag : mag; }
+    var f = function (x) { return a * (x - h) * (x - h) + k; };
+    return { prompt: 'This is the graph of a quadratic. How many real solutions does it have when you set it equal to 0?' + graphSVG5(f, []), type: 'choice', options: NOPTS, key: key, keyHTML: NOPTS[key], keyTyped: String(key),
+      traps: key === 1 ? [] : [tr('DISC_SIGN_FLIP', 'conceptual', 'Count where the graph meets the x-axis: that’s the number of real solutions', 2 - key, String(2 - key))],
+      steps: [S('It meets the x-axis ' + (key === 0 ? 'twice' : key === 1 ? 'once (it just touches)' : 'never') + '.', 'real solutions are x-intercepts'), S(NOPTS[key] + ', so the discriminant is ' + ['positive', 'zero', 'negative'][key] + '.', '')], params: { a: a, h: h, k: k } };
+  });
+  function vtxParams(R) { var a = R.pick([1, -1, 2, -2]), h = R.nz(-5, 5), k = R.nz(-9, 9); return { a: a, h: h, k: k, b: -2 * a * h, c: a * h * h + k }; }
+  function vSteps(P) {
+    return [S(M('<i>x</i> = −<i>b</i> / (2<i>a</i>) = ' + n$(-P.b) + ' / ' + par(2 * P.a) + ' = ' + n$(P.h)), 'the x of the vertex'),
+            S(M('<i>y</i> = ' + par(P.a) + '(' + n$(P.h) + ')' + sq(2) + ' + ' + par(P.b) + '(' + n$(P.h) + ') + ' + par(P.c) + ' = ' + n$(P.k)), 'plug that x back in to get the y')];
+  }
+  def14('F5-x', 'F5', 'drill', ['HSF.IF.C.8.A', 'HSF.IF.B.4'], function (R) {
+    var P = vtxParams(R), key = P.h, traps = [];
+    pushN(traps, key, tr('SIGN', 'slip', 'The formula is −b/(2a): ' + n$(-P.b) + ' / ' + par(2 * P.a), -P.h, String(-P.h)));
+    pushN(traps, key, tr('NO_TWO', 'procedural', 'Divide by 2a, not a', 2 * P.h, String(2 * P.h)));
+    pushN(traps, key, tr('GAVE_Y', 'conceptual', 'That’s the y of the vertex; this asks for the x', P.k, String(P.k)));
+    return { prompt: 'What is the x-coordinate of the vertex of ' + M('<i>y</i> = ' + poly([P.a, P.b, P.c])) + '?', type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps, steps: vSteps(P).slice(0, 1), params: P };
+  });
+  def14('F5-y', 'F5', 'drill', ['HSF.IF.C.8.A', 'HSF.IF.B.4'], function (R) {
+    var P = vtxParams(R), key = P.k, word = P.a > 0 ? 'minimum' : 'maximum', traps = [];
+    pushN(traps, key, tr('GAVE_X', 'conceptual', 'That’s where it happens (the x); the ' + word + ' value is the y', P.h, String(P.h)));
+    pushN(traps, key, tr('GAVE_C', 'procedural', 'c is the y-intercept, not the ' + word + '; plug the vertex x back in', P.c, String(P.c)));
+    return { prompt: 'What is the ' + word + ' value of ' + M('<i>y</i> = ' + poly([P.a, P.b, P.c])) + '?', type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: vSteps(P).concat([S('It opens ' + (P.a > 0 ? 'up (a > 0), so the vertex is the lowest point: minimum ' : 'down (a < 0), so the vertex is the highest point: maximum ') + n$(P.k), '“value” means the y')]), params: P };
+  });
+  def14('F5-m', 'F5', 'drill', ['HSF.IF.C.7.A'], function (R) {
+    var P = vtxParams(R), opts = ['Maximum', 'Minimum'], key = P.a < 0 ? 0 : 1;
+    return { prompt: 'Does ' + M('<i>y</i> = ' + poly([P.a, P.b, P.c])) + ' have a maximum or a minimum?', type: 'choice', options: opts, key: key, keyHTML: opts[key], keyTyped: String(key),
+      traps: [tr('A_SIGN', 'conceptual', 'Look at the sign of a: positive opens up (minimum), negative opens down (maximum)', 1 - key, String(1 - key))],
+      steps: [S(M('<i>a</i> = ' + n$(P.a)), P.a > 0 ? 'positive: opens up like a cup, lowest point is the vertex' : 'negative: opens down, highest point is the vertex'), S(opts[key], '')], params: P };
+  });
+  def14('F5-t', 'F5', 'drill', ['HSF.IF.B.4', 'HSA.CED.A.1'], function (R) {
+    var v = R.pick([32, 48, 64, 80, 96]), s0 = R.pick([0, 4, 5, 6, 8]), t = v / 32, H = -16 * t * t + v * t + s0, kind = R.int(0, 1), traps = [];
+    var key = kind === 0 ? t : H;
+    if (kind === 0) { pushN(traps, key, tr('GAVE_HEIGHT', 'conceptual', '“How many seconds” wants the t; that’s the height', H, String(H))); pushN(traps, key, tr('NO_TWO', 'procedural', 't = −b/(2a) = ' + v + ' / 32, not ' + v + ' / 16', v / 16, String(v / 16))); }
+    else { pushN(traps, key, tr('GAVE_TIME', 'conceptual', '“How high” wants the height; that’s the time', t, String(t))); }
+    return { prompt: 'A ball’s height in feet after <i>t</i> seconds is ' + M('<i>h</i>(<i>t</i>) = −16<i>t</i>' + sq(2) + ' + ' + v + '<i>t</i>' + (s0 ? ' + ' + s0 : '')) + '. ' + (kind === 0 ? 'How many seconds after it’s thrown does it reach its highest point?' : 'What is its maximum height, in feet?'), type: 'number', key: key, keyHTML: M(String(key)), keyTyped: String(key), traps: traps,
+      steps: [S(M('<i>t</i> = −<i>b</i> / (2<i>a</i>) = −' + v + ' / (2 · (−16)) = ' + t), 'the time of the highest point is the vertex’s t'), S(M('<i>h</i>(' + t + ') = −16(' + t + ')' + sq(2) + ' + ' + v + '(' + t + ')' + (s0 ? ' + ' + s0 : '') + ' = ' + H), 'the height is the vertex’s h (calculator is fine)'), S(kind === 0 ? 'The question says “how many seconds”: answer ' + t : 'The question says “maximum height”: answer ' + H, 'read what it asks for')], params: { v: v, s0: s0, kind: kind } };
+  });
+  def14('F5-r', 'F5', 'retention', ['HSF.IF.B.4'], function (R) {
+    var a = R.pick([1, 2, -1, -2]), h = R.nz(-4, 4), k = R.nz(-8, 8), kind = R.int(0, 1), xs = [], ys = [];
+    for (var x = h - 3; x <= h + 3; x++) { xs.push(n$(x)); ys.push(n$(a * (x - h) * (x - h) + k)); }
+    var word = a > 0 ? 'minimum' : 'maximum', key = kind === 0 ? h : k, traps = [];
+    pushN(traps, key, tr(kind === 0 ? 'GAVE_Y' : 'GAVE_X', 'conceptual', kind === 0 ? '“At what x” wants the x; that’s the value' : '“Value” wants the y; that’s where it happens', kind === 0 ? k : h, String(kind === 0 ? k : h)));
+    var table = '<table class="ptab"><tr><td><i>x</i></td>' + xs.map(function (v) { return '<td>' + v + '</td>'; }).join('') + '</tr><tr><td><i>f</i>(<i>x</i>)</td>' + ys.map(function (v) { return '<td>' + v + '</td>'; }).join('') + '</tr></table>';
+    return { prompt: 'The table shows a quadratic function. ' + (kind === 0 ? 'At what x does f reach its ' + word + '?' : 'What is the ' + word + ' value of f?') + table, type: 'number', key: key, keyHTML: M(n$(key)), keyTyped: String(key), traps: traps,
+      steps: [S('The values match up on both sides of x = ' + n$(h) + ': that’s the vertex.', 'a parabola is symmetric'), S('Vertex (' + n$(h) + ', ' + n$(k) + '); the ' + word + ' is the y, ' + n$(k) + ', reached at x = ' + n$(h) + '.', kind === 0 ? 'the question asks for the x' : 'the question asks for the value (y)')], params: { a: a, h: h, k: k, kind: kind } };
+  });
+
+  // ---------- v6 (S12): find the first mistake (worked chains with one wrong line) ----------
+  function prH(t) { // typed chain line -> display html (controlled inputs only)
+    var h = t.replace(/\^2/g, '<sup>2</sup>').replace(/\*/g, ' · ').replace(/\(-/g, '(−').replace(/^-/, '−').replace(/-/g, ' − ').replace(/\+/g, ' + ').replace(/x/g, '<i>x</i>');
+    return h;
+  }
+  function sgT(v) { return (v < 0 ? '-' : '+') + Math.abs(v); }
+  function pn(v) { return v < 0 ? '(' + v + ')' : String(v); }
+  function fmItem(intro, chain, key, why, fix, P) {
+    var opts = [], i; for (i = 1; i < chain.length; i++) opts.push('Line ' + i);
+    var lines = '<ol class="steps">' + chain.slice(1).map(function (c) { return '<li>' + M('= ' + prH(c)) + '</li>'; }).join('') + '</ol>';
+    P.chain = chain;
+    return { prompt: intro + ' ' + M(prH(chain[0])) + lines + 'Which line has the <b>first</b> mistake?', type: 'choice', options: opts, key: key, keyHTML: 'Line ' + (key + 1), keyTyped: String(key), traps: [],
+      steps: [S('Line ' + (key + 1) + ' is where it goes wrong.', why), S('It should be ' + M('= ' + prH(fix)), 'every line has to equal the line before it')], params: P };
+  }
+  def14('FM-sq', 'F2', 'drill', ['HSA.APR.A.1', 'HSA.SSE.A.2'], function (R) {
+    var h; do { h = R.nz(-9, 9); } while (Math.abs(h) < 3);
+    var A = Math.abs(h), e0 = '(x' + sgT(h) + ')^2', twice = '(x' + sgT(h) + ')(x' + sgT(h) + ')', pieces = 'x^2' + sgT(h) + 'x' + sgT(h) + 'x+' + h * h, done = 'x^2' + sgT(2 * h) + 'x+' + h * h, v = R.int(0, 2);
+    if (v === 0) return fmItem('Someone multiplied out', [e0, twice, 'x^2' + sgT(h) + 'x' + sgT(h) + 'x+' + 2 * A, 'x^2' + sgT(2 * h) + 'x+' + 2 * A], 1, 'the corner is ' + pn(h) + ' · ' + pn(h) + ' = ' + h * h + ', not ' + A + ' doubled', pieces, { v: v, h: h });
+    if (v === 1) return fmItem('Someone multiplied out', [e0, twice, pieces, 'x^2' + sgT(h) + 'x+' + h * h], 2, 'there are two middle pieces: ' + n$(h) + 'x and ' + n$(h) + 'x make ' + n$(2 * h) + 'x', done, { v: v, h: h });
+    return fmItem('Someone multiplied out', [e0, twice, 'x^2+' + h * h], 1, 'the box has four pieces; the two middle ones are missing', pieces, { v: v, h: h });
+  });
+  def14('FM-xx', 'F1', 'drill', ['HSA.APR.A.1', '8.EE.A.1'], function (R) {
+    var a, b; do { a = R.nz(-7, 7); b = R.nz(-7, 7); } while (Math.abs(a) < 2 || Math.abs(b) < 2 || a + b === a * b || a + b === 0);
+    var e0 = '(' + a + 'x)(' + b + 'x)', re = a + '*' + pn(b) + '*x*x', v = R.int(0, 1);
+    if (v === 0) return fmItem('Someone multiplied', [e0, re, a * b + '*x*x', a * b + 'x'], 2, 'x times x is x²: the exponents add', a * b + 'x^2', { v: v, a: a, b: b });
+    return fmItem('Someone multiplied', [e0, re, (a + b) + '*x*x', (a + b) + 'x^2'], 1, 'side by side means multiply: ' + n$(a) + ' · ' + pn(b).replace('-', '−') + ' = ' + n$(a * b) + ', not ' + n$(a + b), a * b + '*x*x', { v: v, a: a, b: b });
+  });
+  def14('FM-dist', 'F1', 'drill', ['7.EE.A.1', 'HSA.APR.A.1'], function (R) {
+    var p, q, a, c, b, d; do { p = R.int(2, 5); q = R.int(2, 5); a = R.int(1, 4); c = R.int(1, 4); b = R.nz(-9, 9); d = R.int(1, 9); } while (p * a === q * c || p * b === q * d || p * b === -q * d);
+    var e0 = p + '(' + (a === 1 ? '' : a) + 'x' + sgT(b) + ')-' + q + '(' + (c === 1 ? '' : c) + 'x+' + d + ')', X = p * a - q * c, K = p * b - q * d;
+    var ex = p * a + 'x' + sgT(p * b) + '-' + q * c + 'x-' + q * d, v = R.int(0, 1), lin2 = function (m, k) { return (m === 1 ? '' : m === -1 ? '-' : m) + 'x' + sgT(k); };
+    if (v === 0) return fmItem('Someone simplified', [e0, p * a + 'x' + sgT(p * b) + '-' + q * c + 'x+' + q * d, lin2(X, p * b + q * d)], 0, 'the −' + q + ' multiplies both pieces: −' + q + ' · ' + d + ' = −' + q * d, ex, { v: v, p: p, q: q, a: a, b: b, c: c, d: d });
+    var wrongX = (X < 0 ? -1 : 1) * (p * a + q * c);
+    return fmItem('Someone simplified', [e0, ex, lin2(wrongX, K)], 1, 'different signs: ' + p * a + 'x − ' + q * c + 'x = ' + n$(X) + 'x (subtract the sizes, keep the sign of the bigger one)', lin2(X, K), { v: v, p: p, q: q, a: a, b: b, c: c, d: d });
+  });
+  def14('FM-d', 'F4', 'drill', ['HSA.REI.B.4.B'], function (R) {
+    var a = R.pick([1, 2, 3]), b = -R.int(2, 9), c; do { c = R.nz(-9, 9); } while (b * b === 4 * a * c || b * b === -4 * a * c);
+    var fac = 4 * a * c, D = b * b - fac, e0 = '(' + b + ')^2-4*' + a + '*' + pn(c), L1 = b * b + '-4*' + a + '*' + pn(c), L2 = b * b + '-' + pn(fac), v = R.int(0, fac < 0 ? 2 : 1), eq = poly([a, b, c]) + ' = 0';
+    var intro = 'Someone found ' + M('<i>b</i>' + sq(2) + ' − 4<i>ac</i>') + ' for ' + M(eq) + ':';
+    if (v === 0) return fmItem(intro, [e0, '-' + b * b + '-4*' + a + '*' + pn(c), '-' + b * b + '-' + pn(fac), String(-b * b - fac)], 0, '(' + n$(b) + ')² is +' + b * b + ': a negative times a negative is positive', L1, { v: v, a: a, b: b, c: c });
+    if (v === 1) return fmItem(intro, [e0, L1, b * b + '-' + pn(-fac), String(b * b + fac)], 1, '4 · ' + a + ' · ' + pn(c).replace('-', '−') + ' = ' + n$(fac) + ': keep its sign', L2, { v: v, a: a, b: b, c: c });
+    return fmItem(intro, [e0, L1, L2, String(b * b - Math.abs(fac))], 2, 'subtracting a negative adds: ' + b * b + ' − (' + n$(fac) + ') = ' + D, String(D), { v: v, a: a, b: b, c: c });
+  });
+  var FORM_FACTORED = 'Right value, but this asks for factored form: two parentheses multiplied, like (x + 2)(x − 5).';
+  function gradeF(item, raw) {
+    var g = grade14(item, raw);
+    if (item.factored && g.verdict === 'correct') { var r = read14(item, raw); if (factoredCount(r.ast) < 2) return { verdict: 'form', text: g.text, formMsg: FORM_FACTORED, formCode: 'FORM_FACTORED' }; }
+    return g;
+  }
+
+  function gen14(id, seed) {
+    var t = T14.filter(function (x) { return x.id === id; })[0];
+    var it = t.gen(makeRng(seed >>> 0));
+    it.template_id = t.id; it.concept = t.concept; it.role = t.role; it.standards = t.standards; it.vars = it.vars || ['x'];
+    it.asks = null; it.desmos = null;
+    it.solution = stepsArr(it.steps);
+    return it;
+  }
+  var API14 = {
+    version: '6.0', CONCEPTS: CONCEPTS, ASKS: ASKS, TEMPLATES: T14, generate: gen14, grade: gradeF, preview: preview14,
+    makeRng: makeRng, parse: parse, evaluate: evaluate, rectSVG: rectSVG, numLineSVG: numLineSVG, graphSVG: graphSVG5
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API14; else root.ALG2F = API14;
+})(this);
+
+</script>
+<script>
+(function(){
+'use strict';
+var E = window.ALG2F;
+var KEY = 'alg2-tutor-15-foundations-v6', KEY_V5 = 'alg2-tutor-15-foundations-v5', KEY_V4 = 'alg2-tutor-15-foundations-v4', KEY_V3 = 'alg2-tutor-15-foundations-v3', KEY_V2 = 'alg2-tutor-15-foundations-v2', KEY_V1 = 'alg2-tutor-15-foundations-v1';
+var APP_FILE = 'alg2-tutor-15-foundations-app-v6.html';
+var VERSION = '6.0';
+var RULE = 'Within a session, a missed concept gets one more item in a different framing before the close. Concepts missed last session return in the next warm-up, sure-but-wrong first. The worked example is skipped after 2 correct independent answers in a row on that concept and returns after 2 misses in a row. v6: an answer reached after “Show me how” or a hint is recorded as assisted; it does not count toward the 2-in-a-row, it earns one more item in a different framing, and it returns in the next warm-up. Learn sessions never change the warm-up list.';
+var DRILL = { F4: ['F4-d', 'F4-c', 'F4-s', 'F4-n'], F5: ['F5-y', 'F5-x', 'F5-t', 'F5-m'], F0: ['F0-m', 'F0-c', 'F0-a'], F1: ['F1-k', 'F1-e', 'F1-a', 'F1-b', 'F1-c', 'F1-d', 'F1-s'], F2: ['F2-q', 'F2-s', 'F2-a', 'F2-b', 'F2-c', 'F2-d', 'F2-k', 'F2-v'], F3: ['F3-a', 'F3-k', 'F3-z'] };
+var RET = { F4: 'F4-r', F5: 'F5-r', F0: 'F0-r', F1: 'F1-r', F2: 'F2-r', F3: 'F3-r' };
+var WORKED = { F4: ['F4-s', 'F4-d'], F5: ['F5-y', 'F5-x'], F0: ['F0-m', 'F0-c'], F1: ['F1-e', 'F1-c'], F2: ['F2-s', 'F2-b'], F3: ['F3-a', 'F3-k'] };
+// v3 (S08): short lessons (about 10 minutes) for the Chapter 2 group test week. Lessons 1-4 ran in v1/v2; old Lessons 5-6 were
+// never taken and are replaced. Each lesson: 2 warm-up items, big idea when new, worked example (by the rule), 1 faded, 4-5 on
+// your own, 2 different-angle items.
+var LESSONS = {
+  1: { focus: 'F1', title: 'Lesson 1: What multiplying does to x' },
+  2: { focus: 'F2', title: 'Lesson 2: Multiplying two binomials' },
+  3: { focus: 'F0', title: 'Lesson 3: Signs, and when it means times' },
+  4: { focus: 'F1', title: 'Lesson 4: The minus sign goes into every box' },
+  5: { focus: 'F1', big: 'K', title: 'Lesson 5: Finish the job: combine like terms', warm: ['F2-r', 'F1-b'], worked: ['F1-k', 'F1-k'], indep: ['F1-s', 'F1-k', 'F1-a', 'F1-k', 'F1-b'], close: ['F2-r', 'F1-r'] },
+  6: { focus: 'F2', big: 'Q', title: 'Lesson 6: Squared means write it twice', warm: ['F2-k', 'F1-b'], worked: ['F2-b', 'F2-v'], indep: ['F2-q', 'F2-b', 'F2-k', 'F2-v', 'F2-c', 'F2-b'], close: ['F2-r', 'F1-k'] },
+  7: { focus: 'F3', big: 'F3', title: 'Lesson 7: Factoring is the box backward', warm: ['F2-q', 'F1-k'], worked: ['F3-a', 'F3-k'], indep: ['F3-k', 'F3-a', 'F3-k', 'F3-a'], close: ['F3-r', 'F2-v'] },
+  8: { focus: 'F3', title: 'Lesson 8: Solve by factoring', warm: ['F3-a', 'F2-q'], worked: ['F3-z', 'F3-a'], indep: ['F3-z', 'F3-a', 'F3-z', 'F2-v'], close: ['F3-r', 'FM-sq'] },
+  9: { focus: null, title: 'Lesson 9: Mixed, cold', warm: ['F1-k', 'F2-q'], indep: ['F3-a', 'F2-v', 'F1-k', 'F3-z', 'F1-b', 'F2-q', 'FM-xx'], close: ['F3-r', 'F2-r'] },
+  10: { focus: 'F4', big: 'F4', title: 'Lesson 10: The quadratic formula, one step at a time', warm: ['F2-q', 'F1-b'], worked: ['F4-s', 'F4-d'], indep: ['F4-c', 'F4-d', 'F4-n', 'F4-c', 'F4-s'], close: ['F4-r', 'FM-d'] },
+  11: { focus: 'F5', big: 'F5', title: 'Lesson 11: Vertex, maximum and minimum', warm: ['F4-d', 'F2-q'], worked: ['F5-y', 'F5-x'], indep: ['F5-x', 'F5-m', 'F5-y', 'F5-t', 'F5-x'], close: ['F5-r', 'F4-s'] },
+  12: { focus: null, title: 'Review: mixed, cold', warm: ['F1-k', 'F2-q'], indep: ['F3-a', 'F2-v', 'F1-k', 'F3-z', 'F1-b', 'F2-q', 'F0-m'], close: ['F3-r', 'F2-r'] }
+};
+// v6 (S12): the Learn tab. Each entry is a short lesson he can open any time: big idea, an example revealed step by step,
+// one to finish with the steps shown, and (where there is one) a find-the-mistake item built from his own recorded errors.
+var LEARN = [
+  { k: 'F0', focus: 'F0', name: 'Signs: adding and multiplying', worked: 'F0-m', tryit: 'F0-c', mistake: null },
+  { k: 'F1', focus: 'F1', name: 'Distributing (the minus goes in every box)', worked: 'F1-e', tryit: 'F1-c', mistake: 'FM-dist' },
+  { k: 'K', focus: 'F1', name: 'Combining like terms', worked: 'F1-k', tryit: 'F1-k', mistake: 'FM-xx' },
+  { k: 'F2', focus: 'F2', name: 'Multiplying binomials: the box', worked: 'F2-s', tryit: 'F2-a', mistake: null },
+  { k: 'Q', focus: 'F2', name: 'Squares and vertex form', worked: 'F2-b', tryit: 'F2-v', mistake: 'FM-sq' },
+  { k: 'F3', focus: 'F3', name: 'Factoring: the box backward', worked: 'F3-a', tryit: 'F3-k', mistake: null },
+  { k: 'F4', focus: 'F4', name: 'The quadratic formula', worked: 'F4-s', tryit: 'F4-d', mistake: 'FM-d' },
+  { k: 'F5', focus: 'F5', name: 'Vertex, maximum and minimum', worked: 'F5-y', tryit: 'F5-x', mistake: null }
+];
+var PLAN = [10, 11, 7, 8, 9]; // v5 (S11): test Wed 11-18; the quadratic formula and vertex in single steps come first (he skipped every multi-step formula item on 11-16)
+var CNAME = {}; E.CONCEPTS.forEach(function(c){ CNAME[c.id] = c.name; });
+var ASKL = {}; E.ASKS.forEach(function(a){ ASKL[a.id] = a.label; });
+var app = document.getElementById('app');
+var S = null, shownAt = 0, cur = null, twinCur = null;
+
+function load(){ try{ var s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function txt(html){
+  var d=document.createElement('div'); d.innerHTML=html;
+  [].slice.call(d.querySelectorAll('svg')).forEach(function(s){ s.replaceWith(' [graph] '); });
+  [].slice.call(d.querySelectorAll('table')).forEach(function(t){ var rows=[].slice.call(t.querySelectorAll('tr')).map(function(r){ return [].slice.call(r.children).map(function(c){ return c.textContent.trim(); }).join(' | '); }); t.replaceWith(' [table: '+rows.join(' / ')+'] '); });
+  function wrap(t){ t=t.trim(); return /^[−-]?[0-9a-z.√]+$/i.test(t) ? t : '('+t+')'; }
+  [].slice.call(d.querySelectorAll('sup')).reverse().forEach(function(s){ s.replaceWith('^'+wrap(s.textContent)); });
+  [].slice.call(d.querySelectorAll('.fr')).reverse().forEach(function(f){ var p=f.children; if(p.length===2) f.replaceWith(wrap(p[0].textContent)+'/'+wrap(p[1].textContent)); });
+  return (d.textContent||'').replace(/ /g,' ').replace(/\s+/g,' ').trim();
+}
+function newSeed(){ return (Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0; }
+function fresh(){
+  return { app: APP_FILE, version: VERSION, created: new Date().toISOString(), sessions: [], current: null,
+    cs: { F0: {introduced:true, worked:true, streak:0, miss:0}, F1: {introduced:false, worked:true, streak:0, miss:0}, F2: {introduced:false, worked:true, streak:0, miss:0}, F3: {introduced:false, worked:true, streak:0, miss:0}, F4: {introduced:false, worked:true, streak:0, miss:0}, F5: {introduced:false, worked:true, streak:0, miss:0} },
+    missedLast: [] };
+}
+function readKey(k){ try{ var t = localStorage.getItem(k); var x = t ? JSON.parse(t) : null; return (x && x.sessions) ? x : null; }catch(e){ return null; } }
+function migrate(){
+  // v4 (S09): merge every earlier store on this device. Sessions taken in v2 as its Lesson 5 or 6 ("Draw your own box",
+  // "Mixed, cold") are a different lesson from v3/v4's Lesson 5 or 6: they are kept in the history but marked legacy so they
+  // don't count as done. The newest store's misses feed the next warm-up.
+  var f = fresh(), stores = [];
+  [[KEY_V5,'v5'],[KEY_V4,'v4'],[KEY_V3,'v3'],[KEY_V2,'v2'],[KEY_V1,'v1']].forEach(function(p){ var x = readKey(p[0]); if(x) stores.push({ tag:p[1], st:x }); });
+  if(!stores.length) return f;
+  var seen = {}, all = [];
+  stores.forEach(function(o){ o.st.sessions.forEach(function(se){
+    if(seen[se.started]) return; seen[se.started] = 1;
+    if((o.tag === 'v2' || o.tag === 'v1') && se.lesson >= 5 && !se.legacy){ se.legacy = o.tag; }
+    all.push(se); }); });
+  all.sort(function(a,b){ return a.started < b.started ? -1 : 1; });
+  f.sessions = all;
+  var newest = null, newestT = '';
+  stores.forEach(function(o){ o.st.sessions.forEach(function(se){ if((se.finished||'') > newestT){ newestT = se.finished||''; newest = o.st; } }); });
+  f.missedLast = (newest && newest.missedLast) || [];
+  var base = stores[0].st;
+  ['F0','F1','F2','F3','F4','F5'].forEach(function(c){ if(base.cs && base.cs[c]) f.cs[c] = base.cs[c]; });
+  f.migrated_from = stores.map(function(o){ return o.tag; }).join('+');
+  return f;
+}
+function gen(id){ var it = E.generate(id, newSeed()); return it; }
+function standalone(){ try{ return !!(navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)); }catch(e){ return false; } }
+
+// ---------------- session plan (the approved adaptive rule) ----------------
+function lessonNo(){ var done = S.sessions.filter(function(x){ return !x.legacy; }).map(function(x){ return x.lesson; }); for(var i=0;i<PLAN.length;i++) if(done.indexOf(PLAN[i])<0) return PLAN[i]; return 12; }
+function buildPlan(n){
+  var L = LESSONS[n], steps = [];
+  // warm-up (2 items): last session's misses first (sure-but-wrong first), then the lesson's own cold items
+  var warm = S.missedLast.slice().sort(function(a,b){ return (b.sure?1:0)-(a.sure?1:0); }).map(function(m){ return m.template_id; });
+  var seen = {}; warm = warm.filter(function(t){ if(seen[t]) return false; seen[t]=1; return true; }).slice(0,2);
+  L.warm.forEach(function(t){ if(warm.length < 2 && !seen[t]){ warm.push(t); seen[t]=1; } });
+  warm.forEach(function(t){ steps.push({ kind:'item', phase:'warm', tid:t }); });
+  if(L.focus){
+    if(L.big) steps.push({ kind:'big', c: L.big, focus: L.focus });
+    if(S.cs[L.focus].worked) steps.push({ kind:'worked', c: L.focus, tid: L.worked[0] });
+    steps.push({ kind:'item', phase:'faded', tid: L.worked[1], fade: 1 });
+  }
+  L.indep.forEach(function(t){ steps.push({ kind:'item', phase:'indep', tid:t }); });
+  L.close.forEach(function(t){ steps.push({ kind:'item', phase:'close', tid:t }); });
+  steps.push({ kind:'sentence', c: L.focus || 'F3' });
+  steps.push({ kind:'done' });
+  return { focus: L.focus || 'mixed', steps: steps };
+}
+function startSession(n){
+  var p = buildPlan(n);
+  S.current = { id: S.sessions.length + 1, lesson: n, started: new Date().toISOString(), focus: p.focus, steps: p.steps, idx: 0, items: [], extraFor: {}, sentence: '', device: navigator.userAgent, standalone: standalone(), resumes: 0 };
+  save(); run();
+}
+function sessTitle(C){ if(C.learn){ var L = LEARN.filter(function(x){ return x.k===C.learn; })[0]; return 'Learn: ' + (L ? L.name : C.learn); } return LESSONS[C.lesson].title; }
+function startLearn(k){
+  var L = LEARN.filter(function(x){ return x.k===k; })[0], steps = [{ kind:'big', c: L.k, focus: L.focus }, { kind:'worked', c: L.focus, tid: L.worked }, { kind:'item', phase:'faded', tid: L.tryit, fade: 1 }];
+  if(L.mistake) steps.push({ kind:'item', phase:'indep', tid: L.mistake });
+  steps.push({ kind:'item', phase:'indep', tid: L.tryit }); steps.push({ kind:'done' });
+  S.current = { id: S.sessions.length + 1, lesson: 0, learn: k, started: new Date().toISOString(), focus: L.focus, steps: steps, idx: 0, items: [], extraFor: { F0:1, F1:1, F2:1, F3:1, F4:1, F5:1 }, sentence: '', device: navigator.userAgent, standalone: standalone(), resumes: 0 };
+  save(); run();
+}
+function learnMenu(){
+  app.innerHTML = '<h1>Learn</h1><p>Pick a skill. Each one is about 3 minutes: the big idea, an example one step at a time, then one or two for you. Open these any time, including while you do homework.</p><div class="learnlist">'+
+    LEARN.map(function(L){ return '<button data-k="'+L.k+'"><b>'+esc(L.name)+'</b></button>'; }).join('')+'</div><div class="row"><button class="link" id="home">Back to start</button></div>';
+  app.querySelector('.learnlist').addEventListener('click', function(e){ var b=e.target.closest('button'); if(b) startLearn(b.getAttribute('data-k')); });
+  document.getElementById('home').onclick = home; window.scrollTo(0,0);
+}
+function run(){
+  var C = S.current; if(!C){ home(); return; }
+  var st = C.steps[C.idx];
+  window.scrollTo(0,0);
+  if(st.kind === 'item') itemScreen(st);
+  else if(st.kind === 'big') bigIdea(st.c, true, st.focus);
+  else if(st.kind === 'worked') worked(st);
+  else if(st.kind === 'sentence') sentence(st);
+  else finishSession();
+}
+function next(){ S.current.idx++; save(); run(); }
+function header(label){
+  var C = S.current, N = C.steps.length - 1;
+  return '<div class="top"><span class="phase">'+label+'</span><span>Step '+(C.idx+1)+' of '+N+' · saves automatically</span></div><div class="bar"><div style="width:'+(100*C.idx/N)+'%"></div></div>';
+}
+var PH = { warm: 'Warm-up', faded: 'Finish the example', indep: 'On your own', close: 'Different angle', extra: 'One more, different angle' };
+
+// ---------------- items ----------------
+function keypadFor(it){
+  var k;
+  if(it.type==='union') k=['(',')','[',']','∞','∪','−',','];
+  else if(it.type==='ineq') k=['y','≥','≤','(',')','[',']','∞','−',','];
+  else if(it.type==='expr') k=['x','²','−','+','(',')','/'];
+  else if(it.type==='cset') k=['i','±','−',',','√','/'];
+  else if(it.type==='set') k=['±','−',',','√','/','(',')'];
+  else k=['−','/','√','.','(',')'];
+  return k.map(function(s){ return '<button type="button" data-k="'+esc(s)+'">'+esc(s)+'</button>'; }).join('');
+}
+function itemScreen(st){
+  var C = S.current;
+  if(!st.seed) { st.seed = newSeed(); save(); }
+  var it = E.generate(st.tid, st.seed); cur = it;
+  var fadeHTML = '';
+  if(st.phase === 'faded'){
+    var shown = st.fade===2 ? Math.max(1, it.steps.length - 2) : 1;
+    fadeHTML = '<ol class="steps fade">' + it.steps.map(function(s,i){ return i < shown ? '<li>'+s.m+(s.why?'<span class="why">'+s.why+'</span>':'')+'</li>' : '<li class="hidden">your step</li>'; }).join('') + '</ol><p class="note">Finish it on paper, then type the <b>whole final answer</b>, not just the missing step.</p>';
+  }
+  var asksFirst = it.asks && st.phase !== 'faded' && !st.asked;
+  if(!st.help) st.help = { show: 0, hints: 0, twin: null };
+  if(!st.work) st.work = [];
+  if(!st.t0) st.t0 = Date.now();
+  var hintHTML = '';
+  if(st.help.hints > 0 && it.steps.length){
+    var hb0 = st.phase === 'faded' ? Math.min(it.steps.length - 1, st.fade===2 ? Math.max(1, it.steps.length - 2) : 1) : 0; // in a faded example, hints start at the first hidden step
+    var s0 = it.steps[hb0], hl = st.help.hints, hh = '<b>Hint ' + Math.min(hl,3) + ' of 3.</b> ';
+    if(hl === 1) hh += (hb0 ? 'Next move: ' : 'First move: ') + (s0.why ? s0.why : s0.m) + '.';
+    else if(hl === 2) hh += (hb0 ? 'The next line: ' : 'The first line: ') + s0.m + (s0.why ? ' <span class="why">' + s0.why + '</span>' : '');
+    else hh += 'Everything but the last line:<ol class="steps">' + it.steps.slice(0, Math.max(1, it.steps.length-1)).map(function(x){ return '<li>'+x.m+(x.why?'<span class="why">'+x.why+'</span>':'')+'</li>'; }).join('') + '</ol>';
+    hintHTML = '<div class="hintbox" id="hintbox">' + hh + '</div>';
+  }
+  var canWork = it.type === 'expr' && it.steps.length >= 2;
+  var workHTML = '';
+  if(canWork && st.workOpen){
+    workHTML = '<div class="workbox" id="workbox"><b>Your work, one line at a time.</b> <span class="note">Each line should equal the problem. I’ll check each one.</span><div id="wlines">'+
+      st.work.map(function(w){ return '<div class="wl '+(w.ok?'ok':'no')+'"><b>'+(w.ok?'✓':'✗')+'</b><span class="m">'+esc(w.text)+'</span>'+(w.ok?'':'<span class="note">not equal to the problem: the mistake is in this line</span>')+'</div>'; }).join('')+
+      '</div><input type="text" id="wl" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Next line of work" placeholder="next line"><div class="row"><button class="btn ghost" id="wcheck" type="button">Check this line</button><button class="btn ghost" id="wuse" type="button"'+(st.work.some(function(w){ return w.ok; })?'':' disabled')+'>Use my last ✓ line as my answer</button></div></div>';
+  }
+  var body = '<div class="prompt">'+it.prompt+'</div>' + fadeHTML + hintHTML;
+  if(asksFirst){
+    app.innerHTML = header(PH[st.phase]) + '<div class="card">'+body+'<p class="confq">Before you solve it: what is this question asking for?</p><div class="opts" id="asks">'+
+      E.ASKS.map(function(a){ return '<button data-a="'+a.id+'">'+esc(a.label)+'</button>'; }).join('')+'</div><div id="askfb"></div></div>';
+    app.querySelector('#asks').addEventListener('click', function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      var a=b.getAttribute('data-a'); st.asked = { chosen: a, correct: a===it.asks }; save();
+      [].slice.call(app.querySelectorAll('#asks button')).forEach(function(x){ x.disabled=true; if(x.getAttribute('data-a')===it.asks) x.classList.add('right'); else if(x===b) x.classList.add('wrongc'); });
+      document.getElementById('askfb').innerHTML = '<p>'+(st.asked.correct ? '<b>Right.</b> ' : '<b>Not quite.</b> ')+'It asks for '+esc(ASKL[it.asks])+'. That’s what your answer has to be.</p><div class="row"><button class="btn" id="go">Solve it</button></div>';
+      document.getElementById('go').onclick = function(){ itemScreen(st); };
+    });
+    shownAt = Date.now();
+    return;
+  }
+  var input = it.type==='choice'
+    ? '<div class="opts" id="choice">'+it.options.map(function(o,i){ return '<button data-i="'+i+'">'+esc(o)+'</button>'; }).join('')+'</div><input type="hidden" id="ans" value="">'
+    : '<input type="text" id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Your answer"><div class="keys" id="keys">'+keypadFor(it)+'</div>';
+  app.innerHTML = header(PH[st.phase]) + '<div class="card">'+body+
+    '<div class="calc">'+((it.concept==='F4'||it.concept==='F5') ? 'Calculator is fine for the arithmetic. Write each step on paper.' : 'No calculator: these are moves you want automatic.')+'</div>'+ workHTML + input +
+    '<div class="read" id="read"></div>'+
+    '<div class="confq">Submit, and how sure are you?</div><div class="conf">'+
+    '<button class="btn" data-c="sure" disabled>Sure</button><button class="btn" data-c="think" disabled>Think so</button><button class="btn" data-c="guess" disabled>Guessing</button></div>'+
+    '<div class="helprow"><button type="button" id="showhow">I haven’t learned this: show me how</button>'+(it.template_id.indexOf('FM-')===0 ? '' : '<button type="button" id="hint"'+(st.help.hints>=3?' disabled':'')+'>I’m stuck: '+(st.help.hints?'another hint':'give me a hint')+'</button>')+(canWork && !st.workOpen ? '<button type="button" id="wopen">Check my work line by line</button>' : '')+'<button type="button" id="skip">Skip</button></div></div>';
+  var inp = document.getElementById('ans'), read = document.getElementById('read'), target = inp;
+  var btns = [].slice.call(app.querySelectorAll('button[data-c]'));
+  document.getElementById('showhow').onclick = function(){ showHow(st, it); };
+  var hbt = document.getElementById('hint'); if(hbt) hbt.onclick = function(){ st.help.hints = Math.min(3, st.help.hints + 1); save(); var keep = inp.value; itemScreen(st); document.getElementById('ans').value = keep; document.getElementById('ans').dispatchEvent(new Event('input')); var hb = document.getElementById('hintbox'); if(hb && hb.scrollIntoView) hb.scrollIntoView({ block: 'center' }); };
+  var wo = document.getElementById('wopen'); if(wo) wo.onclick = function(){ st.workOpen = true; save(); itemScreen(st); var w = document.getElementById('wl'); if(w) w.focus(); };
+  var wl = document.getElementById('wl');
+  if(wl){
+    wl.addEventListener('focus', function(){ target = wl; });
+    function checkLine(){
+      var t = wl.value.trim(); if(!t) return;
+      var okLine = false, bad = null;
+      try{ okLine = E.grade({ type:'expr', vars: it.vars || ['x'], key: it.keyTyped, traps: [] }, t).verdict === 'correct'; }catch(e){ bad = e.message; }
+      if(bad){ read.className='read err'; read.textContent = 'Line of work: ' + bad; return; }
+      st.work.push({ text: t, ok: okLine, at: Date.now() - st.t0 }); save();
+      var keep = inp.value; itemScreen(st); document.getElementById('ans').value = keep; document.getElementById('ans').dispatchEvent(new Event('input')); var w2 = document.getElementById('wl'); if(w2) w2.focus();
+    }
+    document.getElementById('wcheck').onclick = checkLine;
+    wl.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); checkLine(); } });
+    document.getElementById('wuse').onclick = function(){ var okL = st.work.filter(function(w){ return w.ok; }); if(okL.length){ inp.value = okL[okL.length-1].text; target = inp; refresh(); inp.focus(); } };
+  }
+  function refresh(){
+    var p = E.preview(it, inp.value);
+    if(p.ok){ read.className='read ok'; read.innerHTML = it.type==='choice' ? '' : 'Reads as: <span class="m">'+esc(p.text)+'</span>'; }
+    else { read.className='read err'; read.textContent = p.error || ''; }
+    btns.forEach(function(b){ b.disabled = !p.ok; });
+  }
+  if(it.type==='choice'){
+    app.querySelector('#choice').addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; [].slice.call(app.querySelectorAll('#choice button')).forEach(function(x){ x.classList.toggle('sel', x===b); }); inp.value=b.getAttribute('data-i'); refresh(); });
+  } else {
+    inp.addEventListener('input', refresh);
+    inp.addEventListener('focus', function(){ target = inp; });
+    inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(!btns[0].disabled){ read.innerHTML += ' &nbsp;<b>Now tap how sure you are.</b>'; } } });
+    document.getElementById('keys').addEventListener('click', function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      var k=b.getAttribute('data-k'); if(k==='√') k='sqrt('; if(k==='²') k='^2';
+      var T=target||inp, s=T.selectionStart==null?T.value.length:T.selectionStart, t=T.selectionEnd==null?s:T.selectionEnd;
+      T.value=T.value.slice(0,s)+k+T.value.slice(t); var pos=s+k.length; T.focus(); try{ T.setSelectionRange(pos,pos); }catch(_){} refresh();
+    });
+  }
+  btns.forEach(function(b){ b.onclick=function(){ submit(st, it, inp.value, b.getAttribute('data-c')); }; });
+  document.getElementById('skip').onclick=function(){ submit(st, it, '', 'skip'); };
+  shownAt = st.t0;
+}
+// "Show me how": a twin problem (same kind, new numbers) revealed one step at a time; he finishes the twin's last step, then
+// goes back to his own problem. Recorded as assisted, never as a miss.
+function showHow(st, it){
+  st.help.show++; save();
+  var tw = E.generate(it.template_id, newSeed()); twinCur = tw; var n = tw.steps.length, typed = tw.type !== 'choice' && n >= 2, lastShown = typed ? n - 1 : n, shown = 1, done = false, verdictHTML = '';
+  function draw(){
+    var more = shown < lastShown;
+    var html = header('Show me how') + '<div class="card"><p class="note">Here is one just like yours, with different numbers. Tap through it, then go back and do yours.</p><div class="prompt">'+tw.prompt+'</div><ol class="steps">'+
+      tw.steps.slice(0, shown).map(function(x){ return '<li>'+x.m+(x.why?'<span class="why">'+x.why+'</span>':'')+'</li>'; }).join('')+'</ol>';
+    if(more) html += '<p class="note">Before you tap: what do you think the next line is?</p><div class="row"><button class="btn" id="more">Next step</button></div>';
+    else if(typed && !done) html += '<p><b>Your turn:</b> finish this one. What’s the answer?</p><input type="text" id="tw" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Finish the example"><div class="keys" id="twkeys">'+keypadFor(tw)+'</div><div class="read" id="twread"></div><div class="row"><button class="btn" id="twgo">Check</button><button class="btn ghost" id="twshow">Show me the last step</button></div>';
+    else html += verdictHTML + '<p><b>Answer:</b> '+tw.keyHTML+'</p><div class="row"><button class="btn" id="back">Back to my problem</button></div>';
+    app.innerHTML = html + '</div>';
+    var m = document.getElementById('more'); if(m) m.onclick = function(){ shown++; draw(); };
+    var go = document.getElementById('twgo');
+    if(go){
+      var tin = document.getElementById('tw'), tr = document.getElementById('twread');
+      document.getElementById('twkeys').addEventListener('click', function(e){ var kb=e.target.closest('button'); if(!kb) return; var k=kb.getAttribute('data-k'); if(k==='√') k='sqrt('; if(k==='²') k='^2';
+        var a=tin.selectionStart==null?tin.value.length:tin.selectionStart, z=tin.selectionEnd==null?a:tin.selectionEnd; tin.value=tin.value.slice(0,a)+k+tin.value.slice(z); tin.focus(); try{ tin.setSelectionRange(a+k.length,a+k.length); }catch(_){} tin.dispatchEvent(new Event('input')); });
+      tin.addEventListener('input', function(){ var p = E.preview(tw, tin.value); tr.className = 'read ' + (p.ok ? 'ok' : 'err'); tr.innerHTML = p.ok ? 'Reads as: <span class="m">'+esc(p.text)+'</span>' : esc(p.error||''); });
+      go.onclick = function(){ var g; try{ g = E.grade(tw, tin.value); }catch(e){ tr.className='read err'; tr.textContent = e.message; return; }
+        st.help.twin = g.verdict; save(); done = true; shown = n;
+        verdictHTML = '<div class="verdict '+(g.verdict==='correct'?'good':g.verdict==='form'?'warn':'bad')+'">'+(g.verdict==='correct'?'Right. Now do yours the same way.':g.verdict==='form'?'Right value: '+esc(g.formMsg||'finish it')+'.':'Not quite. Look at the last step, then try yours.')+'</div>'; draw(); };
+      document.getElementById('twshow').onclick = function(){ st.help.twin = 'shown'; save(); done = true; shown = n; verdictHTML = ''; draw(); };
+    }
+    var b = document.getElementById('back'); if(b) b.onclick = function(){ itemScreen(st); };
+    window.scrollTo(0,0);
+  }
+  draw();
+}
+function submit(st, it, raw, conf){
+  var C = S.current;
+  var rec = { step: C.idx+1, phase: st.phase, template_id: it.template_id, concept: it.concept, role: it.role, params: it.params,
+    prompt_text: txt(it.prompt), key_text: txt(it.keyHTML), response_raw: raw, confidence: conf, time_ms: Date.now()-shownAt, graded: true };
+  var H = st.help || { show: 0, hints: 0, twin: null }, assisted = H.show > 0 || H.hints > 0;
+  if(assisted){ rec.assisted = true; rec.help_show = H.show; rec.hints_used = H.hints; if(H.twin) rec.twin_result = H.twin; }
+  if(st.work && st.work.length) rec.work_lines = st.work.map(function(w){ return { text: w.text, ok: w.ok, at_ms: w.at }; });
+  if(C.learn) rec.learn = C.learn;
+  if(st.fade) rec.fade_steps_hidden = st.fade;
+  if(st.asked){ rec.asks_expected = it.asks; rec.asks_chosen = st.asked.chosen; rec.asks_correct = st.asked.correct; }
+  var g = null;
+  if(conf==='skip'){ rec.verdict='skipped'; rec.error_type='no-attempt'; }
+  else {
+    try{ g = E.grade(it, raw); }catch(e){ var r=document.getElementById('read'); r.className='read err'; r.textContent=e.message; return; }
+    rec.verdict = g.verdict; rec.response_read = g.text;
+    if(g.verdict==='form'){ rec.error_type='notation'; rec.form_code=g.formCode; rec.form_issue=g.formMsg; }
+    if(g.verdict==='wrong'){ rec.error_type = g.trap ? g.trap.error_type : 'unknown'; rec.trap_code = g.trap ? g.trap.code : null; rec.trap_label = g.trap ? g.trap.label : null; }
+  }
+  // adaptive bookkeeping (approved rule)
+  var cs = S.cs[it.concept], right = rec.verdict==='correct';
+  if(st.phase==='indep'){
+    if(right && !assisted){ cs.streak++; cs.miss=0; if(cs.streak>=2) cs.worked=false; }
+    else if(!right){ cs.miss++; cs.streak=0; if(cs.miss>=2) cs.worked=true; }
+  }
+  if((!right || assisted) && st.phase!=='extra' && !C.extraFor[it.concept]){
+    C.extraFor[it.concept] = true;
+    var closeAt = C.steps.findIndex(function(s){ return s.phase==='close'; });
+    var at = Math.max(closeAt < 0 ? C.idx+1 : closeAt, C.idx+1);
+    var xt = it.template_id===RET[it.concept] ? DRILL[it.concept][0] : RET[it.concept];
+    C.steps.splice(at, 0, { kind:'item', phase:'extra', tid: xt });
+  }
+  C.items.push(rec); save();
+  feedback(st, it, rec, g);
+}
+function feedback(st, it, rec, g){
+  var v = rec.verdict, cls = v==='correct' ? 'good' : v==='form' ? 'warn' : 'bad';
+  var head = v==='correct' ? (rec.assisted ? 'Right, with help. One more like it is coming so you can do it solo.' : 'Right.') : v==='form' ? 'Right value, wrong form.' : v==='skipped' ? 'Here’s how to start.' : 'Not quite.';
+  var parts = '';
+  if(v==='wrong' && rec.trap_label) parts += '<p><b>What happened:</b> '+esc(rec.trap_label)+'.</p>';
+  if(v==='form') parts += '<p>'+esc(rec.form_issue)+'</p>';
+  if(v!=='correct') parts += '<p><b>Answer:</b> '+it.keyHTML+'</p>';
+  parts += (v==='correct' ? '<details><summary>See the steps</summary>'+it.solution+'</details>' : '<div class="lbl" style="font-weight:700;margin-top:10px">The steps</div>'+it.solution);
+  if(it.desmos && (st.phase==='indep' || st.phase==='close' || st.phase==='extra')) parts += '<p class="note">Check it in Desmos: type <span class="kbd">'+esc(it.desmos)+'</span> and tap the points. <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Open Desmos</a></p>';
+  app.innerHTML = header(PH[st.phase]) + '<div class="card"><div class="prompt" style="font-size:1rem">'+it.prompt+'</div>'+
+    (v!=='skipped' ? '<p class="note">You wrote: <span class="m">'+esc(rec.response_read||rec.response_raw)+'</span>'+(rec.confidence?' · '+esc(rec.confidence):'')+'</p>' : '')+
+    '<div class="verdict '+cls+'">'+head+'</div>'+parts+'<div class="row"><button class="btn" id="nx">Next</button></div></div>';
+  document.getElementById('nx').onclick = next;
+}
+
+// ---------------- big idea (interactive) ----------------
+var BIG = {
+  F0: { q: 'Why is (−2)(−3) positive and not negative? Slide down the table and watch the answers.',
+        line: 'Each row down takes away one −3, so the answer goes up by 3, and it keeps going past 0: negative times negative is positive. Two numbers side by side, like (−7)(−2), always mean multiply: 14. Adding is different: with different signs, subtract the sizes and keep the sign of the bigger one, so −6 + 5 = −1.' },
+  F1: { q: 'Is 3<i>x</i> + 2<i>x</i><sup>2</sup> the same as 5<i>x</i><sup>3</sup>? Decide, then slide and watch what multiplying does.',
+        line: 'x is a length and x² is an area, so 3x + 2x² stays as it is: you can only combine the same kind. Multiplying is different: x · x makes a square, x². And a number in front of parentheses multiplies every piece inside, sign included. A minus in front belongs to the number: in 2(x − 3) − 4(x − 5), the side of the second box is −4.' },
+  F2: { q: 'Is (<i>x</i> + 3)<sup>2</sup> equal to <i>x</i><sup>2</sup> + 9? Count the pieces in the box before you decide.',
+        line: 'Two binomials multiply into a box of four pieces: every term times every term. (x + a)(x + b) = x² + ax + bx + ab. Squaring means times itself, so (x + a)² has two middle pieces, never just x² + a². Draw the box on paper every time, even when you think you don’t need it. Check any answer by putting x = 2 into both versions.' },
+  K: { name: 'Combining like terms', q: 'Is −8<i>x</i> − 5<i>x</i> equal to −3<i>x</i>, 13<i>x</i>, or −13<i>x</i>? Slide the second term and watch.',
+       line: 'Like terms are the same kind: x with x, x² with x², numbers with numbers. Combine them exactly like signed numbers: −8x − 5x is −8 − 5 = −13, so −13x. x² and x never combine. Every box answer ends with this step: x² − 8x − 5x + 40 = x² − 13x + 40. An answer with two x-terms isn’t finished.' },
+  Q: { name: 'Squaring a binomial', q: 'Is (<i>x</i> − 6)<sup>2</sup> equal to <i>x</i><sup>2</sup> − 6<i>x</i> + 12? Slide and count the pieces.',
+       line: 'Squared means times itself, so write (x − 6)² as (x − 6)(x − 6) before anything else, then box it. There are two equal middle pieces: −6x and −6x make −12x. The corner is (−6)(−6) = +36, never 12. Vertex form works the same way: y = (x − 3)² + 5 becomes x² − 6x + 9 + 5 = x² − 6x + 14.' },
+  F4: { name: 'The quadratic formula', q: 'How many times does this parabola cross the x-axis? The number <i>b</i><sup>2</sup> − 4<i>ac</i> tells you before you graph. Slide <i>c</i> and watch.',
+       line: 'The quadratic formula solves any ax² + bx + c = 0. Do it in four steps on paper, one line each: (1) get 0 on one side and write a, b and c with their signs; (2) find b² − 4ac; (3) positive means two solutions, zero means one, negative means none that are real; (4) x = (−b ± √(b² − 4ac)) / (2a), once with + and once with −. Your calculator is fine for the arithmetic. Check in Desmos: the solutions are where the graph crosses the x-axis.' },
+  F5: { name: 'Vertex, maximum and minimum', q: 'Where is the turning point? Slide and watch the vertex move.',
+       line: 'The vertex is the turning point. Its x is −b/(2a); put that x back in to get its y. If a is positive the parabola opens up and the vertex is the minimum; if a is negative it opens down and the vertex is the maximum. Read what the question asks: “when” or “at what x” wants the x; “how high”, “maximum value” or “minimum value” wants the y.' },
+  F3: { name: 'Factoring', q: 'You know the four pieces of a box: x², 5x, and 6. What are the sides? Slide to try other boxes.',
+       line: 'Factoring is the box run backward: you know the pieces and find the sides. The corner number is the two side numbers multiplied; the x-term is the same two numbers added. For x² + 5x + 6: which two numbers multiply to 6 and add to 5? 2 and 3, so (x + 2)(x + 3). To solve x² + 5x + 6 = 0, factor, then set each parentheses to 0: x = −2 or x = −3. Those are where the parabola crosses the x-axis. Check by multiplying back.' }
+};
+function bigIdea(c, inSession, focus){
+  var name = BIG[c].name || CNAME[c];
+  var html = '<h2 style="margin-top:.4em">'+esc(name)+': the big idea</h2><p class="big">'+BIG[c].q+'</p><div id="viz"></div><p class="big"><b>The idea:</b> '+esc(BIG[c].line)+'</p>';
+  app.innerHTML = (inSession ? header('Big idea') : '') + '<div class="card">'+html+'<div class="row"><button class="btn" id="nx">'+(inSession?'Got it: show me an example':'Back')+'</button></div></div>';
+  var viz = document.getElementById('viz');
+  ({ F0: vizF0, F1: vizF1, F2: vizF2, K: vizK, Q: vizQ, F3: vizF3, F4: vizF4, F5: vizF5 })[c](viz);
+  document.getElementById('nx').onclick = inSession ? function(){ S.cs[focus || c].introduced = true; next(); } : home;
+}
+function sgnx(v){ return (v<0?'−':'+')+' '+(Math.abs(v)===1?'':Math.abs(v))+'<i>x</i>'; }
+function vizK(el){
+  el.innerHTML = '<label class="note">second term: <b id="av">−5</b><i>x</i></label><input type="range" id="as" min="-9" max="9" step="1" value="-5"><p class="m" id="eq" style="text-align:center;font-size:1.15rem"></p><p class="note" id="why" style="text-align:center"></p>';
+  function draw(){
+    var b=+document.getElementById('as').value; if(b===0) b=1; var t=-8+b;
+    document.getElementById('av').textContent=(b<0?'−'+(-b):b);
+    document.getElementById('eq').innerHTML='−8<i>x</i> '+sgnx(b)+' = '+(t===0?'0':(t<0?'−':'')+(Math.abs(t)===1?'':Math.abs(t))+'<i>x</i>');
+    document.getElementById('why').textContent= b<0 ? 'Owe 8 x’s, then owe '+(-b)+' more: owe '+(8-b)+'. Same signs: add the sizes, keep the sign.' : 'Owe 8 x’s, then get '+b+' back: '+(t<0?'still owe '+(-t):t===0?'even':'ahead by '+t)+'. Different signs: subtract the sizes, keep the sign of the bigger one.';
+  }
+  document.getElementById('as').oninput=draw; draw();
+}
+function vizQ(el){
+  el.innerHTML = '<label class="note">(x + h)² with h = <b id="av">−6</b></label><input type="range" id="as" min="-9" max="9" step="1" value="-6"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function t(v){ return (v<0?'−':'+')+Math.abs(v); }
+  function m(v){ return (v===1?'':v===-1?'−':v)+'x'; }
+  function draw(){
+    var h=+document.getElementById('as').value; if(h===0) h=1; document.getElementById('av').textContent=(h<0?'−'+(-h):h);
+    document.getElementById('pic').innerHTML=E.rectSVG(['x',t(h)],['x',t(h)],[['x²',m(h)],[m(h),String(h*h)]]);
+    document.getElementById('eq').innerHTML='(<i>x</i> '+t(h).replace(/([+−])/,'$1 ')+')<sup>2</sup> = (<i>x</i> '+t(h).replace(/([+−])/,'$1 ')+')(<i>x</i> '+t(h).replace(/([+−])/,'$1 ')+') = <i>x</i><sup>2</sup> '+(h<0?'−':'+')+' '+Math.abs(2*h)+'<i>x</i> + '+(h*h);
+  }
+  document.getElementById('as').oninput=draw; draw();
+}
+function vizF4(el){
+  el.innerHTML = '<label class="note"><i>c</i> = <b id="av">−3</b> in <i>y</i> = <i>x</i>² − 2<i>x</i> + <i>c</i></label><input type="range" id="as" min="-5" max="5" step="1" value="-3"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function draw(){
+    var c=+document.getElementById('as').value, D=4-4*c; document.getElementById('av').textContent=(c<0?'−'+(-c):c);
+    document.getElementById('pic').innerHTML=E.graphSVG(function(x){ return x*x-2*x+c; }, []);
+    document.getElementById('eq').innerHTML='<i>b</i><sup>2</sup> − 4<i>ac</i> = (−2)<sup>2</sup> − 4(1)('+(c<0?'−'+(-c):c)+') = '+(D<0?'−'+(-D):D)+': '+(D>0?'positive, two real solutions':D===0?'zero, one real solution':'negative, no real solutions');
+  }
+  document.getElementById('as').oninput=draw; draw();
+}
+function vizF5(el){
+  el.innerHTML = '<label class="note">vertex x = <b id="av">2</b></label><input type="range" id="as" min="-4" max="4" step="1" value="2"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function draw(){
+    var h=+document.getElementById('as').value, b=-2*h, c=h*h-3; document.getElementById('av').textContent=(h<0?'−'+(-h):h);
+    document.getElementById('pic').innerHTML=E.graphSVG(function(x){ return x*x+b*x+c; }, [[h,-3]]);
+    var bs=b===0?'':(b<0?' − '+(-b===1?'':-b):' + '+(b===1?'':b))+'<i>x</i>', cs=c===0?'':(c<0?' − '+(-c):' + '+c);
+    document.getElementById('eq').innerHTML='<i>y</i> = <i>x</i><sup>2</sup>'+bs+cs+': <i>x</i> = −<i>b</i>/(2<i>a</i>) = '+(-b<0?'−'+b:-b)+'/2 = '+(h<0?'−'+(-h):h)+', and <i>y</i> = −3 there. a = 1 is positive, so that’s the minimum.';
+  }
+  document.getElementById('as').oninput=draw; draw();
+}
+function vizF3(el){
+  var P=[[-4,1],[2,3],[-3,-5],[6,-2],[5,4],[-7,2]];
+  el.innerHTML = '<label class="note">box <b id="av">2</b> of '+P.length+'</label><input type="range" id="as" min="1" max="'+P.length+'" step="1" value="2"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p><div class="row" style="justify-content:center"><button class="btn ghost" id="rev" type="button">Show the sides</button></div>';
+  var shown=false;
+  function t(v){ return (v<0?'−':'+')+Math.abs(v); }
+  function m(v){ return (v===1?'':v===-1?'−':v)+'x'; }
+  function draw(){
+    var i=+document.getElementById('as').value-1, p=P[i][0], q=P[i][1]; document.getElementById('av').textContent=i+1;
+    document.getElementById('pic').innerHTML=E.rectSVG(['x',shown?t(q):'?'],['x',shown?t(p):'?'],[['x²',m(q)],[m(p),String(p*q).replace('-','−')]]);
+    var b=p+q, c=p*q;
+    document.getElementById('eq').innerHTML='<i>x</i><sup>2</sup> '+(b<0?'− '+(-b===1?'':-b):'+ '+(b===1?'':b))+'<i>x</i> '+(c<0?'− '+(-c):'+ '+c)+(shown?' = (<i>x</i> '+t(p).replace(/([+−])/,'$1 ')+')(<i>x</i> '+t(q).replace(/([+−])/,'$1 ')+'): '+String(p).replace('-','−')+' · '+String(q).replace('-','−')+' = '+String(c).replace('-','−')+' and '+String(p).replace('-','−')+' + '+(q<0?'('+String(q).replace('-','−')+')':q)+' = '+String(b).replace('-','−'):': multiply to '+String(c).replace('-','−')+', add to '+String(b).replace('-','−')+'?');
+  }
+  document.getElementById('as').oninput=function(){ shown=false; draw(); };
+  document.getElementById('rev').onclick=function(){ shown=true; draw(); };
+  draw();
+}
+function svgEl(w,h){ return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" style="max-width:340px;display:block;margin:8px auto">'; }
+function vizF0(el){
+  el.innerHTML = '<label class="note">times what: <b id="av">1</b></label><input type="range" id="as" min="-3" max="3" step="1" value="1"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function draw(){
+    var n=+document.getElementById('as').value, rows='';
+    document.getElementById('av').textContent=(n<0?'−'+(-n):n);
+    for(var k=3;k>=-3;k--){ var on=(k===n), show=(k>=n); rows+='<tr'+(on?' style="background:var(--soft);font-weight:700"':'')+'><td>'+(k<0?'(−'+(-k)+')':k)+' × (−3)</td><td>'+(show?(k*-3<0?'−'+(3*k):String(-3*k)):'')+'</td></tr>'; }
+    document.getElementById('pic').innerHTML='<table class="ptab">'+rows+'</table>';
+    document.getElementById('eq').innerHTML=(n<0?'(−'+(-n)+')':n)+' × (−3) = '+(n*-3<0?'−'+(3*n):String(-3*n))+(n<0?' &nbsp;(negative times negative: positive)':n===0?' &nbsp;(keep sliding left)':'');
+  }
+  document.getElementById('as').oninput=draw; draw();
+}
+function vizF1(el){
+  el.innerHTML = '<label class="note">number in front: <b id="av">3</b></label><input type="range" id="as" min="-5" max="6" step="1" value="3"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function draw(){
+    var a=+document.getElementById('as').value; if(a===0) a=1; document.getElementById('av').textContent=a;
+    document.getElementById('pic').innerHTML=E.rectSVG(['x','−4'],[String(a)],[[ (a===1?'':a===-1?'−':a)+'x', String(-4*a)]]);
+    document.getElementById('eq').innerHTML=a+'(<i>x</i> − 4) = '+(a===1?'':a===-1?'−':a)+'<i>x</i> '+(-4*a<0?'−':'+')+' '+Math.abs(4*a)+(a<0?' &nbsp;(negative times negative: +)':'');
+  }
+  document.getElementById('as').oninput=draw; draw();
+}
+function vizF2(el){
+  el.innerHTML = '<label class="note">a = <b id="av">3</b></label><input type="range" id="as" min="-6" max="6" step="1" value="3"><label class="note">b = <b id="bv">3</b></label><input type="range" id="bs" min="-6" max="6" step="1" value="3"><div id="pic"></div><p class="m" id="eq" style="text-align:center"></p>';
+  function t(v){ return (v<0?'−':'+')+Math.abs(v); }
+  function m(v){ return (v===1?'':v===-1?'−':v)+'x'; }
+  function draw(){
+    var a=+document.getElementById('as').value||1, b=+document.getElementById('bs').value||1;
+    document.getElementById('av').textContent=a; document.getElementById('bv').textContent=b;
+    document.getElementById('pic').innerHTML=E.rectSVG(['x',t(b)],['x',t(a)],[['x²',m(b)],[m(a),String(a*b)]]);
+    var mid=a+b;
+    document.getElementById('eq').innerHTML='(<i>x</i> '+t(a).replace(/([+−])/,'$1 ')+')(<i>x</i> '+t(b).replace(/([+−])/,'$1 ')+') = <i>x</i><sup>2</sup>'+(mid===0?'':' '+(mid<0?'−':'+')+' '+(Math.abs(mid)===1?'':Math.abs(mid))+'<i>x</i>')+' '+(a*b<0?'−':'+')+' '+Math.abs(a*b)+(a===b?' &nbsp;(two equal middle pieces)':'');
+  }
+  document.getElementById('as').oninput=draw; document.getElementById('bs').oninput=draw; draw();
+}
+
+// ---------------- worked example ----------------
+function worked(st){
+  if(!st.seed){ st.seed=newSeed(); save(); }
+  var it=E.generate(st.tid, st.seed), shown=1;
+  function draw(){
+    app.innerHTML = header('Worked example') + '<div class="card"><div class="prompt">'+it.prompt+'</div><ol class="steps">'+
+      it.steps.slice(0,shown).map(function(s){ return '<li>'+s.m+(s.why?'<span class="why">'+s.why+'</span>':'')+'</li>'; }).join('')+'</ol>'+
+      (shown<it.steps.length ? '<div class="row"><button class="btn" id="more">Next step</button></div>' : '<p><b>Answer:</b> '+it.keyHTML+'</p><div class="row"><button class="btn" id="nx">Now you finish one</button></div>')+'</div>';
+    var m=document.getElementById('more'); if(m) m.onclick=function(){ shown++; draw(); };
+    var n=document.getElementById('nx'); if(n) n.onclick=next;
+  }
+  draw();
+}
+function sentence(st){
+  app.innerHTML = header('Last thing') + '<div class="card"><p class="big">In one sentence, in your own words: what is the big idea of <b>'+esc(CNAME[st.c])+'</b>?</p>'+
+    '<textarea id="sent" style="height:90px;font:1rem system-ui" aria-label="Your sentence"></textarea><p class="note">Not graded. Saying it yourself is what makes it stick.</p><div class="row"><button class="btn" id="nx">Finish session</button></div></div>';
+  document.getElementById('nx').onclick=function(){ S.current.sentence=document.getElementById('sent').value; next(); };
+}
+
+// ---------------- finish, progress, export ----------------
+function finishSession(){
+  var C=S.current; C.finished=new Date().toISOString();
+  if(!C.learn) S.missedLast = C.items.filter(function(r){ return r.verdict!=='correct' || r.assisted; }).map(function(r){ return { template_id: r.template_id, concept: r.concept, sure: r.confidence==='sure' }; });
+  S.sessions.push(C); S.current=null; save();
+  summary(S.sessions.length-1);
+}
+function stats(items){
+  var g=items.filter(function(r){ return r.graded; }), c=g.filter(function(r){ return r.verdict==='correct'; }).length;
+  var sure=g.filter(function(r){ return r.confidence==='sure'; }), sr=sure.filter(function(r){ return r.verdict==='correct'; }).length;
+  var asks=g.filter(function(r){ return 'asks_correct' in r; }), ac=asks.filter(function(r){ return r.asks_correct; }).length;
+  return { n:g.length, correct:c, acc: g.length? c/g.length : null, sure:sure.length, sureRight: sr, sureAcc: sure.length? sr/sure.length : null, asks: asks.length, asksRight: ac };
+}
+function pct(v){ return v==null ? '–' : Math.round(100*v)+'%'; }
+function progressTable(){
+  if(!S.sessions.length) return '<p class="note">No finished sessions yet.</p>';
+  var rows = S.sessions.map(function(s){
+    var cells = ['F0','F1','F2','F3','F4','F5'].map(function(c){ var st=stats(s.items.filter(function(r){ return r.concept===c; })); return '<td>'+(st.n? pct(st.acc)+' <span class="note">('+st.correct+'/'+st.n+')</span>' : '–')+'</td>'; }).join('');
+    var all=stats(s.items);
+    return '<tr><td>'+(s.learn?esc(sessTitle(s)):(s.lesson>=12?'Review':'Lesson '+s.lesson))+(s.legacy?' (old version)':'')+'<br><span class="note">'+(new Date(s.started)).toLocaleString([], {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'})+'</span></td>'+cells+'<td>'+pct(all.sureAcc)+'</td></tr>';
+  }).join('');
+  return '<div style="overflow-x:auto"><table class="prog"><tr><th>Session</th><th>Signed numbers</th><th>Like terms, distributing</th><th>Multiplying binomials</th><th>Factoring</th><th>Quadratic formula</th><th>Vertex, max/min</th><th>Right when sure</th></tr>'+rows+'</table></div>';
+}
+function payload(i){
+  var s=S.sessions[i];
+  return { app: APP_FILE, version: VERSION, engine_version: E.version, learn: S.sessions[i].learn || null, session: s.id, lesson: s.lesson, focus_concept: s.focus,
+    started: s.started, finished: s.finished, device: s.device, standalone: s.standalone, resumes: s.resumes, adaptive_rule: RULE,
+    totals: stats(s.items), concept_state_after: S.cs, big_idea_sentence: s.sentence, items: s.items,
+    history: S.sessions.map(function(x){ return { session:x.id, lesson:x.lesson, started:x.started, focus:x.focus, totals:stats(x.items),
+      by_concept: ['F0','F1','F2','F3','F4','F5'].reduce(function(o,c){ o[c]=stats(x.items.filter(function(r){ return r.concept===c; })); return o; },{}) }; }) };
+}
+function fname(i){ var d=new Date(S.sessions[i].finished||Date.now()); function p(n){return (n<10?'0':'')+n;} return 'alg2-tutor-15-results-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+'.json'; }
+function summary(i){
+  var s=S.sessions[i], st=stats(s.items);
+  var missed=s.items.filter(function(r){ return r.verdict!=='correct'; });
+  app.innerHTML='<h1>Session done.</h1><p>'+st.correct+' of '+st.n+' right'+(st.sure? '; right on '+st.sureRight+' of the '+st.sure+' you were sure about':'')+'.</p>'+
+    '<div class="card"><b>Send it</b><p class="note">Download the results file and send it to your dad. It’s what the next session gets built from.</p><div class="row"><button class="btn" id="dl">Download results</button><button class="btn ghost" id="cp">Copy results</button></div><div id="cpbox"></div></div>'+
+    (missed.length? '<div class="card"><b>Coming back next time</b><p class="note">These come back in your next warm-up, the ones you were sure about first:</p><ul class="tight">'+missed.map(function(r){ return '<li>'+esc(CNAME[r.concept])+': '+esc(r.trap_label||r.form_issue||(r.verdict==='skipped'?'skipped':'missed'))+'</li>'; }).join('')+'</ul></div>' : '')+
+    '<h2>Your progress</h2><div class="card">'+progressTable()+'</div><div class="row"><button class="link" id="home">Back to start</button></div>';
+  document.getElementById('dl').onclick=function(){
+    try{ var P=payload(i), blob=new Blob([JSON.stringify(P,null,2)],{type:'application/json'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname(i); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); }catch(e){ showCopy(); }
+  };
+  document.getElementById('cp').onclick=function(){
+    var t=JSON.stringify(payload(i));
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){ document.getElementById('cpbox').innerHTML='<p class="note">Copied. Paste it into a message to your dad.</p>'; }, showCopy); } else showCopy();
+  };
+  function showCopy(){ var b=document.getElementById('cpbox'); b.innerHTML='<p class="note">Select all of this, copy it, and paste it into a message:</p><textarea readonly>'+esc(JSON.stringify(payload(i)))+'</textarea>'; b.querySelector('textarea').select(); }
+  document.getElementById('home').onclick=home;
+  window.scrollTo(0,0);
+}
+
+function ladder(){
+  var all = []; S.sessions.forEach(function(se){ (se.items||[]).forEach(function(r){ all.push(r); }); });
+  function has(c, f){ return all.some(function(r){ return r.concept===c && f(r); }); }
+  var rows = ['F0','F1','F2','F3','F4','F5'].map(function(c){
+    var r1 = S.cs[c].introduced || has(c, function(){ return true; }),
+        r2 = has(c, function(r){ return r.verdict==='correct' && (r.phase==='faded' || r.assisted); }),
+        r3 = has(c, function(r){ return r.verdict==='correct' && !r.assisted && (r.phase==='indep' || r.phase==='close' || r.phase==='extra'); }),
+        r4 = has(c, function(r){ return r.verdict==='correct' && !r.assisted && r.phase==='warm'; });
+    return '<tr><td>'+esc(CNAME[c])+'</td>'+[r1,r2,r3,r4].map(function(on){ return '<td><span class="dot'+(on?' on':'')+'"></span></td>'; }).join('')+'</tr>';
+  }).join('');
+  return '<div style="overflow-x:auto"><table class="ladder" id="ladder"><tr><th>Skill</th><th>Seen the lesson</th><th>Right with help</th><th>Right on your own</th><th>Right cold, a later day</th></tr>'+rows+'</table></div><p class="note">Every skill starts at the left. Needing the lesson first is the normal first step, not a miss.</p>';
+}
+// ---------------- home ----------------
+function home(){
+  var C=S.current, n=lessonNo(), L=LESSONS[n], last=S.sessions[S.sessions.length-1];
+  var gap='';
+  if(last && last.finished){ var mins=Math.round((Date.now()-new Date(last.finished).getTime())/60000); if(mins < 240) gap = '<p class="note">Your last lesson finished '+mins+' minutes ago. One of these a day: the warm-up checks what stuck after a night’s sleep, which is the part that counts. A Learn lesson any time is fine.</p>'; }
+  var doneL = S.sessions.filter(function(x){ return !x.legacy; }).map(function(x){ return x.lesson; });
+  var plan = '<div class="card"><b>This stretch</b><ul class="tight">'+PLAN.map(function(k){ return '<li>'+(doneL.indexOf(k)>=0?'✓ ':'')+esc(LESSONS[k].title)+'</li>'; }).join('')+'</ul></div>';
+  app.innerHTML='<h1>Algebra foundations</h1><p>Short lessons on the moves everything in Algebra 2 is built on, and that Chapter 2 runs on. About 10 minutes each: a warm-up, the big idea when it’s new, an example, then problems on your own. Or open <b>Learn</b> to see the lesson for any skill first.</p>'+
+    '<div class="card"><ul class="tight"><li>New to you? Tap <b>“I haven’t learned this: show me how.”</b> That’s what it’s for, and it doesn’t count against you.</li><li>Stuck partway? Tap for a hint. There are three, each one a bit more.</li><li>On longer problems, tap <b>“Check my work line by line”</b> and type each line: it tells you the first line that goes wrong.</li><li>After each answer, tap how sure you are. Close it any time; it picks up where you left off.</li></ul></div>'+
+    plan+'<div class="row">'+(C ? '<button class="btn" id="resume">Resume '+esc(sessTitle(C).split(':')[0])+' ('+(C.idx+1)+' of '+(C.steps.length-1)+')</button>' : '<button class="btn" id="start">Start '+esc(L.title)+'</button><button class="btn ghost" id="learn">Learn: pick a skill</button>')+'</div>'+gap+
+    '<h2>Your skills</h2><div class="card">'+ladder()+'</div>'+
+    '<h2>Your progress</h2><div class="card">'+progressTable()+'</div>'+
+    (S.sessions.length ? '<div class="row"><button class="link" id="last">Last session’s results and download</button></div>' : '')+
+    '<details><summary>Typing math</summary><ul class="tight"><li>Exponent: <span class="kbd">x^2</span> or the x² button</li><li>Example: <span class="kbd">3x^2 - 5x + 2</span></li><li>Negative numbers: <span class="kbd">-12</span></li><li>Check “Reads as” under the box before you submit.</li></ul></details>';
+  var r=document.getElementById('resume'); if(r) r.onclick=function(){ S.current.resumes++; save(); run(); };
+  var s=document.getElementById('start'); if(s) s.onclick=function(){ startSession(n); };
+  var l=document.getElementById('last'); if(l) l.onclick=function(){ summary(S.sessions.length-1); };
+  var le=document.getElementById('learn'); if(le) le.onclick=learnMenu;
+  window.scrollTo(0,0);
+}
+
+S = load(); if(!S || S.version!==VERSION || (!S.sessions.length && !S.current)){ S = migrate(); save(); }
+['F3','F4','F5'].forEach(function(c){ if(!S.cs[c]) S.cs[c] = {introduced:false, worked:true, streak:0, miss:0}; });
+window.APP15 = { current: function(){ return cur; }, twin: function(){ return twinCur; }, state: function(){ return S; } };
+home();
+})();
+</script>
+</body>
+</html>
